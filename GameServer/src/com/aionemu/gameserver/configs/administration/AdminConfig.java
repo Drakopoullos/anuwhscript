@@ -4,6 +4,8 @@ import com.aionemu.commons.configuration.Property;
 
 public class AdminConfig
 {
+	@Property(key = "gameserver.administration.gmskills", defaultValue = "3")
+	public static int GM_SPECIAL_SKILLS;
 	@Property(key = "gameserver.administration.gmlevel", defaultValue = "3")
 	public static int GM_LEVEL;
 	@Property(key = "gameserver.administration.gmpanel", defaultValue = "3")
@@ -32,6 +34,8 @@ public class AdminConfig
 	public static boolean VISION_GM_CONNECTION;
 	@Property(key = "gameserver.administration.whisper.gm.connection", defaultValue = "false")
 	public static boolean WHISPER_GM_CONNECTION;
+	@Property(key = "gameserver.administration.gm.mode.connection", defaultValue = "false")
+    public static boolean GM_MODE_CONNECTION;
 	@Property(key = "gameserver.administration.quest.dialog.log", defaultValue = "false")
 	public static boolean QUEST_DIALOG_LOG;
 	@Property(key = "gameserver.administration.trade.item.restriction", defaultValue = "false")
@@ -46,8 +50,12 @@ public class AdminConfig
     public static String ADMIN_TAG_3;
     @Property(key = "gameserver.admin.tag.4", defaultValue="<HEAD-GM> %s")
     public static String ADMIN_TAG_4;
-    @Property(key = "gameserver.admin.tag.5", defaultValue="<ADMIN-DEV> %s")
+    @Property(key = "gameserver.admin.tag.5", defaultValue="<ADMIN> %s")
     public static String ADMIN_TAG_5;
+    @Property(key = "gameserver.admin.tag.6", defaultValue="<ADMIN-DEV> %s")
+    public static String ADMIN_TAG_6;
 	@Property(key = "gameserver.admin.announce.levels", defaultValue = "*")
 	public static String ANNOUNCE_LEVEL_LIST;
+	@Property(key = "gameserver.not-open.twoclienwindow", defaultValue = "false")
+	public static boolean NO_OPEN_NEW_WINDOW;
 }

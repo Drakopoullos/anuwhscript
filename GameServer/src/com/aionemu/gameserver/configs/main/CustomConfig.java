@@ -103,6 +103,10 @@ public class CustomConfig
 	@Property(key = "gameserver.auto.kinah.enabled", defaultValue = "false")
 	public static boolean AUTO_KINAH_ENABLED;
 	
+	//Basic Quest limit size
+	@Property(key = "gameserver.basic.cubesize.limit", defaultValue = "9")
+	public static int BASIC_CUBE_SIZE_LIMIT;
+	
 	//Exp Progressive.
 	@Property(key = "gameserver.enable.exp.progressive.ap.player", defaultValue = "false")
 	public static boolean ENABLE_EXP_PROGRESSIVE_AP_PLAYER;
@@ -266,4 +270,20 @@ public class CustomConfig
 	public static boolean ENABLE_LUNA_CAP;
 	@Property(key = "gameserver.luna.cap.value", defaultValue = "9999999")
 	public static long LUNA_CAP_VALUE;
+	
+	//Bind Point
+	@Property(key = "gameserver.storebindpoint.enable", defaultValue = "false")
+    public static boolean ENABLE_STORE_BINDPOINT;
+	
+	//MAX CP LIMIT
+	@Property(key = "gameserver.max.cp.limit", defaultValue = "1000")
+	public static int CP_LIMIT_MAX;
+	
+	// World Channel Cost
+	@Property(key = "gameserver.worldchannel.costs", defaultValue = "50000")
+	public static int WORLD_CHANNEL_AP_COSTS;
+	
+	// Auto Powershard
+	@Property(key = "gameserver.enable.auto.powershard", defaultValue = "false")
+	public static boolean ENABLE_AUTO_POWERSHARD;
 }

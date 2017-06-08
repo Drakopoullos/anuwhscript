@@ -40,6 +40,8 @@ public class CommandsConfig
 	public static int BANMAC;
 	@Property(key = "bk", defaultValue = "3")
 	public static int BK;
+	@Property(key = "banhdd", defaultValue = "3")
+	public static int BANHDD;
 	@Property(key = "configure", defaultValue = "3")
 	public static int CONFIGURE;
 	@Property(key = "cooldown", defaultValue = "3")
@@ -74,6 +76,8 @@ public class CommandsConfig
 	public static int GOTO;
 	@Property(key = "grouptome", defaultValue = "3")
 	public static int GROUPTOME;
+	@Property(key = "netban", defaultValue = "1")
+	public static int NETBAN;
 	@Property(key = "heal", defaultValue = "3")
 	public static int HEAL;
 	@Property(key = "html", defaultValue = "3")
@@ -188,6 +192,10 @@ public class CommandsConfig
 	public static int UNBAN;
 	@Property(key = "unbanchar", defaultValue = "3")
 	public static int UNBANCHAR;
+	@Property(key = "unbanhdd", defaultValue = "4")
+	public static int UNBANHDD;
+	@Property(key = "unbannet", defaultValue = "4")
+	public static int UNBANNET;
 	@Property(key = "unbanip", defaultValue = "3")
 	public static int UNBANIP;
 	@Property(key = "ungag", defaultValue = "3")

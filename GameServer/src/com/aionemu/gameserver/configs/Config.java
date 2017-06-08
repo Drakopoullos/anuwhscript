@@ -47,6 +47,7 @@ public class Config
 			PropertiesUtils.overrideProperties(adminProps, myProps);
 			ConfigurableProcessor.process(AdminConfig.class, adminProps);
 			ConfigurableProcessor.process(DeveloperConfig.class, adminProps);
+			ConfigurableProcessor.process(PanelConfig.class, adminProps);
 			String main = "./config/main";
 			Properties[] mainProps = PropertiesUtils.loadAllFromDirectory(main);
 			PropertiesUtils.overrideProperties(mainProps, myProps);
@@ -115,6 +116,7 @@ public class Config
 			PropertiesUtils.overrideProperties(adminProps, myProps);
 			ConfigurableProcessor.process(AdminConfig.class, adminProps);
 			ConfigurableProcessor.process(DeveloperConfig.class, adminProps);
+			ConfigurableProcessor.process(PanelConfig.class, adminProps);
 			String main = "./config/main";
 			Properties[] mainProps = PropertiesUtils.loadAllFromDirectory(main);
 			PropertiesUtils.overrideProperties(mainProps, myProps);

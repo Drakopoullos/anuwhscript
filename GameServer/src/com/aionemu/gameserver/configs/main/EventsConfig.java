@@ -50,4 +50,36 @@ public class EventsConfig
 	
 	@Property(key = "gameserver.atreian.passport.enable", defaultValue = "false")
 	public static boolean ENABLE_ATREIAN_PASSPORT;
+	
+	//LoginService
+	@Property(key = "gameserver.event.enable2", defaultValue = "false")
+	public static boolean EVENT_ENABLED2;
+	@Property(key = "gameserver.event.level2", defaultValue = "45")
+	public static int EVENT_REWARD_LEVEL2;
+	@Property(key = "gameserver.event.membership", defaultValue = "0")
+    public static int EVENT_REWARD_MEMBERSHIP;
+	@Property(key = "gameserver.event.period2", defaultValue = "60")
+    public static int EVENT_PERIOD2;
+	@Property(key = "gameserver.event.item.elyos2", defaultValue = "162002024")
+    public static int EVENT_ITEM_ELYOS2;
+    @Property(key = "gameserver.event.item.asmo2", defaultValue = "162002024")
+    public static int EVENT_ITEM_ASMO2;
+    @Property(key = "gameserver.event.count2", defaultValue = "1")
+    public static int EVENT_ITEM_COUNT2;
+    @Property(key = "gameserver.event.membership.rate", defaultValue = "false")
+    public static boolean EVENT_REWARD_MEMBERSHIP_RATE;
+    
+    @Property(key = "gameserver.event.enable3", defaultValue = "false")
+	public static boolean EVENT_ENABLED3;
+	@Property(key = "gameserver.event.level3", defaultValue = "45")
+	public static int EVENT_REWARD_LEVEL3;
+	@Property(key = "gameserver.event.period3", defaultValue = "60")
+    public static int EVENT_PERIOD3;
+	@Property(key = "gameserver.event.item.elyos3", defaultValue = "162002024")
+    public static int EVENT_ITEM_ELYOS3;
+    @Property(key = "gameserver.event.item.asmo3", defaultValue = "162002024")
+    public static int EVENT_ITEM_ASMO3;
+    @Property(key = "gameserver.event.count3", defaultValue = "1")
+    public static int EVENT_ITEM_COUNT3;
+	
 }

@@ -49,4 +49,11 @@ public class PvPConfig
 
   @Property(key="gameserver.pvp.special_reward.chance", defaultValue="2")
   public static float SPECIAL_REWARD_CHANCE;
+  
+  // Bandit Reward
+  @Property(key="gameserver.pvp.toll.pk.cost", defaultValue="0")
+  public static int TOLL_PK_COST;
+  
+  
+  
 }

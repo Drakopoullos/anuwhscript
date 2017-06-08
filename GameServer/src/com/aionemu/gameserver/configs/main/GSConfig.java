@@ -11,6 +11,16 @@ public class GSConfig
     public static String SERVER_NAME;
     @Property(key="gameserver.players.max.level", defaultValue="75")
     public static int PLAYER_MAX_LEVEL;
+    
+    /**
+     * Player Starting Level
+     */
+    @Property(key = "gameserver.starting.level", defaultValue = "1")
+    public static int STARTING_LEVEL;
+    
+    @Property(key = "gameserver.startClass.maxLevel", defaultValue = "10")
+    public static int STARTCLASS_MAXLEVEL;
+    
 	@Property(key = "gameserver.timezone", defaultValue = "")
 	public static String TIME_ZONE_ID = Calendar.getInstance().getTimeZone().getID();
 	@Property(key = "gameserver.chatserver.enable", defaultValue = "false")

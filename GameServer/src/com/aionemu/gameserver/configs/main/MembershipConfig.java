@@ -47,6 +47,20 @@ public class MembershipConfig
 	@Property(key = "gameserver.advanced.friendlist.size", defaultValue = "90")
 	public static int ADVANCED_FRIENDLIST_SIZE;
 	
+	// TITLE ADDITIONAL
+	@Property(key = "gameserver.titles.additional.enable", defaultValue = "10")
+    public static byte TITLES_ADDITIONAL_ENABLE;
+	
+	/**
+     * Membership Tags
+     */
+    @Property(key = "gameserver.membership.tag.display", defaultValue = "true")
+    public static boolean PREMIUM_TAG_DISPLAY;
+    @Property(key = "gameserver.membership.tag.vip", defaultValue = "\uE02E %s")
+    public static String TAG_VIP;
+    @Property(key = "gameserver.membership.tag.premium", defaultValue = "\uE02D %s")
+    public static String TAG_PREMIUM;
+	
 	//TITLE SPECIAL MEMBER.
 	@Property(key = "gameserver.player.tag.30", defaultValue="")
     public static String PLAYER_TAG_30;

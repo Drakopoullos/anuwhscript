@@ -34,4 +34,7 @@ public class AdvCustomConfig
 	
 	@Property(key = "gameserver.craft.delaytime,rate", defaultValue = "2")
 	public static Integer CRAFT_DELAYTIME_RATE;
+	
+	@Property(key="gameserver.godstone.base", defaultValue="1000")
+	public static int BASE_GODSTONE;
 }

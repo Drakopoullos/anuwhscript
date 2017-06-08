@@ -177,4 +177,39 @@ public class RateConfig
 	public static float PREMIUM_QUEST_EXP_BOOST_RATE;
 	@Property(key = "gameserver.rate.vip.quest.exp_boost", defaultValue = "3")
 	public static float VIP_QUEST_EXP_BOOST_RATE;
+	
+	/**
+     * Player glory Points Rates (Gain) - Regular (1), Premium (2), VIP (3)
+     */
+    @Property(key = "gameserver.rate.regular.gp.player.gain", defaultValue = "1.0")
+    public static float GP_PLAYER_GAIN_RATE;
+    @Property(key = "gameserver.rate.premium.gp.player.gain", defaultValue = "2.0")
+    public static float PREMIUM_GP_PLAYER_GAIN_RATE;
+    @Property(key = "gameserver.rate.vip.gp.player.gain", defaultValue = "3.0")
+    public static float VIP_GP_PLAYER_GAIN_RATE;
+    
+    /**
+     * Player glory Points Rates - Regular (1), Premium (2), VIP (3)
+     */
+    @Property(key = "gameserver.rate.regular.gp.player.loss", defaultValue = "1.0")
+    public static float GP_PLAYER_LOSS_RATE;
+    @Property(key = "gameserver.rate.premium.gp.player.loss", defaultValue = "2.0")
+    public static float PREMIUM_GP_PLAYER_LOSS_RATE;
+    @Property(key = "gameserver.rate.vip.gp.player.loss", defaultValue = "3.0")
+    public static float VIP_GP_PLAYER_LOSS_RATE;
+    
+    /**
+     * Holiday Rates
+     */
+    @Property(key = "gameserver.rate.holiday.enable", defaultValue = "true")
+	public static boolean ENABLE_HOLIDAY_RATE;
+    @Property(key = "gameserver.rate.holiday.regular", defaultValue = "true")
+	public static int HOLIDAY_RATE_REGULAR;
+    @Property(key = "gameserver.rate.holiday.premium", defaultValue = "true")
+    public static int HOLIDAY_RATE_PREMIUM;
+    @Property(key = "gameserver.rate.holiday.vip", defaultValue = "true")
+    public static int HOLIDAY_RATE_VIP;
+    @Property(key = "gameserver.rate.holiday.days", defaultValue = "1,7")
+    public static String HOLIDAY_RATE_DAYS;
+    
 }
