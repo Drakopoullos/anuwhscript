@@ -869,8 +869,14 @@ public class EnchantService
 		ItemPacketService.updateItemAfterInfoChange(player, targetItem);
 	}
 	
+	/**
+     * @param player
+     * @param item
+     */
+    @SuppressWarnings("rawtypes")
 	public static void onItemEquip(Player player, Item item) {
-		List<IStatFunction> modifiers = new ArrayList<IStatFunction>();
+    	@SuppressWarnings("unchecked")
+		List<IStatFunction> modifiers = new ArrayList();
 		try {
 			if (item.getItemTemplate().isWeapon()) {
 				switch (item.getItemTemplate().getWeaponType()) {

@@ -1,42 +1,42 @@
 /*
- * This file is part of Encom. **ENCOM FUCK OTHER SVN**
+ * This file is part of Aion-Unique. **Aion-Unique**
  *
- *  Encom is free software: you can redistribute it and/or modify
+ *  Aion-Unique is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  Encom is distributed in the hope that it will be useful,
+ *  Aion-Unique is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser Public License for more details.
  *
  *  You should have received a copy of the GNU Lesser Public License
- *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with Aion-Unique.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.gameserver.utils.stats.enums;
 
 public enum ATTACK_SPEED
 {
-	WARRIOR(1500),
-	GLADIATOR(1500),
-	TEMPLAR(1500),
-	SCOUT(1500),
-	ASSASSIN(1500),
-	RANGER(1500),
-	MAGE(1500),
-	SORCERER(1500),
-	SPIRIT_MASTER(1500),
-	PRIEST(1500),
-	CLERIC(1500),
-	CHANTER(1500),
+	WARRIOR(1400),
+	GLADIATOR(1400),
+	TEMPLAR(1400),
+	SCOUT(1400),
+	ASSASSIN(1400),
+	RANGER(1400),
+	MAGE(1400),
+	SORCERER(1400),
+	SPIRIT_MASTER(1400),
+	PRIEST(1400),
+	CLERIC(1400),
+	CHANTER(1400),
 	//News Class 4.3
-	TECHNIST(1500),
-	GUNSLINGER(1500),
-	MUSE(1500),
-	SONGWEAVER(1500),
+	TECHNIST(1400),
+	GUNSLINGER(1400),
+	MUSE(1400),
+	SONGWEAVER(1400),
 	//News Class 4.5
-	AETHERTECH(1500);
+	AETHERTECH(1400);
 	
 	private int value;
 	
