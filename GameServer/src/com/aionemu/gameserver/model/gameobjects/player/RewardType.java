@@ -25,6 +25,12 @@ public enum RewardType
 			return (long) (reward * player.getRates().getApPlayerGainRate() * statRate);
 		}
 	},
+	GP_PLAYER {
+        @Override
+        public long calcReward(Player player, long reward) {
+            return (long) (reward * player.getRates().getGpPlayerGainRate());
+        }
+    },
 	AP_NPC {
 		@Override
 		public long calcReward(Player player, long reward) {

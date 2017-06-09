@@ -3,71 +3,83 @@ package com.aionemu.gameserver.utils.rates;
 import com.aionemu.gameserver.configs.main.CraftConfig;
 import com.aionemu.gameserver.configs.main.RateConfig;
 
-public class PremiumRates extends Rates
-{
+public class PremiumRates extends Rates {
+	
+	int holidayRate = HolidayRates.getHolidayRate(0);
+	
 	@Override
 	public float getGroupXpRate() {
-		return RateConfig.PREMIUM_GROUPXP_RATE;
+		return RateConfig.PREMIUM_GROUPXP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getApNpcRate() {
-		return RateConfig.PREMIUM_AP_NPC_RATE;
+		return RateConfig.PREMIUM_AP_NPC_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getApPlayerGainRate() {
-		return RateConfig.PREMIUM_AP_PLAYER_GAIN_RATE;
+		return RateConfig.PREMIUM_AP_PLAYER_GAIN_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getXpPlayerGainRate() {
-		return RateConfig.PREMIUM_XP_PLAYER_GAIN_RATE;
+		return RateConfig.PREMIUM_XP_PLAYER_GAIN_RATE + holidayRate;
+	}
+	
+	@Override
+	public float getGpPlayerGainRate() {
+		return RateConfig.PREMIUM_GP_PLAYER_GAIN_RATE;
 	}
 	
 	@Override
 	public float getApPlayerLossRate() {
-		return RateConfig.PREMIUM_AP_PLAYER_LOSS_RATE;
+		return RateConfig.PREMIUM_AP_PLAYER_LOSS_RATE + holidayRate;
 	}
 	
 	@Override
+    public float getGpPlayerLossRate() {
+        return RateConfig.PREMIUM_GP_PLAYER_LOSS_RATE;
+    }
+	
+	@Override
 	public float getDropRate() {
-		return RateConfig.PREMIUM_DROP_RATE;
+		return RateConfig.PREMIUM_DROP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestKinahRate() {
-		return RateConfig.PREMIUM_QUEST_KINAH_RATE;
+		return RateConfig.PREMIUM_QUEST_KINAH_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestXpRate() {
-		return RateConfig.PREMIUM_QUEST_XP_RATE;
+		return RateConfig.PREMIUM_QUEST_XP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestApRate() {
-		return RateConfig.PREMIUM_QUEST_AP_RATE;
+		return RateConfig.PREMIUM_QUEST_AP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestGpRate() {
-		return RateConfig.PREMIUM_QUEST_GP_RATE;
+		return RateConfig.PREMIUM_QUEST_GP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestAbyssOpRate() {
-		return RateConfig.PREMIUM_QUEST_ABYSS_OP_RATE;
+		return RateConfig.PREMIUM_QUEST_ABYSS_OP_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getQuestExpBoostRate() {
-		return RateConfig.PREMIUM_QUEST_EXP_BOOST_RATE;
+		return RateConfig.PREMIUM_QUEST_EXP_BOOST_RATE + holidayRate;
 	}
 	
 	@Override
 	public float getXpRate() {
-		return RateConfig.PREMIUM_XP_RATE;
+		return RateConfig.PREMIUM_XP_RATE + holidayRate;
 	}
 	
 	@Override

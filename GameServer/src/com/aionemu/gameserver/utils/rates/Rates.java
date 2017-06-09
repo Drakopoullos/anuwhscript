@@ -6,8 +6,10 @@ public abstract class Rates
 	public abstract float getXpRate();
 	public abstract float getApNpcRate();
 	public abstract float getApPlayerGainRate();
+	public abstract float getGpPlayerGainRate();
 	public abstract float getXpPlayerGainRate();
 	public abstract float getApPlayerLossRate();
+	public abstract float getGpPlayerLossRate();
 	public abstract float getGatheringXPRate();
 	public abstract int getGatheringCountRate();
 	public abstract float getCraftingXPRate();

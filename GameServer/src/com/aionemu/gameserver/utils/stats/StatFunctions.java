@@ -112,6 +112,33 @@ public class StatFunctions
 	/**
 	 * @param defeated
 	 * @param winner
+	 * @return Glory Lost in PvP Death
+	 */
+	public static int calculatePvPGpLost(Player defeated, Player winner) {
+        int pointsLost = Math.round(defeated.getAbyssRank().getRank().getPointsLost()
+                * defeated.getRates().getGpPlayerLossRate());
+
+        // Level penalty calculation
+        int difference = winner.getLevel() - defeated.getLevel();
+
+        if (difference > 4) {
+            pointsLost = Math.round(pointsLost * 0.1f);
+        } else {
+            switch (difference) {
+                case 3:
+                    pointsLost = Math.round(pointsLost * 0.85f);
+                    break;
+                case 4:
+                    pointsLost = Math.round(pointsLost * 0.65f);
+                    break;
+            }
+        }
+        return pointsLost;
+    }
+	
+	/**
+	 * @param defeated
+	 * @param winner
 	 * @return Points Gained in PvP Kill
 	 */
 	public static int calculatePvpApGained(Player defeated, int maxRank, int maxLevel) {
@@ -146,6 +173,52 @@ public class StatFunctions
 		}
 		return pointsGained;
 	}
+	
+	/**
+	 * @param defeated
+	 * @param winner
+	 * @return Glory Gained in PvP Kill
+	 */
+	public static int calculatePvpGpGained(Player defeated, int maxRank, int maxLevel) {
+        int pointsGained = defeated.getAbyssRank().getRank().getPointsGained();
+
+        // Level penalty calculation
+        int difference = maxLevel - defeated.getLevel();
+
+        if (difference > 4) {
+            pointsGained = Math.round(pointsGained * 0.1f);
+        } else if (difference < -3) {
+            pointsGained = Math.round(pointsGained * 1.3f);
+        } else {
+            switch (difference) {
+                case 3:
+                    pointsGained = Math.round(pointsGained * 0.85f);
+                    break;
+                case 4:
+                    pointsGained = Math.round(pointsGained * 0.65f);
+                    break;
+                case -2:
+                    pointsGained = Math.round(pointsGained * 1.1f);
+                    break;
+                case -3:
+                    pointsGained = Math.round(pointsGained * 1.2f);
+                    break;
+            }
+        }
+
+        // Abyss rank penalty calculation
+        int winnerAbyssRank = maxRank;
+        int defeatedAbyssRank = defeated.getAbyssRank().getRank().getId();
+        int abyssRankDifference = winnerAbyssRank - defeatedAbyssRank;
+
+        if (winnerAbyssRank <= 7 && abyssRankDifference > 0) {
+            float penaltyPercent = abyssRankDifference * 0.05f;
+
+            pointsGained -= Math.round(pointsGained * penaltyPercent);
+        }
+
+        return pointsGained;
+    }
 	
 	public static int calculatePvpXpGained(Player defeated, int maxRank, int maxLevel) {
 		int pointsGained = 5000;
