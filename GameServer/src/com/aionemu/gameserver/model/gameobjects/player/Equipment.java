@@ -1,30 +1,56 @@
 package com.aionemu.gameserver.model.gameobjects.player;
 
-import java.util.*;
-import org.slf4j.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
 import javolution.util.FastList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.dao.DAOManager;
-import com.aionemu.gameserver.configs.administration.AdminConfig;
 import com.aionemu.gameserver.controllers.observer.ActionObserver;
 import com.aionemu.gameserver.controllers.observer.ObserverType;
 import com.aionemu.gameserver.dao.InventoryDAO;
-import com.aionemu.gameserver.model.*;
+import com.aionemu.gameserver.model.DescriptionId;
+import com.aionemu.gameserver.model.EmotionType;
+import com.aionemu.gameserver.model.Race;
+import com.aionemu.gameserver.model.TaskId;
 import com.aionemu.gameserver.model.actions.PlayerActions;
 import com.aionemu.gameserver.model.actions.PlayerMode;
-import com.aionemu.gameserver.model.gameobjects.*;
+import com.aionemu.gameserver.model.gameobjects.Creature;
+import com.aionemu.gameserver.model.gameobjects.Item;
+import com.aionemu.gameserver.model.gameobjects.PersistentState;
+import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.state.CreatureState;
 import com.aionemu.gameserver.model.items.ItemSlot;
 import com.aionemu.gameserver.model.stats.listeners.ItemEquipmentListener;
-import com.aionemu.gameserver.model.templates.item.*;
+import com.aionemu.gameserver.model.templates.item.ArmorType;
+import com.aionemu.gameserver.model.templates.item.EquipType;
+import com.aionemu.gameserver.model.templates.item.ItemCategory;
+import com.aionemu.gameserver.model.templates.item.ItemTemplate;
+import com.aionemu.gameserver.model.templates.item.ItemUseLimits;
+import com.aionemu.gameserver.model.templates.item.WeaponType;
 import com.aionemu.gameserver.model.templates.itemset.ItemSetTemplate;
-import com.aionemu.gameserver.network.aion.serverpackets.*;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_DELETE_ITEM;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_EMOTION;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_ITEM_USAGE_ANIMATION;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_QUESTION_WINDOW;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_UPDATE_PLAYER_APPEARANCE;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.services.StigmaService;
 import com.aionemu.gameserver.services.item.ItemPacketService;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
-import com.aionemu.gameserver.utils.*;
+import com.aionemu.gameserver.utils.PacketSendUtility;
+import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.stats.AbyssRankEnum;
 
 public class Equipment
@@ -63,12 +89,15 @@ public class Equipment
 			PacketSendUtility.sendPacket(owner, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_INVALID_CLASS);
 			return null;
 		}
-		int requiredLevel = item.getItemTemplate().getRequiredLevel(owner.getCommonData().getPlayerClass()) - item.getReductionLevel();
-		if (requiredLevel == -1 || requiredLevel > owner.getLevel()) {
+		/* don't allow to wear items of higher level */
+			int requiredLevel = item.getItemTemplate().getRequiredLevel(owner.getCommonData().getPlayerClass()) - item.getReductionLevel();
+			if (requiredLevel == -1 || requiredLevel > owner.getLevel()) {
 			//You cannot use %1 until you reach level %0.
 			PacketSendUtility.sendPacket(owner, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_TOO_LOW_LEVEL_MUST_BE_THIS_LEVEL(item.getNameId(), itemTemplate.getLevel()));
 			return null;
-		} if (itemTemplate.getRace() != Race.PC_ALL && itemTemplate.getRace() != owner.getRace()) {
+			}
+
+		if (itemTemplate.getRace() != Race.PC_ALL && itemTemplate.getRace() != owner.getRace()) {
 			//Your race cannot use this item.
 			PacketSendUtility.sendPacket(owner, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_INVALID_RACE);
 			return null;
@@ -96,7 +125,11 @@ public class Equipment
 				    }
 			    break;
 			    case WEAPON:
-				    if (!validateEquippedWeapon(item, true)) {
+
+
+
+
+					if (!validateEquippedWeapon(item, true)) {
 					    item.setEquipmentSlot(oldSlot);
 					    return null;
 				    }
@@ -159,6 +192,7 @@ public class Equipment
 			if (allSlots.length > 1 && !item.getItemTemplate().isTwoHandWeapon())
 				throw new IllegalArgumentException("itemSlotToEquip can not be composite!");
 
+
 			// remove item first from inventory to have at least one slot free
 			owner.getInventory().remove(item);
 
@@ -189,6 +223,10 @@ public class Equipment
 						+ equipment.get(allSlots[0].getSlotIdMask()).getItemTemplate().getTemplateId());
 				return null;
 			}
+
+
+
+
 
 			// equip target item
 			for (ItemSlot slot : allSlots)
@@ -324,6 +362,9 @@ public class Equipment
 	 * @return
 	 */
 	private boolean validateEquippedWeapon(Item item, boolean validateOnly) {
+
+
+
 		// check present skill
 		int[] requiredSkills = item.getItemTemplate().getWeaponType().getRequiredSkills();
 
@@ -346,6 +387,11 @@ public class Equipment
 		}
 		else
 			return false;
+
+		boolean addingLeftHand = (item.getEquipmentSlot() & ItemSlot.LEFT_HAND.getSlotIdMask()) != 0;
+
+
+
 
 		// for dual weapons, they occupy two slots, so check if the same item
 		if (itemInRightHand == itemInLeftHand)
@@ -385,7 +431,6 @@ public class Equipment
 		}
 		else { // adding one-handed weapon
 			if (itemInRightHand != null) { // main hand is already occupied
-				boolean addingLeftHand = (item.getEquipmentSlot() & ItemSlot.LEFT_HAND.getSlotIdMask()) != 0;
 				// if occupied by 2H weapon, we have to unequip both slots, skills are not required
 				if (mainIsTwoHand) {
 					if (validateOnly) {
@@ -413,6 +458,8 @@ public class Equipment
 				else {
 					// requiredInventorySlots are 0
 					if (addingLeftHand && itemInLeftHand != null) {
+						if(itemInLeftHand.getEquipmentType() == EquipType.ARMOR)
+							return false;
 						// this is not good, if inventory is full, should switch slots
 						if (validateOnly)
 							markedFreeSlots.add(leftSlot);
@@ -420,12 +467,40 @@ public class Equipment
 							unEquip(leftSlot);
 					}
 					else {
+
+							// this is not good, if inventory is full, should switch slots
+							if (validateOnly)
+								markedFreeSlots.add(rightSlot);
+							else
+								unEquip(rightSlot);
+
 						// replace main hand, doesn't matter which slot is equiped
 						// client sends slot 2 even for double-click
-						if (validateOnly)
-							markedFreeSlots.add(rightSlot);
+
+						/*if(addingLeftHand && itemInRightHand != null && itemInRightHand.getEquipmentType() == EquipType.WEAPON)
+						{
+							if (validateOnly)
+								markedFreeSlots.add(rightSlot);
+							else
+								unEquip(rightSlot);
+						}
 						else
-							unEquip(rightSlot);
+						if(!addingLeftHand && itemInLeftHand != null && itemInLeftHand.getEquipmentType() == EquipType.WEAPON)
+						{
+							if (validateOnly)
+								markedFreeSlots.add(leftSlot);
+							else
+								unEquip(leftSlot);
+						}*/
+
+						if(itemInLeftHand != null && itemInLeftHand.getEquipmentType() == EquipType.WEAPON)
+						{
+							if (validateOnly)
+								markedFreeSlots.add(leftSlot);
+							else
+								unEquip(leftSlot);
+						}
+
 						item.setEquipmentSlot(rightSlot);
 						return true;
 					}
@@ -1137,7 +1212,7 @@ public class Equipment
 		 return false;
 	 }
 
-	private boolean verifyRankLimits(Item item) {
+	 private boolean verifyRankLimits(Item item) {
 		 int rank = owner.getAbyssRank().getRank().getId();
 		 if (!item.getItemTemplate().getUseLimits().verifyRank(rank)) {
             return false;
@@ -1146,7 +1221,6 @@ public class Equipment
          }
 		 return true;
 	 }
-
 	 public void checkRankLimitItems() {
 		 for (Item item : getEquippedItems()) {
 			 if (!verifyRankLimits(item)) {
