@@ -36,11 +36,8 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.items.ItemSlot;
 import com.aionemu.gameserver.model.items.ManaStone;
 import com.aionemu.gameserver.model.items.storage.Storage;
-import com.aionemu.gameserver.model.stats.calc.StatOwner;
 import com.aionemu.gameserver.model.stats.calc.functions.IStatFunction;
-import com.aionemu.gameserver.model.stats.calc.functions.StatAddFunction;
 import com.aionemu.gameserver.model.stats.calc.functions.StatEnchantFunction;
-import com.aionemu.gameserver.model.stats.calc.functions.StatFunction;
 import com.aionemu.gameserver.model.stats.container.StatEnum;
 import com.aionemu.gameserver.model.stats.listeners.ItemEquipmentListener;
 import com.aionemu.gameserver.model.templates.item.ArmorType;
@@ -216,7 +213,7 @@ public class EnchantService
 			    qualityCap = 25;
 			break;
 		    case MYTHIC:
-			    qualityCap = 30;
+			    qualityCap = 25;
 			break;
 		}
 		float success = EnchantsConfig.ENCHANT_ITEM;
@@ -261,6 +258,8 @@ public class EnchantService
 				case MYTHIC:
 				    addSuccessRate *= EnchantsConfig.GREATER_SUP;
 				break;
+			default:
+				break;
 			}
 			success += addSuccessRate;
 			player.subtractSupplements(supplementUseCount, supplementTemplate.getTemplateId());
@@ -271,10 +270,7 @@ public class EnchantService
 		} if (targetItem.isArchDaevaItem()) {
 			success = 85;
 		}
-		//Admin enchant "Fail" Never.
-		if (player.getAccessLevel() == 5) {
-			success = 100;
-		}
+		
 		boolean result = false;
 		float random = Rnd.get(1, 1000) / 10f;
 		if (random <= success) {
@@ -447,7 +443,7 @@ public class EnchantService
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_CAN_EXCEED_ENCHANT_LEVEL(new DescriptionId(targetItem.getNameId())));
 			}
 		} else {
-		 	if (targetItem.isArchDaevaItem() && targetItem.isEquipped() && !isArchdaevaRemodeledDanuar(targetItem)) {
+		 	if (EnchantsConfig.ENABLE_ARCHDAEVA_DESTROY_ITEM && targetItem.isArchDaevaItem() && targetItem.isEquipped() && !isArchdaevaRemodeledDanuar(targetItem)) {
 		 		player.getEquipment().unEquipItem(targetItem.getObjectId(), targetItem.getEquipmentSlot());
 				if (targetItem.hasGodStone()) {
 		 			//If the enchant fails, there is a chance that the player will receive their "Manastones & Godstones" back.
@@ -472,11 +468,19 @@ public class EnchantService
 		 	}
 			//If a player enchant a archdaeva equipment in inventory, archdaeva equipment will be destroyed.
 			//The player receive any "Enchantment Stone Dust" & "Archdaeva Crafting Materials"
-			else if (targetItem.isArchDaevaItem()) {
+			else if (EnchantsConfig.ENABLE_ARCHDAEVA_DESTROY_ITEM && targetItem.isArchDaevaItem()) {
 		 		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_ENCHANT_TYPE1_ENCHANT_FAIL(new DescriptionId(targetItem.getNameId())));
 		 		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_ENCHANT_ITEM_FAILED(new DescriptionId(targetItem.getNameId())));
 		 		if (!player.getInventory().decreaseByObjectId(targetItem.getObjectId(), 1)) {
 		 		}
+		 	} else if (!EnchantsConfig.ENABLE_ARCHDAEVA_DESTROY_ITEM && targetItem.isArchDaevaItem() && targetItem.isEquipped() && !isArchdaevaRemodeledDanuar(targetItem) || player.isGM())  {
+		 		if (currentEnchant >= 15 && !targetItem.isAmplified()) {
+		 			currentEnchant = 15;
+		 		} else if (currentEnchant >= 10 && currentEnchant <= 25 && !targetItem.isAmplified()) {
+	                currentEnchant = 10;
+	            } else if (currentEnchant > 0 && !targetItem.isAmplified()) {
+	                currentEnchant -= 1;
+	            }
 		 	} else {
 			   PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_ENCHANT_ITEM_FAILED(new DescriptionId(targetItem.getNameId())));
 			}
@@ -821,6 +825,8 @@ public class EnchantService
 				case MYTHIC:
 				    addSuccessRate *= EnchantsConfig.GREATER_SUP;
 				break;
+			default:
+				break;
 			} if (isManastoneOnly) {
 				supplementUseCount = 1;
 			} else if (stoneCount > 0) {
@@ -896,6 +902,8 @@ public class EnchantService
 				    case POLEARM_2H:
 				    	modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_ATTACK, 0));
 				    break;
+				default:
+					break;
 				}
 			} else if (item.getItemTemplate().isArmor()) {
 				if (item.getItemTemplate().getArmorType() == ArmorType.SHIELD) {
@@ -1019,6 +1027,8 @@ public class EnchantService
 					    case RINGS: 
 					    case BELT: 
 					    	modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_DEFEND_RATIO,0));
+						break;
+					default:
 						break;
 					}
 				}
