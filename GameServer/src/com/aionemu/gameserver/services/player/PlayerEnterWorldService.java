@@ -496,7 +496,7 @@ public final class PlayerEnterWorldService
 			//For more information on Growth Aura, check the Character XP Status Bar Tool Tip.
 			PacketSendUtility.playerSendPacketTime(player, SM_SYSTEM_MESSAGE.STR_MSG_CHARGE_EXP_POINT, 60000);
 			//"Auto PowerShard ON"
-			if (player.getEquipment().isPowerShardEquipped()) {
+			if (player.getEquipment().isPowerShardEquipped() && CustomConfig.ENABLE_AUTO_POWERSHARD) {
 				PacketSendUtility.playerSendPacketTime(player, SM_SYSTEM_MESSAGE.STR_WEAPON_BOOST_BOOST_MODE_STARTED, 7000);
 				player.setState(CreatureState.POWERSHARD);
 				PacketSendUtility.playerSendPacketTime(player, new SM_EMOTION(player, EmotionType.POWERSHARD_ON, 0, 0), 7000);

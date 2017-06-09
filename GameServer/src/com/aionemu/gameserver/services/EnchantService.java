@@ -905,15 +905,44 @@ public class EnchantService
 				default:
 					break;
 				}
+				
+				// For the future...it looks like ncsoft will enable it also for weapons
+				if (item.getItemTemplate().getTemperingTableId() > 0) {
+                    ItemEnchantTemplate ie = DataManager.ITEM_ENCHANT_DATA.getEnchantTemplate(EnchantType.AUTHORIZE, item.getItemTemplate().getTemperingTableId());
+                    if (item.getAuthorize() > 0 && ie != null) {
+                        try {
+                            modifiers.addAll(ie.getStats(item.getAuthorize()));
+                        } catch (Exception e) {
+                            log.error("Cant add tempering modifiers for item: " + item.getItemId() + " , " + ie.getStats(item.getAuthorize()));
+                        }
+                    }
+                }
 			} else if (item.getItemTemplate().isArmor()) {
 				if (item.getItemTemplate().getArmorType() == ArmorType.SHIELD) {
 					modifiers.add(new StatEnchantFunction(item, StatEnum.DAMAGE_REDUCE, 0));
 					modifiers.add(new StatEnchantFunction(item, StatEnum.BLOCK, 0));
+				} if (item.getItemTemplate().isAccessory() && item.getItemTemplate().getCategory() != ItemCategory.PLUME) {
+				    switch (item.getItemTemplate().getCategory()) {
+                        case HELMET:
+                        case EARRINGS:
+                        case NECKLACE:
+                        	modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_ATTACK_RATIO, 0));
+							modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0));
+							modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0));
+                            break;
+                        case RINGS:
+                        case BELT:
+                        	modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_DEFEND_RATIO, 0));
+							modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0));
+							modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0));
+					default:
+						break;
+                    }
 				}
 				/**
 				 * 5.0 Wings Enchant
 				 */
-				else if (item.getItemTemplate().getItemSlot() == 32768) {
+				if (item.getItemTemplate().getItemSlot() == 32768) {
 					modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_ATTACK, 0));
 					modifiers.add(new StatEnchantFunction(item, StatEnum.BOOST_MAGICAL_SKILL, 0));
 					modifiers.add(new StatEnchantFunction(item, StatEnum.MAXHP, 0));
@@ -921,7 +950,9 @@ public class EnchantService
 					modifiers.add(new StatEnchantFunction(item, StatEnum.FLY_TIME, 0));
 					modifiers.add(new StatEnchantFunction(item, StatEnum.MAGICAL_CRITICAL_RESIST, 0));
 					modifiers.add(new StatEnchantFunction(item, StatEnum.SOAR_SPEED, 0));
-				} else if (item.getItemTemplate().getCategory() == ItemCategory.PLUME) {
+				} 
+				
+				if (item.getItemTemplate().getCategory() == ItemCategory.PLUME) {
 					int plumeId = item.getItemTemplate().getTemperingTableId();
 					switch (plumeId) {
 					    case 10051:
@@ -999,39 +1030,27 @@ public class EnchantService
 					    break;
 					}
 				} else {
-					modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_ATTACK, 0));
-					modifiers.add(new StatEnchantFunction(item, StatEnum.BOOST_MAGICAL_SKILL, 0));
-					modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_DEFENSE, 0));
-					modifiers.add(new StatEnchantFunction(item, StatEnum.MAGICAL_DEFEND, 0));
-					modifiers.add(new StatEnchantFunction(item, StatEnum.MAXHP, 0));
-					modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_CRITICAL_RESIST, 0));
-				}
-			} else if (item.getItemTemplate().isAccessory() || item.getItemTemplate().isArmor()|| item.getItemTemplate().isWeapon()) {
-				if (item.getItemTemplate().getTemperingTableId() > 0) {
-					ItemEnchantTemplate ie = DataManager.ITEM_ENCHANT_DATA.getEnchantTemplate(EnchantType.AUTHORIZE, item.getItemTemplate().getTemperingTableId());
-					if (item.getAuthorize() > 0) {
-						try
-						{
-							modifiers.addAll(ie.getStats(item.getAuthorize()));
-						} catch (Exception localException2) {
-							log.error("Cant add tempering modifiers for item: " + item.getItemId() + " , " + ie.getStats(item.getAuthorize()));
-						}
+					if(item.getItemTemplate().getArmorType() != ArmorType.SHIELD){
+						modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_ATTACK, 0));
+						modifiers.add(new StatEnchantFunction(item, StatEnum.BOOST_MAGICAL_SKILL, 0));
+						modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_DEFENSE, 0));
+						modifiers.add(new StatEnchantFunction(item, StatEnum.MAGICAL_DEFEND, 0));
+						modifiers.add(new StatEnchantFunction(item, StatEnum.MAXHP, 0));
+						modifiers.add(new StatEnchantFunction(item, StatEnum.PHYSICAL_CRITICAL_RESIST, 0));
 					}
-				} else {
-					switch (item.getItemTemplate().getCategory()) {
-					    case HELMET: 
-					    case EARRINGS: 
-					    case NECKLACE: 
-					    	modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_ATTACK_RATIO,0));
-					    break;
-					    case RINGS: 
-					    case BELT: 
-					    	modifiers.add(new StatEnchantFunction(item, StatEnum.PVP_DEFEND_RATIO,0));
-						break;
-					default:
-						break;
-					}
+					player.getGameStats().updateStatsAndSpeedVisually();
 				}
+				// For the future...it looks like ncsoft will enable it also for armors
+                if (item.getItemTemplate().getTemperingTableId() > 0 && !item.getItemTemplate().isAccessory()) {
+                    ItemEnchantTemplate ie = DataManager.ITEM_ENCHANT_DATA.getEnchantTemplate(EnchantType.AUTHORIZE, item.getItemTemplate().getTemperingTableId());
+                    if (item.getAuthorize() > 0 && ie != null) {
+                        try {
+                            modifiers.addAll(ie.getStats(item.getAuthorize()));
+                        } catch (Exception e) {
+                            log.error("Cant add tempering modifiers for item: " + item.getItemId() + " , " + ie.getStats(item.getAuthorize()));
+                        }
+                    }
+                }
 			} if (!modifiers.isEmpty()) {
 				player.getGameStats().addEffect(item, modifiers);
 			}

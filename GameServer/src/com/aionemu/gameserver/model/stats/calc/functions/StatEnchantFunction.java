@@ -1,8 +1,5 @@
 package com.aionemu.gameserver.model.stats.calc.functions;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.items.ItemSlot;
 import com.aionemu.gameserver.model.stats.calc.Stat2;
@@ -11,8 +8,6 @@ import com.aionemu.gameserver.model.templates.item.ArmorType;
 
 public class StatEnchantFunction extends StatAddFunction
 {
-	private static final Logger log = LoggerFactory.getLogger(StatEnchantFunction.class);
-	
 	private Item item;
 	private int point;
 	
@@ -78,10 +73,12 @@ public class StatEnchantFunction extends StatAddFunction
 			case BOW:
 			case SWORD_2H:
 			case POLEARM_2H:
-				return 4 * enchantLvl;
+				return 3 * enchantLvl;
 			case MACE_1H:
 			case STAFF_2H:
 				return 3 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
 		case BOOST_MAGICAL_SKILL:
@@ -95,6 +92,8 @@ public class StatEnchantFunction extends StatAddFunction
 			case CANNON_2H:
 			case KEYBLADE_2H:
 				return 20 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
 		case MAGICAL_ATTACK:
@@ -108,6 +107,8 @@ public class StatEnchantFunction extends StatAddFunction
 			case CANNON_2H:
 			case KEYBLADE_2H:
 				return 4 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
 		default:
@@ -116,43 +117,33 @@ public class StatEnchantFunction extends StatAddFunction
 	}
 	
 	private int getAccessoryModifiers(int autorizeLvl) {
-		switch (this.stat) {
-		case PVP_ATTACK_RATIO: 
-			switch (autorizeLvl) {
-			case 1: 
-				return 2;
-			case 2: 
-				return 7;
-			case 3: 
-				return 12;
-			case 4: 
-				return 17;
-			case 5: 
-				return 25;
-			case 6: 
-				return 60;
-			case 7: 
-				return 75;
+		switch (stat) {
+		case PVP_ATTACK_RATIO:
+        case PVP_ATTACK_RATIO_PHYSICAL:
+        case PVP_ATTACK_RATIO_MAGICAL: {
+				switch (item.getItemTemplate().getCategory()) {
+					case HELMET:
+					case EARRINGS:
+					case NECKLACE:
+						return (int) (5 * autorizeLvl);
+					default:
+						break;
+        	
+				}
+        }
+        case PVP_DEFEND_RATIO:
+        case PVP_DEFEND_RATIO_PHYSICAL:
+        case PVP_DEFEND_RATIO_MAGICAL: {
+				switch (item.getItemTemplate().getCategory()) {
+					case RINGS:
+					case BELT:
+						return (int) (8 * autorizeLvl);
+					default:
+						break;
+				}			
 			}
-			return 0;
-		case PVP_DEFEND_RATIO: 
-			switch (autorizeLvl) {
-			case 1: 
-				return 3;
-			case 2: 
-				return 9;
-			case 3: 
-				return 15;
-			case 4: 
-				return 21;
-			case 5: 
-				return 31;
-			case 6: 
-				return 41;
-			case 7: 
-				return 55;
-			}
-			return 0;
+        default:
+			break;
 		}
 		return 0;
 	}
@@ -186,6 +177,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 2 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 			    return 0;
 			case 1 << 12:
@@ -202,6 +195,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 3 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 3:
@@ -218,6 +213,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 4 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 3 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			}
@@ -240,6 +237,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 2 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 12:
@@ -256,6 +255,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 3 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 3:
@@ -272,6 +273,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 4 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 3 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			}
@@ -294,6 +297,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 2 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 12:
@@ -310,6 +315,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 3 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 3:
@@ -326,6 +333,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 4 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 3 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			}
@@ -348,6 +357,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 2 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 12:
@@ -364,6 +375,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 3 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 2 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			case 1 << 3:
@@ -380,6 +393,8 @@ public class StatEnchantFunction extends StatAddFunction
 					return 4 * enchantLvl;
 				case MAGICAL_DEFEND:
 					return 3 * enchantLvl;
+				default:
+					break;
 				}
 				return 0;
 			}
@@ -393,6 +408,8 @@ public class StatEnchantFunction extends StatAddFunction
 				if (enchantLvl > 10)
 					return 30 * (enchantLvl - 10);
 				return 0;
+			default:
+				break;
 			}
 
 		case PLUME:
@@ -411,6 +428,8 @@ public class StatEnchantFunction extends StatAddFunction
 				    return 8 * enchantLvl;
 				case MAGICAL_CRITICAL:
 				    return 8 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
 		/**
@@ -430,6 +449,8 @@ public class StatEnchantFunction extends StatAddFunction
 				    return 10 * enchantLvl;
 				case MAGICAL_CRITICAL_RESIST:
 				    return 1 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
 		/**
@@ -441,8 +462,12 @@ public class StatEnchantFunction extends StatAddFunction
 				    return 3 * enchantLvl;
 			    case PVP_DEFEND_RATIO_MAGICAL: 
 				    return 3 * enchantLvl;
+			default:
+				break;
 			}
 			return 0;
+		default:
+			break;
 		}
 		return 0;
 	}
