@@ -638,11 +638,11 @@ public class StatFunctions
         		switch (playerClass) {
         		case GUNSLINGER : damages *= 0.4f;
         			break;
-        		case SORCERER : damages *= 0.7f;
+        		case SORCERER : damages *= 0.5f;
         			break;
-        		case SPIRIT_MASTER : damages *= 0.8f;
+        		case SPIRIT_MASTER : damages *= 0.6f;
         			break;
-        		case CLERIC : damages *= 0.6f;
+        		case CLERIC : damages *= 0.5f;
         			break;
         		case SONGWEAVER : damages *= 0.4f;
         			break;
