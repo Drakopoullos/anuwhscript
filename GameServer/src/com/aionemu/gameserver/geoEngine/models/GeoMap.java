@@ -1,20 +1,18 @@
-/*
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
- * MA  02110-1301, USA.
- *
- * http://www.gnu.org/copyleft/gpl.html
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.gameserver.geoEngine.models;
 
@@ -29,9 +27,8 @@ import com.aionemu.gameserver.geoEngine.math.Vector3f;
 import com.aionemu.gameserver.geoEngine.scene.Node;
 import com.aionemu.gameserver.geoEngine.scene.Spatial;
 import com.aionemu.gameserver.geoEngine.scene.mesh.DoorGeometry;
+
 import javolution.util.FastMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,13 +41,12 @@ import java.util.Map.Entry;
  */
 public class GeoMap extends Node {
 
-    private static final Logger log = LoggerFactory.getLogger(GeoMap.class);
-
     private short[] terrainData;
     private List<BoundingBox> tmpBox = new ArrayList<BoundingBox>();
     private Map<String, DoorGeometry> doors = new FastMap<String, DoorGeometry>();
 
     /**
+     * @param name 
      *
      */
     public GeoMap(String name, int worldSize) {
@@ -66,15 +62,17 @@ public class GeoMap extends Node {
     }
 
     public String getDoorName(int worldId, String meshFile, float x, float y, float z) {
-        if (!GeoDataConfig.GEO_DOORS_ENABLE)
+        if (!GeoDataConfig.GEO_DOORS_ENABLE) {
             return null;
+        }
         String mesh = meshFile.toUpperCase();
         Vector3f templatePoint = new Vector3f(x, y, z);
         float distance = Float.MAX_VALUE;
         DoorGeometry foundDoor = null;
         for (Entry<String, DoorGeometry> door : doors.entrySet()) {
-            if (!(door.getKey().startsWith(Integer.toString(worldId)) && door.getKey().endsWith(mesh)))
+            if (!(door.getKey().startsWith(Integer.toString(worldId)) && door.getKey().endsWith(mesh))) {
                 continue;
+            }
             DoorGeometry checkDoor = doors.get(door.getKey());
             float doorDistance = checkDoor.getWorldBound().distanceTo(templatePoint);
             if (distance > doorDistance) {
@@ -87,6 +85,7 @@ public class GeoMap extends Node {
             }
         }
         if (foundDoor == null) {
+            //log.warn("Could not find static door: " + worldId + " " + meshFile + " " + templatePoint);
             return null;
         }
         foundDoor.setFoundTemplate(true);
@@ -97,8 +96,9 @@ public class GeoMap extends Node {
 
     public void setDoorState(int instanceId, String name, boolean isOpened) {
         DoorGeometry door = doors.get(name);
-        if (door != null)
+        if (door != null) {
             door.setDoorState(instanceId, isOpened);
+        }
     }
 
     /*
@@ -109,8 +109,9 @@ public class GeoMap extends Node {
     public int attachChild(Spatial child) {
         int i = 0;
 
-        if (child instanceof DoorGeometry)
+        if (child instanceof DoorGeometry) {
             doors.put(child.getName(), (DoorGeometry) child);
+        }
 
         for (Spatial spatial : getChildren()) {
             if (tmpBox.get(i).intersects(child.getWorldBound())) {
@@ -140,8 +141,9 @@ public class GeoMap extends Node {
         Vector3f terrain = null;
         if (terrainData.length == 1) {
             terrain = new Vector3f(x, y, terrainData[0] / 32f);
-        } else
+        } else {
             terrain = terraionCollision(x, y, r);
+        }
         if (terrain != null) {
             CollisionResult result = new CollisionResult(terrain, Math.max(0, Math.max(4000 - terrain.z, terrain.z)));
             results.addCollision(result);
@@ -163,10 +165,12 @@ public class GeoMap extends Node {
         collideWith(r, results);
         Vector3f terrain = null;
         if (terrainData.length == 1) {
-            if (terrainData[0] != 0)
+            if (terrainData[0] != 0) {
                 terrain = new Vector3f(x, y, terrainData[0] / 32f);
-        } else
+            }
+        } else {
             terrain = terraionCollision(x, y, r);
+        }
         if (terrain != null && terrain.z > 0 && terrain.z < z + 2) {
             CollisionResult result = new CollisionResult(terrain, Math.abs(z - terrain.z + 2));
             results.addCollision(result);
@@ -178,7 +182,7 @@ public class GeoMap extends Node {
     }
 
     public Vector3f getClosestCollision(float x, float y, float z, float targetX, float targetY, float targetZ, boolean changeDirection,
-        boolean fly, int instanceId, byte intentions) {
+                                        boolean fly, int instanceId, byte intentions) {
         float zChecked1 = 0;
         float zChecked2 = 0;
         if (!fly && changeDirection) {
@@ -208,11 +212,12 @@ public class GeoMap extends Node {
 
         float geoZ = 0;
         if (results.size() == 0) {
-            if (fly)
+            if (fly) {
                 return end;
-            if (zChecked1 > 0 && targetX == x && targetY == y && targetZ - 1f == zChecked1)
+            }
+            if (zChecked1 > 0 && targetX == x && targetY == y && targetZ - 1f == zChecked1) {
                 geoZ = z - 1f;
-            else {
+            } else {
                 zChecked2 = targetZ;
                 geoZ = getZ(targetX, targetY, targetZ + 2, instanceId);
             }
@@ -223,26 +228,29 @@ public class GeoMap extends Node {
         }
         Vector3f contactPoint = results.getClosestCollision().getContactPoint();
         float distance = results.getClosestCollision().getDistance();
-        if (distance < 1)
+        if (distance < 1) {
             return start;
+        }
         // -1m
         contactPoint = contactPoint.subtract(dir);
         if (!fly && changeDirection) {
-            if (zChecked1 > 0 && contactPoint.x == x && contactPoint.y == y && contactPoint.z == zChecked1)
+            if (zChecked1 > 0 && contactPoint.x == x && contactPoint.y == y && contactPoint.z == zChecked1) {
                 contactPoint.z = z - 1f;
-            else if (zChecked2 > 0 && contactPoint.x == targetX && contactPoint.y == targetY && contactPoint.z == zChecked2)
+            } else if (zChecked2 > 0 && contactPoint.x == targetX && contactPoint.y == targetY && contactPoint.z == zChecked2) {
                 contactPoint.z = geoZ;
-            else
+            } else {
                 contactPoint.z = getZ(contactPoint.x, contactPoint.y, contactPoint.z + 2, instanceId);
+            }
         }
-        if (!fly && Math.abs(start.z - contactPoint.z) > distance)
+        if (!fly && Math.abs(start.z - contactPoint.z) > distance) {
             return start;
+        }
 
         return contactPoint;
     }
 
     public CollisionResults getCollisions(float x, float y, float z, float targetX, float targetY, float targetZ, boolean changeDirection,
-        boolean fly, int instanceId, byte intentions) {
+                                          boolean fly, int instanceId, byte intentions) {
         if (!fly && changeDirection) {
             z = getZ(x, y, z + 2, instanceId);
         }
@@ -269,6 +277,10 @@ public class GeoMap extends Node {
         return results;
     }
 
+    /**
+	 * @param z 
+     * @param targetZ  
+	 */
     private Vector3f calculateTerrainCollision(float x, float y, float z, float targetX, float targetY, float targetZ, Ray ray) {
 
         float x2 = targetX - x;
@@ -279,8 +291,9 @@ public class GeoMap extends Node {
             float tempX = x + (x2 * s / ray.getLimit());
             float tempY = y + (y2 * s / ray.getLimit());
             Vector3f result = terraionCollision(tempX, tempY, ray);
-            if (result != null)
+            if (result != null) {
                 return result;
+            }
         }
         return null;
     }
@@ -312,14 +325,16 @@ public class GeoMap extends Node {
         if (p1 >= 0 && p2 >= 0 && p3 >= 0) {
             Triangle tringle1 = new Triangle(new Vector3f(xInt * 2, yInt * 2, p1), new Vector3f(xInt * 2, (yInt + 1) * 2, p2), new Vector3f(
                     (xInt + 1) * 2, yInt * 2, p3));
-            if (ray.intersectWhere(tringle1, result))
+            if (ray.intersectWhere(tringle1, result)) {
                 return result;
+            }
         }
         if (p4 >= 0 && p2 >= 0 && p3 >= 0) {
             Triangle tringle2 = new Triangle(new Vector3f((xInt + 1) * 2, (yInt + 1) * 2, p4), new Vector3f(xInt * 2, (yInt + 1) * 2, p2),
                     new Vector3f((xInt + 1) * 2, yInt * 2, p3));
-            if (ray.intersectWhere(tringle2, result))
+            if (ray.intersectWhere(tringle2, result)) {
                 return result;
+            }
         }
         return null;
     }
@@ -334,8 +349,9 @@ public class GeoMap extends Node {
         float x2 = x - targetX;
         float y2 = y - targetY;
         float distance = (float) Math.sqrt(x2 * x2 + y2 * y2);
-        if (distance > 80f)
+        if (distance > 80f) {
             return false;
+        }
         int intD = (int) Math.abs(distance);
 
         Vector3f pos = new Vector3f(x, y, z);
@@ -347,8 +363,9 @@ public class GeoMap extends Node {
             float tempX = targetX + (x2 * s / distance);
             float tempY = targetY + (y2 * s / distance);
             Vector3f result = terraionCollision(tempX, tempY, r);
-            if (result != null)
+            if (result != null) {
                 return false;
+            }
         }
         CollisionResults results = new CollisionResults((byte) (CollisionIntention.PHYSICAL.getId() | CollisionIntention.DOOR.getId()), false,
                 instanceId);
@@ -356,11 +373,10 @@ public class GeoMap extends Node {
         return (results.size() == 0 && collisions == 0);
     }
 
-	/*
+    /*
      * (non-Javadoc)
-	 * @see aionjHungary.geoEngine.scene.Spatial#updateModelBound()
-	 */
-
+     * @see aionjHungary.geoEngine.scene.Spatial#updateModelBound()
+     */
     @Override
     public void updateModelBound() {
         if (getChildren() != null) {

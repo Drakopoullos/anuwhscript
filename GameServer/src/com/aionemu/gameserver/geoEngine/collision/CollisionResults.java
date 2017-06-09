@@ -1,35 +1,19 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.collision;
 
 import java.util.ArrayList;
@@ -38,117 +22,120 @@ import java.util.Iterator;
 
 public class CollisionResults implements Iterable<CollisionResult> {
 
-	private final ArrayList<CollisionResult> results = new ArrayList<CollisionResult>();
-	private boolean sorted = true;
-	private final boolean onlyFirst;
-	private final byte intentions;
-	private final int instanceId;
+    private final ArrayList<CollisionResult> results = new ArrayList<CollisionResult>();
+    private boolean sorted = true;
+    private final boolean onlyFirst;
+    private final byte intentions;
+    private final int instanceId;
 
-	public CollisionResults(byte intentions, boolean searchFirst, int instanceId) {
-		this.intentions = intentions;
-		this.onlyFirst = searchFirst;
-		this.instanceId = instanceId;
-	}
+    public CollisionResults(byte intentions, boolean searchFirst, int instanceId) {
+        this.intentions = intentions;
+        this.onlyFirst = searchFirst;
+        this.instanceId = instanceId;
+    }
 
-	public void clear() {
-		results.clear();
-	}
+    public void clear() {
+        results.clear();
+    }
 
-	public Iterator<CollisionResult> iterator() {
-		if (!sorted) {
-			Collections.sort(results);
-			sorted = true;
-		}
+    public Iterator<CollisionResult> iterator() {
+        if (!sorted) {
+            Collections.sort(results);
+            sorted = true;
+        }
 
-		return results.iterator();
-	}
+        return results.iterator();
+    }
 
-	public void addCollision(CollisionResult result) {
-		if (Float.isNaN(result.getDistance())) {
-			return;
-		}
-		results.add(result);
-		if (!onlyFirst)
-			sorted = false;
-	}
+    public void addCollision(CollisionResult result) {
+        if (Float.isNaN(result.getDistance())) {
+            return;
+        }
+        results.add(result);
+        if (!onlyFirst) {
+            sorted = false;
+        }
+    }
 
-	public int size() {
-		return results.size();
-	}
+    public int size() {
+        return results.size();
+    }
 
-	public CollisionResult getClosestCollision() {
-		if (size() == 0)
-			return null;
+    public CollisionResult getClosestCollision() {
+        if (size() == 0) {
+            return null;
+        }
 
-		if (!sorted) {
-			Collections.sort(results);
-			sorted = true;
-		}
+        if (!sorted) {
+            Collections.sort(results);
+            sorted = true;
+        }
 
-		return results.get(0);
-	}
+        return results.get(0);
+    }
 
-	public CollisionResult getFarthestCollision() {
-		if (size() == 0)
-			return null;
+    public CollisionResult getFarthestCollision() {
+        if (size() == 0) {
+            return null;
+        }
 
-		if (!sorted) {
-			Collections.sort(results);
-			sorted = true;
-		}
+        if (!sorted) {
+            Collections.sort(results);
+            sorted = true;
+        }
 
-		return results.get(size() - 1);
-	}
+        return results.get(size() - 1);
+    }
 
-	public CollisionResult getCollision(int index) {
-		if (!sorted) {
-			Collections.sort(results);
-			sorted = true;
-		}
+    public CollisionResult getCollision(int index) {
+        if (!sorted) {
+            Collections.sort(results);
+            sorted = true;
+        }
 
-		return results.get(index);
-	}
+        return results.get(index);
+    }
 
-	/**
-	 * Internal use only.
-	 * 
-	 * @param index
-	 * @return
-	 */
-	public CollisionResult getCollisionDirect(int index) {
-		return results.get(index);
-	}
+    /**
+     * Internal use only.
+     *
+     * @param index
+     * @return
+     */
+    public CollisionResult getCollisionDirect(int index) {
+        return results.get(index);
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("CollisionResults[");
-		for (CollisionResult result : results) {
-			sb.append(result).append(", ");
-		}
-		if (results.size() > 0)
-			sb.setLength(sb.length() - 2);
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("CollisionResults[");
+        for (CollisionResult result : results) {
+            sb.append(result).append(", ");
+        }
+        if (results.size() > 0) {
+            sb.setLength(sb.length() - 2);
+        }
 
-		sb.append("]");
-		return sb.toString();
-	}
+        sb.append("]");
+        return sb.toString();
+    }
 
-	/**
-	 * @return Returns the onlyFirst.
-	 */
-	public boolean isOnlyFirst() {
-		return onlyFirst;
-	}
+    /**
+     * @return Returns the onlyFirst.
+     */
+    public boolean isOnlyFirst() {
+        return onlyFirst;
+    }
 
-	/**
-	 * @return the intention
-	 */
-	public byte getIntentions() {
-		return intentions;
-	}
+    /**
+     * @return the intention
+     */
+    public byte getIntentions() {
+        return intentions;
+    }
 
-	public int getInstanceId() {
-		return instanceId;
-	}
-
+    public int getInstanceId() {
+        return instanceId;
+    }
 }

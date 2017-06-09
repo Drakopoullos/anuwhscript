@@ -1,45 +1,25 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.scene;
-
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
 
 import com.aionemu.gameserver.geoEngine.math.FastMath;
 import com.aionemu.gameserver.geoEngine.utils.BufferUtils;
+
+import java.nio.*;
 
 public class VertexBuffer extends GLObject implements Cloneable {
 
@@ -47,78 +27,65 @@ public class VertexBuffer extends GLObject implements Cloneable {
      * Type of buffer. Specifies the actual attribute it defines.
      */
     public static enum Type {
+
         /**
          * Position of the vertex (3 floats)
          */
         Position,
-
         /**
          * The size of the point when using point buffers.
          */
         Size,
-
         /**
          * Normal vector, normalized.
          */
         Normal,
-
         /**
          * Texture coordinate
          */
         TexCoord,
-
         /**
          * Color and Alpha (4 floats)
          */
         Color,
-
         /**
          * Tangent vector, normalized.
          */
         Tangent,
-
         /**
          * Binormal vector, normalized.
          */
         Binormal,
-
         /**
-         * Specifies the source data for various vertex buffers
-         * when interleaving is used.
+         * Specifies the source data for various vertex buffers when
+         * interleaving is used.
          */
         InterleavedData,
-
         /**
          * Do not use.
          */
         @Deprecated
         MiscAttrib,
-
         /**
          * Specifies the index buffer, must contain integer data.
          */
         Index,
-
-        /** 
-         * Inital vertex position, used with animation 
+        /**
+         * Inital vertex position, used with animation
          */
         BindPosePosition,
-
-        /** 
+        /**
          * Inital vertex normals, used with animation
          */
         BindPoseNormal,
-
-        /** 
+        /**
          * Bone weights, used with animation
          */
         BoneWeight,
-
-        /** 
+        /**
          * Bone indices, used with animation
          */
         BoneIndex,
-
         /**
          * Texture coordinate #2
          */
@@ -126,40 +93,36 @@ public class VertexBuffer extends GLObject implements Cloneable {
     }
 
     /**
-     * The usage of the VertexBuffer, specifies how often the buffer
-     * is used. This can determine if a vertex buffer is placed in VRAM
-     * or held in video memory, but no garantees are made- it's only a hint.
+     * The usage of the VertexBuffer, specifies how often the buffer is used.
+     * This can determine if a vertex buffer is placed in VRAM or held in video
+     * memory, but no garantees are made- it's only a hint.
      */
     public static enum Usage {
-        
+
         /**
          * Mesh data is sent once and very rarely updated.
          */
         Static,
-
         /**
          * Mesh data is updated occasionally (once per frame or less).
          */
         Dynamic,
-
         /**
          * Mesh data is updated every frame.
          */
         Stream,
-
         /**
-         * Mesh data is not sent to GPU at all. It is only
-         * used by the CPU.
+         * Mesh data is not sent to GPU at all. It is only used by the CPU.
          */
         CpuOnly;
     }
 
     public static enum Format {
         // Floating point formats
+
         Half(2),
         Float(4),
         Double(8),
-
         // Integer formats
         Byte(1),
         UnsignedByte(1),
@@ -167,17 +130,16 @@ public class VertexBuffer extends GLObject implements Cloneable {
         UnsignedShort(2),
         Int(4),
         UnsignedInt(4);
-
         private int componentSize = 0;
 
-        Format(int componentSize){
+        Format(int componentSize) {
             this.componentSize = componentSize;
         }
 
         /**
          * @return Size in bytes of this data type.
          */
-        public int getComponentSize(){
+        public int getComponentSize() {
             return componentSize;
         }
     }
@@ -185,7 +147,6 @@ public class VertexBuffer extends GLObject implements Cloneable {
     protected int offset = 0;
     protected int stride = 0;
     protected int components = 0;
-
     /**
      * derived from components * format.getComponentSize()
      */
@@ -199,10 +160,10 @@ public class VertexBuffer extends GLObject implements Cloneable {
     protected transient boolean dataSizeChanged = false;
 
     /**
-     * Creates an empty, uninitialized buffer.
-     * Must call setupData() to initialize.
+     * Creates an empty, uninitialized buffer. Must call setupData() to
+     * initialize.
      */
-    public VertexBuffer(Type type){
+    public VertexBuffer(Type type) {
         super(GLObject.Type.VertexBuffer);
         this.bufType = type;
     }
@@ -210,11 +171,11 @@ public class VertexBuffer extends GLObject implements Cloneable {
     /**
      * Do not use this constructor. Serialization purposes only.
      */
-    public VertexBuffer(){
+    public VertexBuffer() {
         super(GLObject.Type.VertexBuffer);
     }
 
-    protected VertexBuffer(int id){
+    protected VertexBuffer(int id) {
         super(GLObject.Type.VertexBuffer, id);
     }
 
@@ -234,7 +195,7 @@ public class VertexBuffer extends GLObject implements Cloneable {
         this.stride = stride;
     }
 
-    public Buffer getData(){
+    public Buffer getData() {
         return data;
     }
 
@@ -245,48 +206,50 @@ public class VertexBuffer extends GLObject implements Cloneable {
     public void setMappedData(ByteBuffer mappedData) {
         this.mappedData = mappedData;
     }
-    
-    public Usage getUsage(){
+
+    public Usage getUsage() {
         return usage;
     }
 
-    public void setUsage(Usage usage){
+    public void setUsage(Usage usage) {
 //        if (id != -1)
 //            throw new UnsupportedOperationException("Data has already been sent. Cannot set usage.");
 
         this.usage = usage;
     }
 
-    public void setNormalized(boolean normalized){
+    public void setNormalized(boolean normalized) {
         this.normalized = normalized;
     }
 
-    public boolean isNormalized(){
+    public boolean isNormalized() {
         return normalized;
     }
 
-    public Type getBufferType(){
+    public Type getBufferType() {
         return bufType;
     }
 
-    public Format getFormat(){
+    public Format getFormat() {
         return format;
     }
 
-    public int getNumComponents(){
+    public int getNumComponents() {
         return components;
     }
 
-    public int getNumElements(){
+    public int getNumElements() {
         int elements = data.capacity() / components;
-        if (format == Format.Half)
+        if (format == Format.Half) {
             elements /= 2;
+        }
         return elements;
     }
 
-    public void setupData(Usage usage, int components, Format format, Buffer data){
-        if (id != -1)
+    public void setupData(Usage usage, int components, Format format, Buffer data) {
+        if (id != -1) {
             throw new UnsupportedOperationException("Data has already been sent. Cannot setupData again.");
+        }
 
         this.data = data;
         this.components = components;
@@ -296,13 +259,13 @@ public class VertexBuffer extends GLObject implements Cloneable {
         setUpdateNeeded();
     }
 
-    public void updateData(Buffer data){
-        if (id != -1){
+    public void updateData(Buffer data) {
+        if (id != -1) {
             // request to update data is okay
         }
 
         // will force renderer to call glBufferData again
-        if (this.data.capacity() != data.capacity()){
+        if (this.data.capacity() != data.capacity()) {
             dataSizeChanged = true;
         }
         this.data = data;
@@ -314,29 +277,31 @@ public class VertexBuffer extends GLObject implements Cloneable {
     }
 
     @Override
-    public void clearUpdateNeeded(){
+    public void clearUpdateNeeded() {
         super.clearUpdateNeeded();
         dataSizeChanged = false;
     }
 
-    public void convertToHalf(){
-        if (id != -1)
+    public void convertToHalf() {
+        if (id != -1) {
             throw new UnsupportedOperationException("Data has already been sent.");
+        }
 
-        if (format != Format.Float)
+        if (format != Format.Float) {
             throw new IllegalStateException("Format must be float!");
+        }
 
         int numElements = data.capacity() / components;
         format = Format.Half;
         this.componentsLength = components * format.getComponentSize();
-        
+
         ByteBuffer halfData = BufferUtils.createByteBuffer(componentsLength * numElements);
         halfData.rewind();
 
         FloatBuffer floatData = (FloatBuffer) data;
         floatData.rewind();
 
-        for (int i = 0; i < floatData.capacity(); i++){
+        for (int i = 0; i < floatData.capacity(); i++) {
             float f = floatData.get(i);
             short half = FastMath.convertFloatToHalf(f);
             halfData.putShort(half);
@@ -346,10 +311,10 @@ public class VertexBuffer extends GLObject implements Cloneable {
         dataSizeChanged = true;
     }
 
-    public void compact(int numElements){
+    public void compact(int numElements) {
         int total = components * numElements;
         data.clear();
-        switch (format){
+        switch (format) {
             case Byte:
             case UnsignedByte:
             case Half:
@@ -383,21 +348,22 @@ public class VertexBuffer extends GLObject implements Cloneable {
                 data = fnewBuf;
                 break;
             default:
-                throw new UnsupportedOperationException("Unrecognized buffer format: "+format);
+                throw new UnsupportedOperationException("Unrecognized buffer format: " + format);
         }
         data.clear();
         setUpdateNeeded();
         dataSizeChanged = true;
     }
 
-    public void copyElement(int inIndex, VertexBuffer outVb, int outIndex){
-        if (outVb.format != format || outVb.components != components)
+    public void copyElement(int inIndex, VertexBuffer outVb, int outIndex) {
+        if (outVb.format != format || outVb.components != components) {
             throw new IllegalArgumentException("Buffer format mismatch. Cannot copy");
+        }
 
-        int inPos  = inIndex  * components;
+        int inPos = inIndex * components;
         int outPos = outIndex * components;
         int elementSz = components;
-        if (format == Format.Half){
+        if (format == Format.Half) {
             // because half is stored as bytebuf but its 2 bytes long
             inPos *= 2;
             outPos *= 2;
@@ -407,7 +373,7 @@ public class VertexBuffer extends GLObject implements Cloneable {
         data.clear();
         outVb.data.clear();
 
-        switch (format){
+        switch (format) {
             case Byte:
             case UnsignedByte:
             case Half:
@@ -441,20 +407,21 @@ public class VertexBuffer extends GLObject implements Cloneable {
                 fout.put(fin);
                 break;
             default:
-                throw new UnsupportedOperationException("Unrecognized buffer format: "+format);
+                throw new UnsupportedOperationException("Unrecognized buffer format: " + format);
         }
 
         data.clear();
         outVb.data.clear();
     }
 
-    public static final Buffer createBuffer(Format format, int components, int numElements){
-        if (components < 1 || components > 4)
+    public static final Buffer createBuffer(Format format, int components, int numElements) {
+        if (components < 1 || components > 4) {
             throw new IllegalArgumentException("Num components must be between 1 and 4");
+        }
 
         int total = numElements * components;
 
-        switch (format){
+        switch (format) {
             case Byte:
             case UnsignedByte:
                 return BufferUtils.createByteBuffer(total);
@@ -471,21 +438,22 @@ public class VertexBuffer extends GLObject implements Cloneable {
             case Double:
                 return BufferUtils.createDoubleBuffer(total);
             default:
-                throw new UnsupportedOperationException("Unrecoginized buffer format: "+format);
+                throw new UnsupportedOperationException("Unrecoginized buffer format: " + format);
         }
     }
 
-    public VertexBuffer clone(){
+    public VertexBuffer clone() {
         // NOTE: Superclass GLObject automatically creates shallow clone
         // e.g re-use ID.
         VertexBuffer vb = (VertexBuffer) super.clone();
-        if (data != null)
+        if (data != null) {
             vb.updateData(BufferUtils.clone(data));
-        
+        }
+
         return vb;
     }
 
-    public VertexBuffer clone(Type overrideType){
+    public VertexBuffer clone(Type overrideType) {
         VertexBuffer vb = new VertexBuffer(overrideType);
         vb.components = components;
         vb.componentsLength = componentsLength;
@@ -502,15 +470,15 @@ public class VertexBuffer extends GLObject implements Cloneable {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         String dataTxt = null;
-        if (data != null){
-            dataTxt = ", elements="+data.capacity();
+        if (data != null) {
+            dataTxt = ", elements=" + data.capacity();
         }
-        return getClass().getSimpleName() + "[fmt="+format.name()
-                                            +", type="+bufType.name()
-                                            +", usage="+usage.name()
-                                            +dataTxt+"]";
+        return getClass().getSimpleName() + "[fmt=" + format.name()
+                + ", type=" + bufType.name()
+                + ", usage=" + usage.name()
+                + dataTxt + "]";
     }
 
     @Override
@@ -521,7 +489,7 @@ public class VertexBuffer extends GLObject implements Cloneable {
     }
 
     @Override
-    public GLObject createDestructableClone(){
+    public GLObject createDestructableClone() {
         return new VertexBuffer(id);
     }
 }

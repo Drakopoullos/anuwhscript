@@ -1,44 +1,29 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.utils;
+
+import com.aionemu.gameserver.geoEngine.utils.IntMap.Entry;
 
 import java.util.Iterator;
 
-import com.aionemu.gameserver.geoEngine.utils.IntMap.Entry;
 /**
  * Taken from http://code.google.com/p/skorpios/
- * 
- * @author Nate 
+ *
+ * @author Nate
  */
 @SuppressWarnings("rawtypes")
 public final class IntMap<T> implements Iterable<Entry>, Cloneable {
@@ -56,17 +41,17 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
     }
 
     public IntMap(int initialCapacity, float loadFactor) {
-        if (initialCapacity > 1 << 30){
+        if (initialCapacity > 1 << 30) {
             throw new IllegalArgumentException("initialCapacity is too large.");
         }
-        if (initialCapacity < 0){
+        if (initialCapacity < 0) {
             throw new IllegalArgumentException("initialCapacity must be greater than zero.");
         }
-        if (loadFactor <= 0){
+        if (loadFactor <= 0) {
             throw new IllegalArgumentException("initialCapacity must be greater than zero.");
         }
         capacity = 1;
-        while (capacity < initialCapacity){
+        while (capacity < initialCapacity) {
             capacity <<= 1;
         }
         this.loadFactor = loadFactor;
@@ -76,26 +61,27 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
     }
 
     @SuppressWarnings("unchecked")
-	public IntMap<T> clone(){
-        try{
+    public IntMap<T> clone() {
+        try {
             IntMap<T> clone = (IntMap<T>) super.clone();
             Entry[] newTable = new Entry[table.length];
-            for (int i = table.length - 1; i >= 0; i--){
-                if (table[i] != null)
+            for (int i = table.length - 1; i >= 0; i--) {
+                if (table[i] != null) {
                     newTable[i] = table[i].clone();
+                }
             }
             clone.table = newTable;
             return clone;
-        }catch (CloneNotSupportedException ex){
+        } catch (CloneNotSupportedException ex) {
         }
         return null;
     }
 
     public boolean containsValue(Object value) {
         Entry[] table = this.table;
-        for (int i = table.length; i-- > 0;){
-            for (Entry e = table[i]; e != null; e = e.next){
-                if (e.value.equals(value)){
+        for (int i = table.length; i-- > 0; ) {
+            for (Entry e = table[i]; e != null; e = e.next) {
+                if (e.value.equals(value)) {
                     return true;
                 }
             }
@@ -105,8 +91,8 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
 
     public boolean containsKey(int key) {
         int index = ((int) key) & mask;
-        for (Entry e = table[index]; e != null; e = e.next){
-            if (e.key == key){
+        for (Entry e = table[index]; e != null; e = e.next) {
+            if (e.key == key) {
                 return true;
             }
         }
@@ -114,10 +100,10 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
     }
 
     @SuppressWarnings("unchecked")
-	public T get(int key) {
+    public T get(int key) {
         int index = key & mask;
-        for (Entry e = table[index]; e != null; e = e.next){
-            if (e.key == key){
+        for (Entry e = table[index]; e != null; e = e.next) {
+            if (e.key == key) {
                 return (T) e.value;
             }
         }
@@ -125,11 +111,11 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
     }
 
     @SuppressWarnings("unchecked")
-	public T put(int key, T value) {
+    public T put(int key, T value) {
         int index = key & mask;
         // Check if key already exists.
-        for (Entry e = table[index]; e != null; e = e.next){
-            if (e.key != key){
+        for (Entry e = table[index]; e != null; e = e.next) {
+            if (e.key != key) {
                 continue;
             }
             Object oldValue = e.value;
@@ -137,23 +123,23 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
             return (T) oldValue;
         }
         table[index] = new Entry(key, value, table[index]);
-        if (size++ >= threshold){
+        if (size++ >= threshold) {
             // Rehash.
             int newCapacity = 2 * capacity;
             Entry[] newTable = new Entry[newCapacity];
             Entry[] src = table;
             int bucketmask = newCapacity - 1;
-            for (int j = 0; j < src.length; j++){
+            for (int j = 0; j < src.length; j++) {
                 Entry e = src[j];
-                if (e != null){
+                if (e != null) {
                     src[j] = null;
-                    do{
+                    do {
                         Entry next = e.next;
                         index = e.key & bucketmask;
                         e.next = newTable[index];
                         newTable[index] = e;
                         e = next;
-                    }while (e != null);
+                    } while (e != null);
                 }
             }
             table = newTable;
@@ -165,17 +151,17 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
     }
 
     @SuppressWarnings("unchecked")
-	public T remove(int key) {
+    public T remove(int key) {
         int index = key & mask;
         Entry prev = table[index];
         Entry e = prev;
-        while (e != null){
+        while (e != null) {
             Entry next = e.next;
-            if (e.key == key){
+            if (e.key == key) {
                 size--;
-                if (prev == e){
+                if (prev == e) {
                     table[index] = next;
-                }else{
+                } else {
                     prev.next = next;
                 }
                 return (T) e.value;
@@ -192,7 +178,7 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
 
     public void clear() {
         Entry[] table = this.table;
-        for (int index = table.length; --index >= 0;){
+        for (int index = table.length; --index >= 0; ) {
             table[index] = null;
         }
         size = 0;
@@ -208,16 +194,14 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
          * Current entry.
          */
         private Entry cur;
-
         /**
          * Entry in the table
          */
         private int idx = 0;
-
         /**
          * Element in the entry
          */
-        private int el  = 0;
+        private int el = 0;
 
         public IntMapIterator() {
             cur = table[0];
@@ -228,17 +212,18 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
         }
 
         public Entry next() {
-            if (el >= size)
+            if (el >= size) {
                 throw new IllegalStateException("No more elements!");
+            }
 
-            if (cur != null){
+            if (cur != null) {
                 Entry e = cur;
                 cur = cur.next;
                 el++;
                 return e;
             }
 //            if (cur != null && cur.next != null){
-                // if we have a current entry, continue to the next entry in the list
+            // if we have a current entry, continue to the next entry in the list
 //                cur = cur.next;
 //                el++;
 //                return cur;
@@ -251,15 +236,14 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
             } while (cur == null);
             Entry e = cur;
             cur = cur.next;
-            el ++;
+            el++;
             return e;
         }
 
         public void remove() {
         }
-        
     }
-    
+
     public static final class Entry<T> implements Cloneable {
 
         final int key;
@@ -272,25 +256,25 @@ public final class IntMap<T> implements Iterable<Entry>, Cloneable {
             next = n;
         }
 
-        public int getKey(){
+        public int getKey() {
             return key;
         }
 
-        public T getValue(){
+        public T getValue() {
             return value;
         }
 
-        public String toString(){
+        public String toString() {
             return key + " => " + value;
         }
 
         @SuppressWarnings("unchecked")
-		public Entry<T> clone(){
-            try{
+        public Entry<T> clone() {
+            try {
                 Entry<T> clone = (Entry<T>) super.clone();
                 clone.next = next != null ? next.clone() : null;
                 return clone;
-            }catch (CloneNotSupportedException ex){
+            } catch (CloneNotSupportedException ex) {
             }
             return null;
         }

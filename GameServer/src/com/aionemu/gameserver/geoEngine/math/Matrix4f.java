@@ -1,54 +1,37 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.math;
+
+import com.aionemu.gameserver.geoEngine.utils.BufferUtils;
 
 import java.nio.FloatBuffer;
 import java.util.logging.Logger;
 
-import com.aionemu.gameserver.geoEngine.utils.BufferUtils;
-
-
 /**
  * <code>Matrix4f</code> defines and maintains a 4x4 matrix in row major order.
- * This matrix is intended for use in a translation and rotational capacity. 
- * It provides convenience methods for creating the matrix from a multitude 
- * of sources.
- * 
- * Matrices are stored assuming column vectors on the right, with the translation
- * in the rightmost column. Element numbering is row,column, so m03 is the zeroth
- * row, third column, which is the "x" translation part. This means that the implicit
- * storage order is column major. However, the get() and set() functions on float
- * arrays default to row major order!
+ * This matrix is intended for use in a translation and rotational capacity. It
+ * provides convenience methods for creating the matrix from a multitude of
+ * sources.
+ * <p/>
+ * Matrices are stored assuming column vectors on the right, with the
+ * translation in the rightmost column. Element numbering is row,column, so m03
+ * is the zeroth row, third column, which is the "x" translation part. This
+ * means that the implicit storage order is column major. However, the get() and
+ * set() functions on float arrays default to row major order!
  *
  * @author Mark Powell
  * @author Joshua Slack
@@ -56,18 +39,15 @@ import com.aionemu.gameserver.geoEngine.utils.BufferUtils;
 public final class Matrix4f implements Cloneable {
 
     private static final Logger logger = Logger.getLogger(Matrix4f.class.getName());
-
     public float m00, m01, m02, m03;
     public float m10, m11, m12, m13;
     public float m20, m21, m22, m23;
     public float m30, m31, m32, m33;
-
     public static final Matrix4f IDENTITY = new Matrix4f();
 
     /**
-     * Constructor instantiates a new <code>Matrix</code> that is set to the
-     * identity matrix.
-     *  
+     * Constructor instantiates a new
+     * <code>Matrix</code> that is set to the identity matrix.
      */
     public Matrix4f() {
         loadIdentity();
@@ -76,10 +56,10 @@ public final class Matrix4f implements Cloneable {
     /**
      * constructs a matrix with the given values.
      */
-    public Matrix4f(float m00, float m01, float m02, float m03, 
-            float m10, float m11, float m12, float m13,
-            float m20, float m21, float m22, float m23,
-            float m30, float m31, float m32, float m33) {
+    public Matrix4f(float m00, float m01, float m02, float m03,
+                    float m10, float m11, float m12, float m13,
+                    float m20, float m21, float m22, float m23,
+                    float m30, float m31, float m32, float m33) {
 
         this.m00 = m00;
         this.m01 = m01;
@@ -102,20 +82,20 @@ public final class Matrix4f implements Cloneable {
     /**
      * Create a new Matrix4f, given data in column-major format.
      *
-     * @param array
-	 *		An array of 16 floats in column-major format (translation in elements 12, 13 and 14).
+     * @param array An array of 16 floats in column-major format (translation in
+     *              elements 12, 13 and 14).
      */
     public Matrix4f(float[] array) {
-    	set(array, false);
+        set(array, false);
     }
 
     /**
-     * Constructor instantiates a new <code>Matrix</code> that is set to the
-     * provided matrix. This constructor copies a given Matrix. If the provided
-     * matrix is null, the constructor sets the matrix to the identity.
-     * 
-     * @param mat
-     *            the matrix to copy.
+     * Constructor instantiates a new
+     * <code>Matrix</code> that is set to the provided matrix. This constructor
+     * copies a given Matrix. If the provided matrix is null, the constructor
+     * sets the matrix to the identity.
+     *
+     * @param mat the matrix to copy.
      */
     public Matrix4f(Matrix4f mat) {
         copy(mat);
@@ -125,9 +105,8 @@ public final class Matrix4f implements Cloneable {
      * <code>copy</code> transfers the contents of a given matrix to this
      * matrix. If a null matrix is supplied, this matrix is set to the identity
      * matrix.
-     * 
-     * @param matrix
-     *            the matrix to copy.
+     *
+     * @param matrix the matrix to copy.
      */
     public void copy(Matrix4f matrix) {
         if (null == matrix) {
@@ -153,28 +132,27 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * <code>get</code> retrieves the values of this object into
-     * a float array in row-major order.
-     * 
-     * @param matrix
-     *            the matrix to set the values into.
+     * <code>get</code> retrieves the values of this object into a float array
+     * in row-major order.
+     *
+     * @param matrix the matrix to set the values into.
      */
     public void get(float[] matrix) {
         get(matrix, true);
     }
 
     /**
-     * <code>set</code> retrieves the values of this object into
-     * a float array.
-     * 
-     * @param matrix
-     *            the matrix to set the values into.
-     * @param rowMajor
-     *            whether the outgoing data is in row or column major order.
+     * <code>set</code> retrieves the values of this object into a float array.
+     *
+     * @param matrix   the matrix to set the values into.
+     * @param rowMajor whether the outgoing data is in row or column major
+     *                 order.
      */
     public void get(float[] matrix, boolean rowMajor) {
-        if (matrix.length != 16) throw new IllegalArgumentException(
-                "Array must be of size 16.");
+        if (matrix.length != 16) {
+            throw new IllegalArgumentException(
+                    "Array must be of size 16.");
+        }
 
         if (rowMajor) {
             matrix[0] = m00;
@@ -214,46 +192,60 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * <code>get</code> retrieves a value from the matrix at the given
-     * position. If the position is invalid a <code>JmeException</code> is
-     * thrown.
-     * 
-     * @param i
-     *            the row index.
-     * @param j
-     *            the colum index.
+     * <code>get</code> retrieves a value from the matrix at the given position.
+     * If the position is invalid a
+     * <code>JmeException</code> is thrown.
+     *
+     * @param i the row index.
+     * @param j the colum index.
      * @return the value at (i, j).
      */
     public float get(int i, int j) {
         switch (i) {
-        case 0:
-            switch (j) {
-            case 0: return m00;
-            case 1: return m01;
-            case 2: return m02;
-            case 3: return m03;
-            }
-        case 1:
-            switch (j) {
-            case 0: return m10;
-            case 1: return m11;
-            case 2: return m12;
-            case 3: return m13;
-            }
-        case 2:
-            switch (j) {
-            case 0: return m20;
-            case 1: return m21;
-            case 2: return m22;
-            case 3: return m23;
-            }
-        case 3:
-            switch (j) {
-            case 0: return m30;
-            case 1: return m31;
-            case 2: return m32;
-            case 3: return m33;
-            }
+            case 0:
+                switch (j) {
+                    case 0:
+                        return m00;
+                    case 1:
+                        return m01;
+                    case 2:
+                        return m02;
+                    case 3:
+                        return m03;
+                }
+            case 1:
+                switch (j) {
+                    case 0:
+                        return m10;
+                    case 1:
+                        return m11;
+                    case 2:
+                        return m12;
+                    case 3:
+                        return m13;
+                }
+            case 2:
+                switch (j) {
+                    case 0:
+                        return m20;
+                    case 1:
+                        return m21;
+                    case 2:
+                        return m22;
+                    case 3:
+                        return m23;
+                }
+            case 3:
+                switch (j) {
+                    case 0:
+                        return m30;
+                    case 1:
+                        return m31;
+                    case 2:
+                        return m32;
+                    case 3:
+                        return m33;
+                }
         }
 
         logger.warning("Invalid matrix index.");
@@ -263,9 +255,8 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>getColumn</code> returns one of three columns specified by the
      * parameter. This column is returned as a float array of length 4.
-     * 
-     * @param i
-     *            the column to retrieve. Must be between 0 and 3.
+     *
+     * @param i the column to retrieve. Must be between 0 and 3.
      * @return the column specified by the index.
      */
     public float[] getColumn(int i) {
@@ -275,57 +266,54 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>getColumn</code> returns one of three columns specified by the
      * parameter. This column is returned as a float[4].
-     * 
-     * @param i
-     *            the column to retrieve. Must be between 0 and 3.
-     * @param store
-     *            the float array to store the result in. if null, a new one
-     *            is created.
+     *
+     * @param i     the column to retrieve. Must be between 0 and 3.
+     * @param store the float array to store the result in. if null, a new one
+     *              is created.
      * @return the column specified by the index.
      */
     public float[] getColumn(int i, float[] store) {
-        if (store == null) store = new float[4];
+        if (store == null) {
+            store = new float[4];
+        }
         switch (i) {
-        case 0:
-            store[0] = m00;
-            store[1] = m10;
-            store[2] = m20;
-            store[3] = m30;
-            break;
-        case 1:
-            store[0] = m01;
-            store[1] = m11;
-            store[2] = m21;
-            store[3] = m31;
-            break;
-        case 2:
-            store[0] = m02;
-            store[1] = m12;
-            store[2] = m22;
-            store[3] = m32;
-            break;
-        case 3:
-            store[0] = m03;
-            store[1] = m13;
-            store[2] = m23;
-            store[3] = m33;
-            break;
-        default:
-            logger.warning("Invalid column index.");
-            throw new IllegalArgumentException("Invalid column index. " + i);
+            case 0:
+                store[0] = m00;
+                store[1] = m10;
+                store[2] = m20;
+                store[3] = m30;
+                break;
+            case 1:
+                store[0] = m01;
+                store[1] = m11;
+                store[2] = m21;
+                store[3] = m31;
+                break;
+            case 2:
+                store[0] = m02;
+                store[1] = m12;
+                store[2] = m22;
+                store[3] = m32;
+                break;
+            case 3:
+                store[0] = m03;
+                store[1] = m13;
+                store[2] = m23;
+                store[3] = m33;
+                break;
+            default:
+                logger.warning("Invalid column index.");
+                throw new IllegalArgumentException("Invalid column index. " + i);
         }
         return store;
     }
 
     /**
-     * 
      * <code>setColumn</code> sets a particular column of this matrix to that
      * represented by the provided vector.
-     * 
-     * @param i
-     *            the column to set.
-     * @param column
-     *            the data to set.
+     *
+     * @param i      the column to set.
+     * @param column the data to set.
      */
     public void setColumn(int i, float[] column) {
 
@@ -334,77 +322,107 @@ public final class Matrix4f implements Cloneable {
             return;
         }
         switch (i) {
-        case 0:
-            m00 = column[0];
-            m10 = column[1];
-            m20 = column[2];
-            m30 = column[3];
-            break;
-        case 1:
-            m01 = column[0];
-            m11 = column[1];
-            m21 = column[2];
-            m31 = column[3];
-            break;
-        case 2:
-            m02 = column[0];
-            m12 = column[1];
-            m22 = column[2];
-            m32 = column[3];
-            break;
-        case 3:
-            m03 = column[0];
-            m13 = column[1];
-            m23 = column[2];
-            m33 = column[3];
-            break;
-        default:
-            logger.warning("Invalid column index.");
-            throw new IllegalArgumentException("Invalid column index. " + i);
-        }    }
+            case 0:
+                m00 = column[0];
+                m10 = column[1];
+                m20 = column[2];
+                m30 = column[3];
+                break;
+            case 1:
+                m01 = column[0];
+                m11 = column[1];
+                m21 = column[2];
+                m31 = column[3];
+                break;
+            case 2:
+                m02 = column[0];
+                m12 = column[1];
+                m22 = column[2];
+                m32 = column[3];
+                break;
+            case 3:
+                m03 = column[0];
+                m13 = column[1];
+                m23 = column[2];
+                m33 = column[3];
+                break;
+            default:
+                logger.warning("Invalid column index.");
+                throw new IllegalArgumentException("Invalid column index. " + i);
+        }
+    }
 
     /**
      * <code>set</code> places a given value into the matrix at the given
-     * position. If the position is invalid a <code>JmeException</code> is
-     * thrown.
-     * 
-     * @param i
-     *            the row index.
-     * @param j
-     *            the colum index.
-     * @param value
-     *            the value for (i, j).
+     * position. If the position is invalid a
+     * <code>JmeException</code> is thrown.
+     *
+     * @param i     the row index.
+     * @param j     the colum index.
+     * @param value the value for (i, j).
      */
     public void set(int i, int j, float value) {
         switch (i) {
-        case 0:
-            switch (j) {
-            case 0: m00 = value; return;
-            case 1: m01 = value; return;
-            case 2: m02 = value; return;
-            case 3: m03 = value; return;
-            }
-        case 1:
-            switch (j) {
-            case 0: m10 = value; return;
-            case 1: m11 = value; return;
-            case 2: m12 = value; return;
-            case 3: m13 = value; return;
-            }
-        case 2:
-            switch (j) {
-            case 0: m20 = value; return;
-            case 1: m21 = value; return;
-            case 2: m22 = value; return;
-            case 3: m23 = value; return;
-            }
-        case 3:
-            switch (j) {
-            case 0: m30 = value; return;
-            case 1: m31 = value; return;
-            case 2: m32 = value; return;
-            case 3: m33 = value; return;
-            }
+            case 0:
+                switch (j) {
+                    case 0:
+                        m00 = value;
+                        return;
+                    case 1:
+                        m01 = value;
+                        return;
+                    case 2:
+                        m02 = value;
+                        return;
+                    case 3:
+                        m03 = value;
+                        return;
+                }
+            case 1:
+                switch (j) {
+                    case 0:
+                        m10 = value;
+                        return;
+                    case 1:
+                        m11 = value;
+                        return;
+                    case 2:
+                        m12 = value;
+                        return;
+                    case 3:
+                        m13 = value;
+                        return;
+                }
+            case 2:
+                switch (j) {
+                    case 0:
+                        m20 = value;
+                        return;
+                    case 1:
+                        m21 = value;
+                        return;
+                    case 2:
+                        m22 = value;
+                        return;
+                    case 3:
+                        m23 = value;
+                        return;
+                }
+            case 3:
+                switch (j) {
+                    case 0:
+                        m30 = value;
+                        return;
+                    case 1:
+                        m31 = value;
+                        return;
+                    case 2:
+                        m32 = value;
+                        return;
+                    case 3:
+                        m33 = value;
+                        return;
+                }
         }
 
         logger.warning("Invalid matrix index.");
@@ -412,17 +430,16 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * <code>set</code> sets the values of this matrix from an array of
-     * values.
-     * 
-     * @param matrix
-     *            the matrix to set the value to.
-     * @throws JmeException
-     *             if the array is not of size 16.
+     * <code>set</code> sets the values of this matrix from an array of values.
+     *
+     * @param matrix the matrix to set the value to.
+     * @throws JmeException if the array is not of size 16.
      */
     public void set(float[][] matrix) {
-        if (matrix.length != 4 || matrix[0].length != 4) { throw new IllegalArgumentException(
-                "Array must be of size 16."); }
+        if (matrix.length != 4 || matrix[0].length != 4) {
+            throw new IllegalArgumentException(
+                    "Array must be of size 16.");
+        }
 
         m00 = matrix[0][0];
         m01 = matrix[0][1];
@@ -445,40 +462,50 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>set</code> sets the values of this matrix from another matrix.
      *
-     * @param matrix
-     *            the matrix to read the value from.
+     * @param matrix the matrix to read the value from.
      */
     public Matrix4f set(Matrix4f matrix) {
-        m00 = matrix.m00; m01 = matrix.m01; m02 = matrix.m02; m03 = matrix.m03;
-        m10 = matrix.m10; m11 = matrix.m11; m12 = matrix.m12; m13 = matrix.m13;
-        m20 = matrix.m20; m21 = matrix.m21; m22 = matrix.m22; m23 = matrix.m23;
-        m30 = matrix.m30; m31 = matrix.m31; m32 = matrix.m32; m33 = matrix.m33;
+        m00 = matrix.m00;
+        m01 = matrix.m01;
+        m02 = matrix.m02;
+        m03 = matrix.m03;
+        m10 = matrix.m10;
+        m11 = matrix.m11;
+        m12 = matrix.m12;
+        m13 = matrix.m13;
+        m20 = matrix.m20;
+        m21 = matrix.m21;
+        m22 = matrix.m22;
+        m23 = matrix.m23;
+        m30 = matrix.m30;
+        m31 = matrix.m31;
+        m32 = matrix.m32;
+        m33 = matrix.m33;
         return this;
     }
 
     /**
-     * <code>set</code> sets the values of this matrix from an array of
-     * values assuming that the data is rowMajor order;
-     * 
-     * @param matrix
-     *            the matrix to set the value to.
+     * <code>set</code> sets the values of this matrix from an array of values
+     * assuming that the data is rowMajor order;
+     *
+     * @param matrix the matrix to set the value to.
      */
     public void set(float[] matrix) {
         set(matrix, true);
     }
 
     /**
-     * <code>set</code> sets the values of this matrix from an array of
-     * values;
-     * 
-     * @param matrix
-     *            the matrix to set the value to.
-     * @param rowMajor
-     *            whether the incoming data is in row or column major order.
+     * <code>set</code> sets the values of this matrix from an array of values;
+     *
+     * @param matrix   the matrix to set the value to.
+     * @param rowMajor whether the incoming data is in row or column major
+     *                 order.
      */
     public void set(float[] matrix, boolean rowMajor) {
-        if (matrix.length != 16) throw new IllegalArgumentException(
-                "Array must be of size 16.");
+        if (matrix.length != 16) {
+            throw new IllegalArgumentException(
+                    "Array must be of size 16.");
+        }
 
         if (rowMajor) {
             m00 = matrix[0];
@@ -521,12 +548,12 @@ public final class Matrix4f implements Cloneable {
         float[] tmp = new float[16];
         get(tmp, true);
         Matrix4f mat = new Matrix4f(tmp);
-    	return mat;
+        return mat;
     }
 
     /**
      * <code>transpose</code> locally transposes this Matrix.
-     * 
+     *
      * @return this object for chaining.
      */
     public Matrix4f transposeLocal() {
@@ -556,123 +583,171 @@ public final class Matrix4f implements Cloneable {
 
         return this;
     }
-    
-    
+
     /**
-     * <code>toFloatBuffer</code> returns a FloatBuffer object that contains
-     * the matrix data.
-     * 
+     * <code>toFloatBuffer</code> returns a FloatBuffer object that contains the
+     * matrix data.
+     *
      * @return matrix data as a FloatBuffer.
      */
     public FloatBuffer toFloatBuffer() {
-    	return toFloatBuffer(false);
+        return toFloatBuffer(false);
     }
 
     /**
      * <code>toFloatBuffer</code> returns a FloatBuffer object that contains the
      * matrix data.
-     * 
-     * @param columnMajor
-     *            if true, this buffer should be filled with column major data,
-     *            otherwise it will be filled row major.
+     *
+     * @param columnMajor if true, this buffer should be filled with column
+     *                    major data, otherwise it will be filled row major.
      * @return matrix data as a FloatBuffer. The position is set to 0 for
-     *         convenience.
+     * convenience.
      */
     public FloatBuffer toFloatBuffer(boolean columnMajor) {
-    	FloatBuffer fb = BufferUtils.createFloatBuffer(16);
-    	fillFloatBuffer(fb, columnMajor);
-    	fb.rewind();
-    	return fb;
-    }
-    
-    /**
-     * <code>fillFloatBuffer</code> fills a FloatBuffer object with
-     * the matrix data.
-     * @param fb the buffer to fill, must be correct size
-     * @return matrix data as a FloatBuffer.
-     */
-    public FloatBuffer fillFloatBuffer(FloatBuffer fb) {
-    	return fillFloatBuffer(fb, false);
+        FloatBuffer fb = BufferUtils.createFloatBuffer(16);
+        fillFloatBuffer(fb, columnMajor);
+        fb.rewind();
+        return fb;
     }
 
     /**
      * <code>fillFloatBuffer</code> fills a FloatBuffer object with the matrix
      * data.
-     * 
-     * @param fb
-     *            the buffer to fill, starting at current position. Must have
-     *            room for 16 more floats.
-     * @param columnMajor
-     *            if true, this buffer should be filled with column major data,
-     *            otherwise it will be filled row major.
+     *
+     * @param fb the buffer to fill, must be correct size
+     * @return matrix data as a FloatBuffer.
+     */
+    public FloatBuffer fillFloatBuffer(FloatBuffer fb) {
+        return fillFloatBuffer(fb, false);
+    }
+
+    /**
+     * <code>fillFloatBuffer</code> fills a FloatBuffer object with the matrix
+     * data.
+     *
+     * @param fb          the buffer to fill, starting at current position. Must have
+     *                    room for 16 more floats.
+     * @param columnMajor if true, this buffer should be filled with column
+     *                    major data, otherwise it will be filled row major.
      * @return matrix data as a FloatBuffer. (position is advanced by 16 and any
-     *         limit set is not changed).
+     * limit set is not changed).
      */
     public FloatBuffer fillFloatBuffer(FloatBuffer fb, boolean columnMajor) {
-        if(columnMajor) {
-    	    fb.put(m00).put(m10).put(m20).put(m30);
-	        fb.put(m01).put(m11).put(m21).put(m31);
-	        fb.put(m02).put(m12).put(m22).put(m32);
-	        fb.put(m03).put(m13).put(m23).put(m33);
-	    } else {
-	        fb.put(m00).put(m01).put(m02).put(m03);
-	        fb.put(m10).put(m11).put(m12).put(m13);
-	        fb.put(m20).put(m21).put(m22).put(m23);
-	        fb.put(m30).put(m31).put(m32).put(m33);
-	    }
+        if (columnMajor) {
+            fb.put(m00).put(m10).put(m20).put(m30);
+            fb.put(m01).put(m11).put(m21).put(m31);
+            fb.put(m02).put(m12).put(m22).put(m32);
+            fb.put(m03).put(m13).put(m23).put(m33);
+        } else {
+            fb.put(m00).put(m01).put(m02).put(m03);
+            fb.put(m10).put(m11).put(m12).put(m13);
+            fb.put(m20).put(m21).put(m22).put(m23);
+            fb.put(m30).put(m31).put(m32).put(m33);
+        }
         return fb;
     }
 
     public void fillFloatArray(float[] f, boolean columnMajor) {
-        if(columnMajor) {
-            f[ 0] = m00; f[ 1] = m10; f[ 2] = m20; f[ 3] = m30;
-            f[ 4] = m01; f[ 5] = m11; f[ 6] = m21; f[ 7] = m31;
-            f[ 8] = m02; f[ 9] = m12; f[10] = m22; f[11] = m32;
-            f[12] = m03; f[13] = m13; f[14] = m23; f[15] = m33;
-	    } else {
-            f[ 0] = m00; f[ 1] = m01; f[ 2] = m02; f[ 3] = m03;
-            f[ 4] = m10; f[ 5] = m11; f[ 6] = m12; f[ 7] = m13;
-            f[ 8] = m20; f[ 9] = m21; f[10] = m22; f[11] = m23;
-            f[12] = m30; f[13] = m31; f[14] = m32; f[15] = m33;
-	    }
+        if (columnMajor) {
+            f[0] = m00;
+            f[1] = m10;
+            f[2] = m20;
+            f[3] = m30;
+            f[4] = m01;
+            f[5] = m11;
+            f[6] = m21;
+            f[7] = m31;
+            f[8] = m02;
+            f[9] = m12;
+            f[10] = m22;
+            f[11] = m32;
+            f[12] = m03;
+            f[13] = m13;
+            f[14] = m23;
+            f[15] = m33;
+        } else {
+            f[0] = m00;
+            f[1] = m01;
+            f[2] = m02;
+            f[3] = m03;
+            f[4] = m10;
+            f[5] = m11;
+            f[6] = m12;
+            f[7] = m13;
+            f[8] = m20;
+            f[9] = m21;
+            f[10] = m22;
+            f[11] = m23;
+            f[12] = m30;
+            f[13] = m31;
+            f[14] = m32;
+            f[15] = m33;
+        }
     }
-    
+
     /**
-     * <code>readFloatBuffer</code> reads value for this matrix from a FloatBuffer.
+     * <code>readFloatBuffer</code> reads value for this matrix from a
+     * FloatBuffer.
+     *
      * @param fb the buffer to read from, must be correct size
      * @return this data as a FloatBuffer.
      */
     public Matrix4f readFloatBuffer(FloatBuffer fb) {
-    	return readFloatBuffer(fb, false);
+        return readFloatBuffer(fb, false);
     }
 
     /**
-     * <code>readFloatBuffer</code> reads value for this matrix from a FloatBuffer.
-     * @param fb the buffer to read from, must be correct size
+     * <code>readFloatBuffer</code> reads value for this matrix from a
+     * FloatBuffer.
+     *
+     * @param fb          the buffer to read from, must be correct size
      * @param columnMajor if true, this buffer should be filled with column
-     * 		major data, otherwise it will be filled row major.
+     *                    major data, otherwise it will be filled row major.
      * @return this data as a FloatBuffer.
      */
     public Matrix4f readFloatBuffer(FloatBuffer fb, boolean columnMajor) {
-    	
-    	if(columnMajor) {
-    		m00 = fb.get(); m10 = fb.get(); m20 = fb.get(); m30 = fb.get();
-    		m01 = fb.get(); m11 = fb.get(); m21 = fb.get(); m31 = fb.get();
-    		m02 = fb.get(); m12 = fb.get(); m22 = fb.get(); m32 = fb.get();
-    		m03 = fb.get(); m13 = fb.get(); m23 = fb.get(); m33 = fb.get();
-    	} else {
-    		m00 = fb.get(); m01 = fb.get(); m02 = fb.get(); m03 = fb.get();
-    		m10 = fb.get(); m11 = fb.get(); m12 = fb.get(); m13 = fb.get();
-    		m20 = fb.get(); m21 = fb.get(); m22 = fb.get(); m23 = fb.get();
-    		m30 = fb.get(); m31 = fb.get(); m32 = fb.get(); m33 = fb.get();
-    	}
+
+        if (columnMajor) {
+            m00 = fb.get();
+            m10 = fb.get();
+            m20 = fb.get();
+            m30 = fb.get();
+            m01 = fb.get();
+            m11 = fb.get();
+            m21 = fb.get();
+            m31 = fb.get();
+            m02 = fb.get();
+            m12 = fb.get();
+            m22 = fb.get();
+            m32 = fb.get();
+            m03 = fb.get();
+            m13 = fb.get();
+            m23 = fb.get();
+            m33 = fb.get();
+        } else {
+            m00 = fb.get();
+            m01 = fb.get();
+            m02 = fb.get();
+            m03 = fb.get();
+            m10 = fb.get();
+            m11 = fb.get();
+            m12 = fb.get();
+            m13 = fb.get();
+            m20 = fb.get();
+            m21 = fb.get();
+            m22 = fb.get();
+            m23 = fb.get();
+            m30 = fb.get();
+            m31 = fb.get();
+            m32 = fb.get();
+            m33 = fb.get();
+        }
         return this;
     }
 
     /**
-     * <code>loadIdentity</code> sets this matrix to the identity matrix,
-     * namely all zeros with ones along the diagonal.
-     *  
+     * <code>loadIdentity</code> sets this matrix to the identity matrix, namely
+     * all zeros with ones along the diagonal.
      */
     public void loadIdentity() {
         m01 = m02 = m03 = 0.0f;
@@ -682,7 +757,7 @@ public final class Matrix4f implements Cloneable {
         m00 = m11 = m22 = m33 = 1.0f;
     }
 
-    public void fromFrustum(float near, float far, float left, float right, float top, float bottom, boolean parallel){
+    public void fromFrustum(float near, float far, float left, float right, float top, float bottom, boolean parallel) {
         loadIdentity();
         if (parallel) {
             // scale
@@ -691,7 +766,7 @@ public final class Matrix4f implements Cloneable {
             m11 = 2.0f / (top - bottom);
             m22 = -2.0f / (far - near);
             m33 = 1f;
-            
+
             // translation
             m03 = -(right + left) / (right - left);
             //m31 = -(bottom + top) / (bottom - top);
@@ -705,27 +780,25 @@ public final class Matrix4f implements Cloneable {
 
             // A
             m02 = (right + left) / (right - left);
-            
+
             // B 
             m12 = (top + bottom) / (top - bottom);
-            
+
             // C
             m22 = -(far + near) / (far - near);
-            
+
             // D
             m23 = -(2.0f * far * near) / (far - near);
         }
     }
 
     /**
-     * <code>fromAngleAxis</code> sets this matrix4f to the values specified
-     * by an angle and an axis of rotation.  This method creates an object, so
-     * use fromAngleNormalAxis if your axis is already normalized.
-     * 
-     * @param angle
-     *            the angle to rotate (in radians).
-     * @param axis
-     *            the axis of rotation.
+     * <code>fromAngleAxis</code> sets this matrix4f to the values specified by
+     * an angle and an axis of rotation. This method creates an object, so use
+     * fromAngleNormalAxis if your axis is already normalized.
+     *
+     * @param angle the angle to rotate (in radians).
+     * @param axis  the axis of rotation.
      */
     public void fromAngleAxis(float angle, Vector3f axis) {
         Vector3f normAxis = axis.normalize();
@@ -735,11 +808,9 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>fromAngleNormalAxis</code> sets this matrix4f to the values
      * specified by an angle and a normalized axis of rotation.
-     * 
-     * @param angle
-     *            the angle to rotate (in radians).
-     * @param axis
-     *            the axis of rotation (already normalized).
+     *
+     * @param angle the angle to rotate (in radians).
+     * @param axis  the axis of rotation (already normalized).
      */
     public void fromAngleNormalAxis(float angle, Vector3f axis) {
         zero();
@@ -747,33 +818,32 @@ public final class Matrix4f implements Cloneable {
 
         float fCos = FastMath.cos(angle);
         float fSin = FastMath.sin(angle);
-        float fOneMinusCos = ((float)1.0)-fCos;
-        float fX2 = axis.x*axis.x;
-        float fY2 = axis.y*axis.y;
-        float fZ2 = axis.z*axis.z;
-        float fXYM = axis.x*axis.y*fOneMinusCos;
-        float fXZM = axis.x*axis.z*fOneMinusCos;
-        float fYZM = axis.y*axis.z*fOneMinusCos;
-        float fXSin = axis.x*fSin;
-        float fYSin = axis.y*fSin;
-        float fZSin = axis.z*fSin;
-        
-        m00 = fX2*fOneMinusCos+fCos;
-        m01 = fXYM-fZSin;
-        m02 = fXZM+fYSin;
-        m10 = fXYM+fZSin;
-        m11 = fY2*fOneMinusCos+fCos;
-        m12 = fYZM-fXSin;
-        m20 = fXZM-fYSin;
-        m21 = fYZM+fXSin;
-        m22 = fZ2*fOneMinusCos+fCos;
+        float fOneMinusCos = ((float) 1.0) - fCos;
+        float fX2 = axis.x * axis.x;
+        float fY2 = axis.y * axis.y;
+        float fZ2 = axis.z * axis.z;
+        float fXYM = axis.x * axis.y * fOneMinusCos;
+        float fXZM = axis.x * axis.z * fOneMinusCos;
+        float fYZM = axis.y * axis.z * fOneMinusCos;
+        float fXSin = axis.x * fSin;
+        float fYSin = axis.y * fSin;
+        float fZSin = axis.z * fSin;
+
+        m00 = fX2 * fOneMinusCos + fCos;
+        m01 = fXYM - fZSin;
+        m02 = fXZM + fYSin;
+        m10 = fXYM + fZSin;
+        m11 = fY2 * fOneMinusCos + fCos;
+        m12 = fYZM - fXSin;
+        m20 = fXZM - fYSin;
+        m21 = fYZM + fXSin;
+        m22 = fZ2 * fOneMinusCos + fCos;
     }
 
     /**
      * <code>mult</code> multiplies this matrix by a scalar.
-     * 
-     * @param scalar
-     *            the scalar to multiply this matrix by.
+     *
+     * @param scalar the scalar to multiply this matrix by.
      */
     public void multLocal(float scalar) {
         m00 *= scalar;
@@ -793,27 +863,26 @@ public final class Matrix4f implements Cloneable {
         m32 *= scalar;
         m33 *= scalar;
     }
-    
+
     public Matrix4f mult(float scalar) {
-    	Matrix4f out = new Matrix4f();
-    	out.set(this);
-    	out.multLocal(scalar);
-    	return out;
+        Matrix4f out = new Matrix4f();
+        out.set(this);
+        out.multLocal(scalar);
+        return out;
     }
-    
+
     public Matrix4f mult(float scalar, Matrix4f store) {
-    	store.set(this);
-    	store.multLocal(scalar);
-    	return store;
+        store.set(this);
+        store.multLocal(scalar);
+        return store;
     }
 
     /**
-     * <code>mult</code> multiplies this matrix with another matrix. The
-     * result matrix will then be returned. This matrix will be on the left hand
-     * side, while the parameter matrix will be on the right.
-     * 
-     * @param in2
-     *            the matrix to multiply this matrix by.
+     * <code>mult</code> multiplies this matrix with another matrix. The result
+     * matrix will then be returned. This matrix will be on the left hand side,
+     * while the parameter matrix will be on the right.
+     *
+     * @param in2 the matrix to multiply this matrix by.
      * @return the resultant matrix
      */
     public Matrix4f mult(Matrix4f in2) {
@@ -821,109 +890,120 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * <code>mult</code> multiplies this matrix with another matrix. The
-     * result matrix will then be returned. This matrix will be on the left hand
-     * side, while the parameter matrix will be on the right.
-     * 
-     * @param in2
-     *            the matrix to multiply this matrix by.
-     * @param store
-     *            where to store the result. It is safe for in2 and store to be
-     *            the same object.
+     * <code>mult</code> multiplies this matrix with another matrix. The result
+     * matrix will then be returned. This matrix will be on the left hand side,
+     * while the parameter matrix will be on the right.
+     *
+     * @param in2   the matrix to multiply this matrix by.
+     * @param store where to store the result. It is safe for in2 and store to
+     *              be the same object.
      * @return the resultant matrix
      */
     public Matrix4f mult(Matrix4f in2, Matrix4f store) {
-        if (store == null) store = new Matrix4f();
+        if (store == null) {
+            store = new Matrix4f();
+        }
 
         float temp00, temp01, temp02, temp03;
         float temp10, temp11, temp12, temp13;
         float temp20, temp21, temp22, temp23;
         float temp30, temp31, temp32, temp33;
 
-        temp00 = m00 * in2.m00 + 
-                m01 * in2.m10 + 
-                m02 * in2.m20 + 
-                m03 * in2.m30;
-        temp01 = m00 * in2.m01 + 
-                m01 * in2.m11 + 
-                m02 * in2.m21 +
-                m03 * in2.m31;
-        temp02 = m00 * in2.m02 + 
-                m01 * in2.m12 + 
-                m02 * in2.m22 +
-                m03 * in2.m32;
-        temp03 = m00 * in2.m03 + 
-                m01 * in2.m13 + 
-                m02 * in2.m23 + 
-                m03 * in2.m33;
-        
-        temp10 = m10 * in2.m00 + 
-                m11 * in2.m10 + 
-                m12 * in2.m20 +
-                m13 * in2.m30;
-        temp11 = m10 * in2.m01 +
-                m11 * in2.m11 +
-                m12 * in2.m21 +
-                m13 * in2.m31;
-        temp12 = m10 * in2.m02 +
-                m11 * in2.m12 + 
-                m12 * in2.m22 +
-                m13 * in2.m32;
-        temp13 = m10 * in2.m03 +
-                m11 * in2.m13 +
-                m12 * in2.m23 + 
-                m13 * in2.m33;
+        temp00 = m00 * in2.m00
+                + m01 * in2.m10
+                + m02 * in2.m20
+                + m03 * in2.m30;
+        temp01 = m00 * in2.m01
+                + m01 * in2.m11
+                + m02 * in2.m21
+                + m03 * in2.m31;
+        temp02 = m00 * in2.m02
+                + m01 * in2.m12
+                + m02 * in2.m22
+                + m03 * in2.m32;
+        temp03 = m00 * in2.m03
+                + m01 * in2.m13
+                + m02 * in2.m23
+                + m03 * in2.m33;
 
-        temp20 = m20 * in2.m00 + 
-                m21 * in2.m10 + 
-                m22 * in2.m20 +
-                m23 * in2.m30;
-        temp21 = m20 * in2.m01 + 
-                m21 * in2.m11 + 
-                m22 * in2.m21 +
-                m23 * in2.m31;
-        temp22 = m20 * in2.m02 + 
-                m21 * in2.m12 + 
-                m22 * in2.m22 +
-                m23 * in2.m32;
-        temp23 = m20 * in2.m03 + 
-                m21 * in2.m13 + 
-                m22 * in2.m23 +
-                m23 * in2.m33;
+        temp10 = m10 * in2.m00
+                + m11 * in2.m10
+                + m12 * in2.m20
+                + m13 * in2.m30;
+        temp11 = m10 * in2.m01
+                + m11 * in2.m11
+                + m12 * in2.m21
+                + m13 * in2.m31;
+        temp12 = m10 * in2.m02
+                + m11 * in2.m12
+                + m12 * in2.m22
+                + m13 * in2.m32;
+        temp13 = m10 * in2.m03
+                + m11 * in2.m13
+                + m12 * in2.m23
+                + m13 * in2.m33;
 
-        temp30 = m30 * in2.m00 + 
-                m31 * in2.m10 + 
-                m32 * in2.m20 +
-                m33 * in2.m30;
-        temp31 = m30 * in2.m01 + 
-                m31 * in2.m11 + 
-                m32 * in2.m21 +
-                m33 * in2.m31;
-        temp32 = m30 * in2.m02 + 
-                m31 * in2.m12 + 
-                m32 * in2.m22 +
-                m33 * in2.m32;
-        temp33 = m30 * in2.m03 + 
-                m31 * in2.m13 + 
-                m32 * in2.m23 +
-                m33 * in2.m33;
-        
-        store.m00 = temp00;  store.m01 = temp01;  store.m02 = temp02;  store.m03 = temp03;
-        store.m10 = temp10;  store.m11 = temp11;  store.m12 = temp12;  store.m13 = temp13;
-        store.m20 = temp20;  store.m21 = temp21;  store.m22 = temp22;  store.m23 = temp23;
-        store.m30 = temp30;  store.m31 = temp31;  store.m32 = temp32;  store.m33 = temp33;
-        
+        temp20 = m20 * in2.m00
+                + m21 * in2.m10
+                + m22 * in2.m20
+                + m23 * in2.m30;
+        temp21 = m20 * in2.m01
+                + m21 * in2.m11
+                + m22 * in2.m21
+                + m23 * in2.m31;
+        temp22 = m20 * in2.m02
+                + m21 * in2.m12
+                + m22 * in2.m22
+                + m23 * in2.m32;
+        temp23 = m20 * in2.m03
+                + m21 * in2.m13
+                + m22 * in2.m23
+                + m23 * in2.m33;
+
+        temp30 = m30 * in2.m00
+                + m31 * in2.m10
+                + m32 * in2.m20
+                + m33 * in2.m30;
+        temp31 = m30 * in2.m01
+                + m31 * in2.m11
+                + m32 * in2.m21
+                + m33 * in2.m31;
+        temp32 = m30 * in2.m02
+                + m31 * in2.m12
+                + m32 * in2.m22
+                + m33 * in2.m32;
+        temp33 = m30 * in2.m03
+                + m31 * in2.m13
+                + m32 * in2.m23
+                + m33 * in2.m33;
+
+        store.m00 = temp00;
+        store.m01 = temp01;
+        store.m02 = temp02;
+        store.m03 = temp03;
+        store.m10 = temp10;
+        store.m11 = temp11;
+        store.m12 = temp12;
+        store.m13 = temp13;
+        store.m20 = temp20;
+        store.m21 = temp21;
+        store.m22 = temp22;
+        store.m23 = temp23;
+        store.m30 = temp30;
+        store.m31 = temp31;
+        store.m32 = temp32;
+        store.m33 = temp33;
+
         return store;
     }
 
     /**
-     * <code>mult</code> multiplies this matrix with another matrix. The
-     * results are stored internally and a handle to this matrix will 
-     * then be returned. This matrix will be on the left hand
-     * side, while the parameter matrix will be on the right.
-     * 
-     * @param in2
-     *            the matrix to multiply this matrix by.
+     * <code>mult</code> multiplies this matrix with another matrix. The results
+     * are stored internally and a handle to this matrix will then be returned.
+     * This matrix will be on the left hand side, while the parameter matrix
+     * will be on the right.
+     *
+     * @param in2 the matrix to multiply this matrix by.
      * @return the resultant matrix
      */
     public Matrix4f multLocal(Matrix4f in2) {
@@ -933,9 +1013,8 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>mult</code> multiplies a vector about a rotation matrix. The
      * resulting vector is returned as a new Vector3f.
-     * 
-     * @param vec
-     *            vec to multiply against.
+     *
+     * @param vec vec to multiply against.
      * @return the rotated vector.
      */
     public Vector3f mult(Vector3f vec) {
@@ -945,16 +1024,16 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>mult</code> multiplies a vector about a rotation matrix and adds
      * translation. The resulting vector is returned.
-     * 
-     * @param vec
-     *            vec to multiply against.
-     * @param store
-     *            a vector to store the result in. Created if null is passed.
+     *
+     * @param vec   vec to multiply against.
+     * @param store a vector to store the result in. Created if null is passed.
      * @return the rotated vector.
      */
     public Vector3f mult(Vector3f vec, Vector3f store) {
-        if (store == null) store = new Vector3f();
-        
+        if (store == null) {
+            store = new Vector3f();
+        }
+
         float vx = vec.x, vy = vec.y, vz = vec.z;
         store.x = m00 * vx + m01 * vy + m02 * vz + m03;
         store.y = m10 * vx + m11 * vy + m12 * vz + m13;
@@ -967,14 +1046,14 @@ public final class Matrix4f implements Cloneable {
      * <code>multNormal</code> multiplies a vector about a rotation matrix, but
      * does not add translation. The resulting vector is returned.
      *
-     * @param vec
-     *            vec to multiply against.
-     * @param store
-     *            a vector to store the result in. Created if null is passed.
+     * @param vec   vec to multiply against.
+     * @param store a vector to store the result in. Created if null is passed.
      * @return the rotated vector.
      */
     public Vector3f multNormal(Vector3f vec, Vector3f store) {
-        if (store == null) store = new Vector3f();
+        if (store == null) {
+            store = new Vector3f();
+        }
 
         float vx = vec.x, vy = vec.y, vz = vec.z;
         store.x = m00 * vx + m01 * vy + m02 * vz;
@@ -988,14 +1067,14 @@ public final class Matrix4f implements Cloneable {
      * <code>multNormal</code> multiplies a vector about a rotation matrix, but
      * does not add translation. The resulting vector is returned.
      *
-     * @param vec
-     *            vec to multiply against.
-     * @param store
-     *            a vector to store the result in. Created if null is passed.
+     * @param vec   vec to multiply against.
+     * @param store a vector to store the result in. Created if null is passed.
      * @return the rotated vector.
      */
     public Vector3f multNormalAcross(Vector3f vec, Vector3f store) {
-        if (store == null) store = new Vector3f();
+        if (store == null) {
+            store = new Vector3f();
+        }
 
         float vx = vec.x, vy = vec.y, vz = vec.z;
         store.x = m00 * vx + m10 * vy + m20 * vz;
@@ -1007,13 +1086,11 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * <code>mult</code> multiplies a vector about a rotation matrix and adds
-     * translation. The w value is returned as a result of
-     * multiplying the last column of the matrix by 1.0
-     * 
-     * @param vec
-     *            vec to multiply against.
-     * @param store
-     *            a vector to store the result in. 
+     * translation. The w value is returned as a result of multiplying the last
+     * column of the matrix by 1.0
+     *
+     * @param vec   vec to multiply against.
+     * @param store a vector to store the result in.
      * @return the W value
      */
     public float multProj(Vector3f vec, Vector3f store) {
@@ -1021,17 +1098,15 @@ public final class Matrix4f implements Cloneable {
         store.x = m00 * vx + m01 * vy + m02 * vz + m03;
         store.y = m10 * vx + m11 * vy + m12 * vz + m13;
         store.z = m20 * vx + m21 * vy + m22 * vz + m23;
-        return    m30 * vx + m31 * vy + m32 * vz + m33;
+        return m30 * vx + m31 * vy + m32 * vz + m33;
     }
 
     /**
      * <code>mult</code> multiplies a vector about a rotation matrix. The
      * resulting vector is returned.
-     * 
-     * @param vec
-     *            vec to multiply against.
-     * @param store
-     *            a vector to store the result in.  created if null is passed.
+     *
+     * @param vec   vec to multiply against.
+     * @param store a vector to store the result in. created if null is passed.
      * @return the rotated vector.
      */
     public Vector3f multAcross(Vector3f vec, Vector3f store) {
@@ -1039,8 +1114,10 @@ public final class Matrix4f implements Cloneable {
             logger.info("Source vector is null, null result returned.");
             return null;
         }
-        if (store == null) store = new Vector3f();
-        
+        if (store == null) {
+            store = new Vector3f();
+        }
+
         float vx = vec.x, vy = vec.y, vz = vec.z;
         store.x = m00 * vx + m10 * vy + m20 * vz + m30 * 1;
         store.y = m01 * vx + m11 * vy + m21 * vz + m31 * 1;
@@ -1048,13 +1125,12 @@ public final class Matrix4f implements Cloneable {
 
         return store;
     }
-    
+
     /**
-     * <code>mult</code> multiplies an array of 4 floats against this rotation 
+     * <code>mult</code> multiplies an array of 4 floats against this rotation
      * matrix. The results are stored directly in the array. (vec4f x mat4f)
-     * 
-     * @param vec4f
-     *            float array (size 4) to multiply against the matrix.
+     *
+     * @param vec4f float array (size 4) to multiply against the matrix.
      * @return the vec4f for chaining.
      */
     public float[] mult(float[] vec4f) {
@@ -1064,7 +1140,7 @@ public final class Matrix4f implements Cloneable {
         }
 
         float x = vec4f[0], y = vec4f[1], z = vec4f[2], w = vec4f[3];
-        
+
         vec4f[0] = m00 * x + m01 * y + m02 * z + m03 * w;
         vec4f[1] = m10 * x + m11 * y + m12 * z + m13 * w;
         vec4f[2] = m20 * x + m21 * y + m22 * z + m23 * w;
@@ -1074,11 +1150,10 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * <code>mult</code> multiplies an array of 4 floats against this rotation 
+     * <code>mult</code> multiplies an array of 4 floats against this rotation
      * matrix. The results are stored directly in the array. (vec4f x mat4f)
-     * 
-     * @param vec4f
-     *            float array (size 4) to multiply against the matrix.
+     *
+     * @param vec4f float array (size 4) to multiply against the matrix.
      * @return the vec4f for chaining.
      */
     public float[] multAcross(float[] vec4f) {
@@ -1088,7 +1163,7 @@ public final class Matrix4f implements Cloneable {
         }
 
         float x = vec4f[0], y = vec4f[1], z = vec4f[2], w = vec4f[3];
-        
+
         vec4f[0] = m00 * x + m10 * y + m20 * z + m30 * w;
         vec4f[1] = m01 * x + m11 * y + m21 * z + m31 * w;
         vec4f[2] = m02 * x + m12 * y + m22 * z + m32 * w;
@@ -1099,7 +1174,7 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * Inverts this matrix as a new Matrix4f.
-     * 
+     *
      * @return The new inverse matrix
      */
     public Matrix4f invert() {
@@ -1108,47 +1183,50 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * Inverts this matrix and stores it in the given store.
-     * 
+     *
      * @return The store
      */
     public Matrix4f invert(Matrix4f store) {
-        if (store == null) store = new Matrix4f();
+        if (store == null) {
+            store = new Matrix4f();
+        }
 
-        float fA0 = m00*m11 - m01*m10;
-        float fA1 = m00*m12 - m02*m10;
-        float fA2 = m00*m13 - m03*m10;
-        float fA3 = m01*m12 - m02*m11;
-        float fA4 = m01*m13 - m03*m11;
-        float fA5 = m02*m13 - m03*m12;
-        float fB0 = m20*m31 - m21*m30;
-        float fB1 = m20*m32 - m22*m30;
-        float fB2 = m20*m33 - m23*m30;
-        float fB3 = m21*m32 - m22*m31;
-        float fB4 = m21*m33 - m23*m31;
-        float fB5 = m22*m33 - m23*m32;
-        float fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
+        float fA0 = m00 * m11 - m01 * m10;
+        float fA1 = m00 * m12 - m02 * m10;
+        float fA2 = m00 * m13 - m03 * m10;
+        float fA3 = m01 * m12 - m02 * m11;
+        float fA4 = m01 * m13 - m03 * m11;
+        float fA5 = m02 * m13 - m03 * m12;
+        float fB0 = m20 * m31 - m21 * m30;
+        float fB1 = m20 * m32 - m22 * m30;
+        float fB2 = m20 * m33 - m23 * m30;
+        float fB3 = m21 * m32 - m22 * m31;
+        float fB4 = m21 * m33 - m23 * m31;
+        float fB5 = m22 * m33 - m23 * m32;
+        float fDet = fA0 * fB5 - fA1 * fB4 + fA2 * fB3 + fA3 * fB2 - fA4 * fB1 + fA5 * fB0;
 
-        if ( FastMath.abs(fDet) <= 0f )
+        if (FastMath.abs(fDet) <= 0f) {
             throw new ArithmeticException("This matrix cannot be inverted");
+        }
 
-        store.m00 = + m11*fB5 - m12*fB4 + m13*fB3;
-        store.m10 = - m10*fB5 + m12*fB2 - m13*fB1;
-        store.m20 = + m10*fB4 - m11*fB2 + m13*fB0;
-        store.m30 = - m10*fB3 + m11*fB1 - m12*fB0;
-        store.m01 = - m01*fB5 + m02*fB4 - m03*fB3;
-        store.m11 = + m00*fB5 - m02*fB2 + m03*fB1;
-        store.m21 = - m00*fB4 + m01*fB2 - m03*fB0;
-        store.m31 = + m00*fB3 - m01*fB1 + m02*fB0;
-        store.m02 = + m31*fA5 - m32*fA4 + m33*fA3;
-        store.m12 = - m30*fA5 + m32*fA2 - m33*fA1;
-        store.m22 = + m30*fA4 - m31*fA2 + m33*fA0;
-        store.m32 = - m30*fA3 + m31*fA1 - m32*fA0;
-        store.m03 = - m21*fA5 + m22*fA4 - m23*fA3;
-        store.m13 = + m20*fA5 - m22*fA2 + m23*fA1;
-        store.m23 = - m20*fA4 + m21*fA2 - m23*fA0;
-        store.m33 = + m20*fA3 - m21*fA1 + m22*fA0;
+        store.m00 = +m11 * fB5 - m12 * fB4 + m13 * fB3;
+        store.m10 = -m10 * fB5 + m12 * fB2 - m13 * fB1;
+        store.m20 = +m10 * fB4 - m11 * fB2 + m13 * fB0;
+        store.m30 = -m10 * fB3 + m11 * fB1 - m12 * fB0;
+        store.m01 = -m01 * fB5 + m02 * fB4 - m03 * fB3;
+        store.m11 = +m00 * fB5 - m02 * fB2 + m03 * fB1;
+        store.m21 = -m00 * fB4 + m01 * fB2 - m03 * fB0;
+        store.m31 = +m00 * fB3 - m01 * fB1 + m02 * fB0;
+        store.m02 = +m31 * fA5 - m32 * fA4 + m33 * fA3;
+        store.m12 = -m30 * fA5 + m32 * fA2 - m33 * fA1;
+        store.m22 = +m30 * fA4 - m31 * fA2 + m33 * fA0;
+        store.m32 = -m30 * fA3 + m31 * fA1 - m32 * fA0;
+        store.m03 = -m21 * fA5 + m22 * fA4 - m23 * fA3;
+        store.m13 = +m20 * fA5 - m22 * fA2 + m23 * fA1;
+        store.m23 = -m20 * fA4 + m21 * fA2 - m23 * fA0;
+        store.m33 = +m20 * fA3 - m21 * fA1 + m22 * fA0;
 
-        float fInvDet = 1.0f/fDet;
+        float fInvDet = 1.0f / fDet;
         store.multLocal(fInvDet);
 
         return store;
@@ -1156,45 +1234,46 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * Inverts this matrix locally.
-     * 
+     *
      * @return this
      */
     public Matrix4f invertLocal() {
 
-        float fA0 = m00*m11 - m01*m10;
-        float fA1 = m00*m12 - m02*m10;
-        float fA2 = m00*m13 - m03*m10;
-        float fA3 = m01*m12 - m02*m11;
-        float fA4 = m01*m13 - m03*m11;
-        float fA5 = m02*m13 - m03*m12;
-        float fB0 = m20*m31 - m21*m30;
-        float fB1 = m20*m32 - m22*m30;
-        float fB2 = m20*m33 - m23*m30;
-        float fB3 = m21*m32 - m22*m31;
-        float fB4 = m21*m33 - m23*m31;
-        float fB5 = m22*m33 - m23*m32;
-        float fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
+        float fA0 = m00 * m11 - m01 * m10;
+        float fA1 = m00 * m12 - m02 * m10;
+        float fA2 = m00 * m13 - m03 * m10;
+        float fA3 = m01 * m12 - m02 * m11;
+        float fA4 = m01 * m13 - m03 * m11;
+        float fA5 = m02 * m13 - m03 * m12;
+        float fB0 = m20 * m31 - m21 * m30;
+        float fB1 = m20 * m32 - m22 * m30;
+        float fB2 = m20 * m33 - m23 * m30;
+        float fB3 = m21 * m32 - m22 * m31;
+        float fB4 = m21 * m33 - m23 * m31;
+        float fB5 = m22 * m33 - m23 * m32;
+        float fDet = fA0 * fB5 - fA1 * fB4 + fA2 * fB3 + fA3 * fB2 - fA4 * fB1 + fA5 * fB0;
 
-        if ( FastMath.abs(fDet) <= 0f )
+        if (FastMath.abs(fDet) <= 0f) {
             return zero();
+        }
 
-        float f00 = + m11*fB5 - m12*fB4 + m13*fB3;
-        float f10 = - m10*fB5 + m12*fB2 - m13*fB1;
-        float f20 = + m10*fB4 - m11*fB2 + m13*fB0;
-        float f30 = - m10*fB3 + m11*fB1 - m12*fB0;
-        float f01 = - m01*fB5 + m02*fB4 - m03*fB3;
-        float f11 = + m00*fB5 - m02*fB2 + m03*fB1;
-        float f21 = - m00*fB4 + m01*fB2 - m03*fB0;
-        float f31 = + m00*fB3 - m01*fB1 + m02*fB0;
-        float f02 = + m31*fA5 - m32*fA4 + m33*fA3;
-        float f12 = - m30*fA5 + m32*fA2 - m33*fA1;
-        float f22 = + m30*fA4 - m31*fA2 + m33*fA0;
-        float f32 = - m30*fA3 + m31*fA1 - m32*fA0;
-        float f03 = - m21*fA5 + m22*fA4 - m23*fA3;
-        float f13 = + m20*fA5 - m22*fA2 + m23*fA1;
-        float f23 = - m20*fA4 + m21*fA2 - m23*fA0;
-        float f33 = + m20*fA3 - m21*fA1 + m22*fA0;
-        
+        float f00 = +m11 * fB5 - m12 * fB4 + m13 * fB3;
+        float f10 = -m10 * fB5 + m12 * fB2 - m13 * fB1;
+        float f20 = +m10 * fB4 - m11 * fB2 + m13 * fB0;
+        float f30 = -m10 * fB3 + m11 * fB1 - m12 * fB0;
+        float f01 = -m01 * fB5 + m02 * fB4 - m03 * fB3;
+        float f11 = +m00 * fB5 - m02 * fB2 + m03 * fB1;
+        float f21 = -m00 * fB4 + m01 * fB2 - m03 * fB0;
+        float f31 = +m00 * fB3 - m01 * fB1 + m02 * fB0;
+        float f02 = +m31 * fA5 - m32 * fA4 + m33 * fA3;
+        float f12 = -m30 * fA5 + m32 * fA2 - m33 * fA1;
+        float f22 = +m30 * fA4 - m31 * fA2 + m33 * fA0;
+        float f32 = -m30 * fA3 + m31 * fA1 - m32 * fA0;
+        float f03 = -m21 * fA5 + m22 * fA4 - m23 * fA3;
+        float f13 = +m20 * fA5 - m22 * fA2 + m23 * fA1;
+        float f23 = -m20 * fA4 + m21 * fA2 - m23 * fA0;
+        float f33 = +m20 * fA3 - m21 * fA1 + m22 * fA0;
+
         m00 = f00;
         m01 = f01;
         m02 = f02;
@@ -1212,90 +1291,91 @@ public final class Matrix4f implements Cloneable {
         m32 = f32;
         m33 = f33;
 
-        float fInvDet = 1.0f/fDet;
+        float fInvDet = 1.0f / fDet;
         multLocal(fInvDet);
 
         return this;
     }
-    
+
     /**
      * Returns a new matrix representing the adjoint of this matrix.
-     * 
+     *
      * @return The adjoint matrix
      */
     public Matrix4f adjoint() {
         return adjoint(null);
     }
-     
-    
+
     /**
      * Places the adjoint of this matrix in store (creates store if null.)
-     * 
-     * @param store
-     *            The matrix to store the result in.  If null, a new matrix is created.
+     *
+     * @param store The matrix to store the result in. If null, a new matrix is
+     *              created.
      * @return store
      */
     public Matrix4f adjoint(Matrix4f store) {
-        if (store == null) store = new Matrix4f();
+        if (store == null) {
+            store = new Matrix4f();
+        }
 
-        float fA0 = m00*m11 - m01*m10;
-        float fA1 = m00*m12 - m02*m10;
-        float fA2 = m00*m13 - m03*m10;
-        float fA3 = m01*m12 - m02*m11;
-        float fA4 = m01*m13 - m03*m11;
-        float fA5 = m02*m13 - m03*m12;
-        float fB0 = m20*m31 - m21*m30;
-        float fB1 = m20*m32 - m22*m30;
-        float fB2 = m20*m33 - m23*m30;
-        float fB3 = m21*m32 - m22*m31;
-        float fB4 = m21*m33 - m23*m31;
-        float fB5 = m22*m33 - m23*m32;
+        float fA0 = m00 * m11 - m01 * m10;
+        float fA1 = m00 * m12 - m02 * m10;
+        float fA2 = m00 * m13 - m03 * m10;
+        float fA3 = m01 * m12 - m02 * m11;
+        float fA4 = m01 * m13 - m03 * m11;
+        float fA5 = m02 * m13 - m03 * m12;
+        float fB0 = m20 * m31 - m21 * m30;
+        float fB1 = m20 * m32 - m22 * m30;
+        float fB2 = m20 * m33 - m23 * m30;
+        float fB3 = m21 * m32 - m22 * m31;
+        float fB4 = m21 * m33 - m23 * m31;
+        float fB5 = m22 * m33 - m23 * m32;
 
-        store.m00 = + m11*fB5 - m12*fB4 + m13*fB3;
-        store.m10 = - m10*fB5 + m12*fB2 - m13*fB1;
-        store.m20 = + m10*fB4 - m11*fB2 + m13*fB0;
-        store.m30 = - m10*fB3 + m11*fB1 - m12*fB0;
-        store.m01 = - m01*fB5 + m02*fB4 - m03*fB3;
-        store.m11 = + m00*fB5 - m02*fB2 + m03*fB1;
-        store.m21 = - m00*fB4 + m01*fB2 - m03*fB0;
-        store.m31 = + m00*fB3 - m01*fB1 + m02*fB0;
-        store.m02 = + m31*fA5 - m32*fA4 + m33*fA3;
-        store.m12 = - m30*fA5 + m32*fA2 - m33*fA1;
-        store.m22 = + m30*fA4 - m31*fA2 + m33*fA0;
-        store.m32 = - m30*fA3 + m31*fA1 - m32*fA0;
-        store.m03 = - m21*fA5 + m22*fA4 - m23*fA3;
-        store.m13 = + m20*fA5 - m22*fA2 + m23*fA1;
-        store.m23 = - m20*fA4 + m21*fA2 - m23*fA0;
-        store.m33 = + m20*fA3 - m21*fA1 + m22*fA0;
+        store.m00 = +m11 * fB5 - m12 * fB4 + m13 * fB3;
+        store.m10 = -m10 * fB5 + m12 * fB2 - m13 * fB1;
+        store.m20 = +m10 * fB4 - m11 * fB2 + m13 * fB0;
+        store.m30 = -m10 * fB3 + m11 * fB1 - m12 * fB0;
+        store.m01 = -m01 * fB5 + m02 * fB4 - m03 * fB3;
+        store.m11 = +m00 * fB5 - m02 * fB2 + m03 * fB1;
+        store.m21 = -m00 * fB4 + m01 * fB2 - m03 * fB0;
+        store.m31 = +m00 * fB3 - m01 * fB1 + m02 * fB0;
+        store.m02 = +m31 * fA5 - m32 * fA4 + m33 * fA3;
+        store.m12 = -m30 * fA5 + m32 * fA2 - m33 * fA1;
+        store.m22 = +m30 * fA4 - m31 * fA2 + m33 * fA0;
+        store.m32 = -m30 * fA3 + m31 * fA1 - m32 * fA0;
+        store.m03 = -m21 * fA5 + m22 * fA4 - m23 * fA3;
+        store.m13 = +m20 * fA5 - m22 * fA2 + m23 * fA1;
+        store.m23 = -m20 * fA4 + m21 * fA2 - m23 * fA0;
+        store.m33 = +m20 * fA3 - m21 * fA1 + m22 * fA0;
 
         return store;
     }
 
     /**
      * <code>determinant</code> generates the determinate of this matrix.
-     * 
+     *
      * @return the determinate
      */
     public float determinant() {
-        float fA0 = m00*m11 - m01*m10;
-        float fA1 = m00*m12 - m02*m10;
-        float fA2 = m00*m13 - m03*m10;
-        float fA3 = m01*m12 - m02*m11;
-        float fA4 = m01*m13 - m03*m11;
-        float fA5 = m02*m13 - m03*m12;
-        float fB0 = m20*m31 - m21*m30;
-        float fB1 = m20*m32 - m22*m30;
-        float fB2 = m20*m33 - m23*m30;
-        float fB3 = m21*m32 - m22*m31;
-        float fB4 = m21*m33 - m23*m31;
-        float fB5 = m22*m33 - m23*m32;
-        float fDet = fA0*fB5-fA1*fB4+fA2*fB3+fA3*fB2-fA4*fB1+fA5*fB0;
+        float fA0 = m00 * m11 - m01 * m10;
+        float fA1 = m00 * m12 - m02 * m10;
+        float fA2 = m00 * m13 - m03 * m10;
+        float fA3 = m01 * m12 - m02 * m11;
+        float fA4 = m01 * m13 - m03 * m11;
+        float fA5 = m02 * m13 - m03 * m12;
+        float fB0 = m20 * m31 - m21 * m30;
+        float fB1 = m20 * m32 - m22 * m30;
+        float fB2 = m20 * m33 - m23 * m30;
+        float fB3 = m21 * m32 - m22 * m31;
+        float fB4 = m21 * m33 - m23 * m31;
+        float fB5 = m22 * m33 - m23 * m32;
+        float fDet = fA0 * fB5 - fA1 * fB4 + fA2 * fB3 + fA3 * fB2 - fA4 * fB1 + fA5 * fB0;
         return fDet;
     }
 
     /**
      * Sets all of the values in this matrix to zero.
-     * 
+     *
      * @return this matrix
      */
     public Matrix4f zero() {
@@ -1305,33 +1385,32 @@ public final class Matrix4f implements Cloneable {
         m30 = m31 = m32 = m33 = 0.0f;
         return this;
     }
-    
+
     public Matrix4f add(Matrix4f mat) {
-    	Matrix4f result = new Matrix4f();
-    	result.m00 = this.m00 + mat.m00;
-    	result.m01 = this.m01 + mat.m01;
-    	result.m02 = this.m02 + mat.m02;
-    	result.m03 = this.m03 + mat.m03;
-    	result.m10 = this.m10 + mat.m10;
-    	result.m11 = this.m11 + mat.m11;
-    	result.m12 = this.m12 + mat.m12;
-    	result.m13 = this.m13 + mat.m13;
-    	result.m20 = this.m20 + mat.m20;
-    	result.m21 = this.m21 + mat.m21;
-    	result.m22 = this.m22 + mat.m22;
-    	result.m23 = this.m23 + mat.m23;
-    	result.m30 = this.m30 + mat.m30;
-    	result.m31 = this.m31 + mat.m31;
-    	result.m32 = this.m32 + mat.m32;
-    	result.m33 = this.m33 + mat.m33;
-    	return result;
+        Matrix4f result = new Matrix4f();
+        result.m00 = this.m00 + mat.m00;
+        result.m01 = this.m01 + mat.m01;
+        result.m02 = this.m02 + mat.m02;
+        result.m03 = this.m03 + mat.m03;
+        result.m10 = this.m10 + mat.m10;
+        result.m11 = this.m11 + mat.m11;
+        result.m12 = this.m12 + mat.m12;
+        result.m13 = this.m13 + mat.m13;
+        result.m20 = this.m20 + mat.m20;
+        result.m21 = this.m21 + mat.m21;
+        result.m22 = this.m22 + mat.m22;
+        result.m23 = this.m23 + mat.m23;
+        result.m30 = this.m30 + mat.m30;
+        result.m31 = this.m31 + mat.m31;
+        result.m32 = this.m32 + mat.m32;
+        result.m33 = this.m33 + mat.m33;
+        return result;
     }
 
     /**
      * <code>add</code> adds the values of a parameter matrix to this matrix.
-     * 
-     * @param mat
-     *            the matrix to add to this.
+     *
+     * @param mat the matrix to add to this.
      */
     public void addLocal(Matrix4f mat) {
         m00 += mat.m00;
@@ -1351,20 +1430,20 @@ public final class Matrix4f implements Cloneable {
         m32 += mat.m32;
         m33 += mat.m33;
     }
-    
+
     public Vector3f toTranslationVector() {
         return new Vector3f(m03, m13, m23);
     }
-    
+
     public void toTranslationVector(Vector3f vector) {
         vector.set(m03, m13, m23);
     }
-    
+
     public Matrix3f toRotationMatrix() {
         return new Matrix3f(m00, m01, m02, m10, m11, m12, m20, m21, m22);
-        
+
     }
-    
+
     public void toRotationMatrix(Matrix3f mat) {
         mat.m00 = m00;
         mat.m01 = m01;
@@ -1375,7 +1454,7 @@ public final class Matrix4f implements Cloneable {
         mat.m20 = m20;
         mat.m21 = m21;
         mat.m22 = m22;
-        
+
     }
 
     public void setRotationMatrix(Matrix3f mat) {
@@ -1388,16 +1467,16 @@ public final class Matrix4f implements Cloneable {
         this.m20 = mat.m20;
         this.m21 = mat.m21;
         this.m22 = mat.m22;
-        
+
     }
-  
-    public void setScale(float x, float y, float z){
+
+    public void setScale(float x, float y, float z) {
         m00 *= x;
         m11 *= y;
         m22 *= z;
     }
 
-    public void setScale(Vector3f scale){
+    public void setScale(Vector3f scale) {
         m00 *= scale.x;
         m11 *= scale.y;
         m22 *= scale.z;
@@ -1405,15 +1484,15 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * <code>setTranslation</code> will set the matrix's translation values.
-     * 
-     * @param translation
-     *            the new values for the translation.
-     * @throws JmeException
-     *             if translation is not size 3.
+     *
+     * @param translation the new values for the translation.
+     * @throws JmeException if translation is not size 3.
      */
     public void setTranslation(float[] translation) {
-        if (translation.length != 3) { throw new IllegalArgumentException(
-                "Translation size must be 3."); }
+        if (translation.length != 3) {
+            throw new IllegalArgumentException(
+                    "Translation size must be 3.");
+        }
         m03 = translation[0];
         m13 = translation[1];
         m23 = translation[2];
@@ -1421,13 +1500,10 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * <code>setTranslation</code> will set the matrix's translation values.
-     * 
-     * @param x
-     *            value of the translation on the x axis
-     * @param y
-     *            value of the translation on the y axis
-     * @param z
-     *            value of the translation on the z axis
+     *
+     * @param x value of the translation on the x axis
+     * @param y value of the translation on the y axis
+     * @param z value of the translation on the z axis
      */
     public void setTranslation(float x, float y, float z) {
         m03 = x;
@@ -1438,8 +1514,7 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>setTranslation</code> will set the matrix's translation values.
      *
-     * @param translation
-     *            the new values for the translation.
+     * @param translation the new values for the translation.
      */
     public void setTranslation(Vector3f translation) {
         m03 = translation.x;
@@ -1450,15 +1525,15 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>setInverseTranslation</code> will set the matrix's inverse
      * translation values.
-     * 
-     * @param translation
-     *            the new values for the inverse translation.
-     * @throws JmeException
-     *             if translation is not size 3.
+     *
+     * @param translation the new values for the inverse translation.
+     * @throws JmeException if translation is not size 3.
      */
     public void setInverseTranslation(float[] translation) {
-        if (translation.length != 3) { throw new IllegalArgumentException(
-                "Translation size must be 3."); }
+        if (translation.length != 3) {
+            throw new IllegalArgumentException(
+                    "Translation size must be 3.");
+        }
         m03 = -translation[0];
         m13 = -translation[1];
         m23 = -translation[2];
@@ -1467,11 +1542,10 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>angleRotation</code> sets this matrix to that of a rotation about
      * three axes (x, y, z). Where each axis has a specified rotation in
-     * degrees. These rotations are expressed in a single <code>Vector3f</code>
-     * object.
-     * 
-     * @param angles
-     *            the angles to rotate.
+     * degrees. These rotations are expressed in a single
+     * <code>Vector3f</code> object.
+     *
+     * @param angles the angles to rotate.
      */
     public void angleRotation(Vector3f angles) {
         float angle;
@@ -1505,15 +1579,15 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>setInverseRotationRadians</code> builds an inverted rotation from
      * Euler angles that are in radians.
-     * 
-     * @param angles
-     *            the Euler angles in radians.
-     * @throws JmeException
-     *             if angles is not size 3.
+     *
+     * @param angles the Euler angles in radians.
+     * @throws JmeException if angles is not size 3.
      */
     public void setInverseRotationRadians(float[] angles) {
-        if (angles.length != 3) { throw new IllegalArgumentException(
-                "Angles must be of size 3."); }
+        if (angles.length != 3) {
+            throw new IllegalArgumentException(
+                    "Angles must be of size 3.");
+        }
         double cr = FastMath.cos(angles[0]);
         double sr = FastMath.sin(angles[0]);
         double cp = FastMath.cos(angles[1]);
@@ -1540,15 +1614,15 @@ public final class Matrix4f implements Cloneable {
     /**
      * <code>setInverseRotationDegrees</code> builds an inverted rotation from
      * Euler angles that are in degrees.
-     * 
-     * @param angles
-     *            the Euler angles in degrees.
-     * @throws JmeException
-     *             if angles is not size 3.
+     *
+     * @param angles the Euler angles in degrees.
+     * @throws JmeException if angles is not size 3.
      */
     public void setInverseRotationDegrees(float[] angles) {
-        if (angles.length != 3) { throw new IllegalArgumentException(
-                "Angles must be of size 3."); }
+        if (angles.length != 3) {
+            throw new IllegalArgumentException(
+                    "Angles must be of size 3.");
+        }
         float vec[] = new float[3];
         vec[0] = (angles[0] * FastMath.RAD_TO_DEG);
         vec[1] = (angles[1] * FastMath.RAD_TO_DEG);
@@ -1557,18 +1631,17 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * 
      * <code>inverseTranslateVect</code> translates a given Vector3f by the
      * translation part of this matrix.
-     * 
-     * @param vec
-     *            the Vector3f data to be translated.
-     * @throws JmeException
-     *             if the size of the Vector3f is not 3.
+     *
+     * @param vec the Vector3f data to be translated.
+     * @throws JmeException if the size of the Vector3f is not 3.
      */
     public void inverseTranslateVect(float[] vec) {
-        if (vec.length != 3) { throw new IllegalArgumentException(
-                "vec must be of size 3."); }
+        if (vec.length != 3) {
+            throw new IllegalArgumentException(
+                    "vec must be of size 3.");
+        }
 
         vec[0] = vec[0] - m03;
         vec[1] = vec[1] - m13;
@@ -1576,14 +1649,11 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * 
      * <code>inverseTranslateVect</code> translates a given Vector3f by the
      * translation part of this matrix.
-     * 
-     * @param data
-     *            the Vector3f to be translated.
-     * @throws JmeException
-     *             if the size of the Vector3f is not 3.
+     *
+     * @param data the Vector3f to be translated.
+     * @throws JmeException if the size of the Vector3f is not 3.
      */
     public void inverseTranslateVect(Vector3f data) {
         data.x -= m03;
@@ -1592,14 +1662,11 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * 
      * <code>inverseTranslateVect</code> translates a given Vector3f by the
      * translation part of this matrix.
-     * 
-     * @param data
-     *            the Vector3f to be translated.
-     * @throws JmeException
-     *             if the size of the Vector3f is not 3.
+     *
+     * @param data the Vector3f to be translated.
+     * @throws JmeException if the size of the Vector3f is not 3.
      */
     public void translateVect(Vector3f data) {
         data.x += m03;
@@ -1608,12 +1675,10 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * 
      * <code>inverseRotateVect</code> rotates a given Vector3f by the rotation
      * part of this matrix.
-     * 
-     * @param vec
-     *            the Vector3f to be rotated.
+     *
+     * @param vec the Vector3f to be rotated.
      */
     public void inverseRotateVect(Vector3f vec) {
         float vx = vec.x, vy = vec.y, vz = vec.z;
@@ -1622,7 +1687,7 @@ public final class Matrix4f implements Cloneable {
         vec.y = vx * m01 + vy * m11 + vz * m21;
         vec.z = vx * m02 + vy * m12 + vz * m22;
     }
-    
+
     public void rotateVect(Vector3f vec) {
         float vx = vec.x, vy = vec.y, vz = vec.z;
 
@@ -1635,11 +1700,11 @@ public final class Matrix4f implements Cloneable {
      * <code>toString</code> returns the string representation of this object.
      * It is in a format of a 4x4 matrix. For example, an identity matrix would
      * be represented by the following string. com.jme.math.Matrix3f <br>[<br>
-     * 1.0  0.0  0.0  0.0 <br>
-     * 0.0  1.0  0.0  0.0 <br>
-     * 0.0  0.0  1.0  0.0 <br>
-     * 0.0  0.0  0.0  1.0 <br>]<br>
-     * 
+     * 1.0 0.0 0.0 0.0 <br>
+     * 0.0 1.0 0.0 0.0 <br>
+     * 0.0 0.0 1.0 0.0 <br>
+     * 0.0 0.0 0.0 1.0 <br>]<br>
+     *
      * @return the string representation of this object.
      */
     @Override
@@ -1685,11 +1750,10 @@ public final class Matrix4f implements Cloneable {
     }
 
     /**
-     * 
      * <code>hashCode</code> returns the hash code value as an integer and is
      * supported for the benefit of hashing based collection classes such as
      * Hashtable, HashMap, HashSet etc.
-     * 
+     *
      * @return the hashcode for this instance of Matrix4f.
      * @see java.lang.Object#hashCode()
      */
@@ -1718,12 +1782,12 @@ public final class Matrix4f implements Cloneable {
 
         return hash;
     }
-    
+
     /**
-     * are these two matrices the same? they are is they both have the same mXX values.
+     * are these two matrices the same? they are is they both have the same mXX
+     * values.
      *
-     * @param o
-     *            the object to compare for equality
+     * @param o the object to compare for equality
      * @return true if they are equal
      */
     @Override
@@ -1737,29 +1801,61 @@ public final class Matrix4f implements Cloneable {
         }
 
         Matrix4f comp = (Matrix4f) o;
-        if (Float.compare(m00,comp.m00) != 0) return false;
-        if (Float.compare(m01,comp.m01) != 0) return false;
-        if (Float.compare(m02,comp.m02) != 0) return false;
-        if (Float.compare(m03,comp.m03) != 0) return false;
+        if (Float.compare(m00, comp.m00) != 0) {
+            return false;
+        }
+        if (Float.compare(m01, comp.m01) != 0) {
+            return false;
+        }
+        if (Float.compare(m02, comp.m02) != 0) {
+            return false;
+        }
+        if (Float.compare(m03, comp.m03) != 0) {
+            return false;
+        }
 
-        if (Float.compare(m10,comp.m10) != 0) return false;
-        if (Float.compare(m11,comp.m11) != 0) return false;
-        if (Float.compare(m12,comp.m12) != 0) return false;
-        if (Float.compare(m13,comp.m13) != 0) return false;
+        if (Float.compare(m10, comp.m10) != 0) {
+            return false;
+        }
+        if (Float.compare(m11, comp.m11) != 0) {
+            return false;
+        }
+        if (Float.compare(m12, comp.m12) != 0) {
+            return false;
+        }
+        if (Float.compare(m13, comp.m13) != 0) {
+            return false;
+        }
 
-        if (Float.compare(m20,comp.m20) != 0) return false;
-        if (Float.compare(m21,comp.m21) != 0) return false;
-        if (Float.compare(m22,comp.m22) != 0) return false;
-        if (Float.compare(m23,comp.m23) != 0) return false;
+        if (Float.compare(m20, comp.m20) != 0) {
+            return false;
+        }
+        if (Float.compare(m21, comp.m21) != 0) {
+            return false;
+        }
+        if (Float.compare(m22, comp.m22) != 0) {
+            return false;
+        }
+        if (Float.compare(m23, comp.m23) != 0) {
+            return false;
+        }
 
-        if (Float.compare(m30,comp.m30) != 0) return false;
-        if (Float.compare(m31,comp.m31) != 0) return false;
-        if (Float.compare(m32,comp.m32) != 0) return false;
-        if (Float.compare(m33,comp.m33) != 0) return false;
+        if (Float.compare(m30, comp.m30) != 0) {
+            return false;
+        }
+        if (Float.compare(m31, comp.m31) != 0) {
+            return false;
+        }
+        if (Float.compare(m32, comp.m32) != 0) {
+            return false;
+        }
+        if (Float.compare(m33, comp.m33) != 0) {
+            return false;
+        }
 
         return true;
     }
-    
+
     public Class<? extends Matrix4f> getClassTag() {
         return this.getClass();
     }
@@ -1768,18 +1864,16 @@ public final class Matrix4f implements Cloneable {
      * @return true if this matrix is identity
      */
     public boolean isIdentity() {
-        return 
-        (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0) &&
-        (m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0) &&
-        (m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0) &&
-        (m30 == 0 && m31 == 0 && m32 == 0 && m33 == 1);
+        return (m00 == 1 && m01 == 0 && m02 == 0 && m03 == 0)
+                && (m10 == 0 && m11 == 1 && m12 == 0 && m13 == 0)
+                && (m20 == 0 && m21 == 0 && m22 == 1 && m23 == 0)
+                && (m30 == 0 && m31 == 0 && m32 == 0 && m33 == 1);
     }
 
     /**
      * Apply a scale to this matrix.
-     * 
-     * @param scale
-     *            the scale to apply
+     *
+     * @param scale the scale to apply
      */
     public void scale(Vector3f scale) {
         m00 *= scale.getX();
@@ -1798,9 +1892,8 @@ public final class Matrix4f implements Cloneable {
 
     /**
      * Apply a scale to this matrix.
-     * 
-     * @param scale
-     *            the scale to apply
+     *
+     * @param scale the scale to apply
      */
     public void scale(float scale) {
         m00 *= scale;
@@ -1818,30 +1911,62 @@ public final class Matrix4f implements Cloneable {
     }
 
     static boolean equalIdentity(Matrix4f mat) {
-		if (Math.abs(mat.m00 - 1) > 1e-4) return false;
-		if (Math.abs(mat.m11 - 1) > 1e-4) return false;
-		if (Math.abs(mat.m22 - 1) > 1e-4) return false;
-		if (Math.abs(mat.m33 - 1) > 1e-4) return false;
+        if (Math.abs(mat.m00 - 1) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m11 - 1) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m22 - 1) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m33 - 1) > 1e-4) {
+            return false;
+        }
 
-		if (Math.abs(mat.m01) > 1e-4) return false;
-		if (Math.abs(mat.m02) > 1e-4) return false;
-		if (Math.abs(mat.m03) > 1e-4) return false;
+        if (Math.abs(mat.m01) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m02) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m03) > 1e-4) {
+            return false;
+        }
 
-		if (Math.abs(mat.m10) > 1e-4) return false;
-		if (Math.abs(mat.m12) > 1e-4) return false;
-		if (Math.abs(mat.m13) > 1e-4) return false;
+        if (Math.abs(mat.m10) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m12) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m13) > 1e-4) {
+            return false;
+        }
 
-		if (Math.abs(mat.m20) > 1e-4) return false;
-		if (Math.abs(mat.m21) > 1e-4) return false;
-		if (Math.abs(mat.m23) > 1e-4) return false;
+        if (Math.abs(mat.m20) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m21) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m23) > 1e-4) {
+            return false;
+        }
 
-		if (Math.abs(mat.m30) > 1e-4) return false;
-		if (Math.abs(mat.m31) > 1e-4) return false;
-		if (Math.abs(mat.m32) > 1e-4) return false;
+        if (Math.abs(mat.m30) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m31) > 1e-4) {
+            return false;
+        }
+        if (Math.abs(mat.m32) > 1e-4) {
+            return false;
+        }
 
-		return true;
+        return true;
     }
-    
+
     @Override
     public Matrix4f clone() {
         try {
@@ -1851,4 +1976,3 @@ public final class Matrix4f implements Cloneable {
         }
     }
 }
-

@@ -1,41 +1,27 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.gameserver.geoEngine.math;
 
 import java.util.Random;
 
 /**
- * <code>FastMath</code> provides 'fast' math approximations and float equivalents of Math
- * functions.  These are all used as static values and functions.
+ * <code>FastMath</code> provides 'fast' math approximations and float
+ * equivalents of Math functions. These are all used as static values and
+ * functions.
  *
  * @author Various
  * @version $Id: FastMath.java,v 1.45 2007/08/26 08:44:20 irrisor Exp $
@@ -44,43 +30,67 @@ final public class FastMath {
 
     private FastMath() {
     }
-    /** A "close to zero" double epsilon value for use*/
+
+    /**
+     * A "close to zero" double epsilon value for use
+     */
     public static final double DBL_EPSILON = 2.220446049250313E-16d;
-    /** A "close to zero" float epsilon value for use*/
+    /**
+     * A "close to zero" float epsilon value for use
+     */
     public static final float FLT_EPSILON = 1.1920928955078125E-7f;
-    /** A "close to zero" float epsilon value for use*/
+    /**
+     * A "close to zero" float epsilon value for use
+     */
     public static final float ZERO_TOLERANCE = 0.0001f;
     public static final float ONE_THIRD = 1f / 3f;
-    /** The value PI as a float. (180 degrees) */
+    /**
+     * The value PI as a float. (180 degrees)
+     */
     public static final float PI = (float) Math.PI;
-    /** The value 2PI as a float. (360 degrees) */
+    /**
+     * The value 2PI as a float. (360 degrees)
+     */
     public static final float TWO_PI = 2.0f * PI;
-    /** The value PI/2 as a float. (90 degrees) */
+    /**
+     * The value PI/2 as a float. (90 degrees)
+     */
     public static final float HALF_PI = 0.5f * PI;
-    /** The value PI/4 as a float. (45 degrees) */
+    /**
+     * The value PI/4 as a float. (45 degrees)
+     */
     public static final float QUARTER_PI = 0.25f * PI;
-    /** The value 1/PI as a float. */
+    /**
+     * The value 1/PI as a float.
+     */
     public static final float INV_PI = 1.0f / PI;
-    /** The value 1/(2PI) as a float. */
+    /**
+     * The value 1/(2PI) as a float.
+     */
     public static final float INV_TWO_PI = 1.0f / TWO_PI;
-    /** A value to multiply a degree value by, to convert it to radians. */
+    /**
+     * A value to multiply a degree value by, to convert it to radians.
+     */
     public static final float DEG_TO_RAD = PI / 180.0f;
-    /** A value to multiply a radian value by, to convert it to degrees. */
+    /**
+     * A value to multiply a radian value by, to convert it to degrees.
+     */
     public static final float RAD_TO_DEG = 180.0f / PI;
-    /** A precreated random object for random numbers. */
+    /**
+     * A precreated random object for random numbers.
+     */
     public static final Random rand = new Random(System.currentTimeMillis());
 
     /**
      * Returns true if the number is a power of 2 (2,4,8,16...)
-     * 
+     * <p/>
      * A good implementation found on the Java boards. note: a number is a power
      * of two if and only if it is the smallest number with that number of
      * significant bits. Therefore, if you subtract 1, you know that the new
      * number will have fewer bits, so ANDing the original number with anything
      * less than it will give 0.
-     * 
-     * @param number
-     *            The number to test.
+     *
+     * @param number The number to test.
      * @return True if it is a power of two.
      */
     public static boolean isPowerOfTwo(int number) {
@@ -94,13 +104,11 @@ final public class FastMath {
     /**
      * Linear interpolation from startValue to endValue by the given percent.
      * Basically: ((1 - percent) * startValue) + (percent * endValue)
-     * 
-     * @param scale
-     *            scale value to use. if 1, use endValue, if 0, use startValue.
-     * @param startValue
-     *            Begining value. 0% of f
-     * @param endValue
-     *            ending value. 100% of f
+     *
+     * @param scale      scale value to use. if 1, use endValue, if 0, use
+     *                   startValue.
+     * @param startValue Begining value. 0% of f
+     * @param endValue   ending value. 100% of f
      * @return The interpolated value between startValue and endValue.
      */
     public static float interpolateLinear(float scale, float startValue, float endValue) {
@@ -120,12 +128,10 @@ final public class FastMath {
      * Linear interpolation from startValue to endValue by the given percent.
      * Basically: ((1 - percent) * startValue) + (percent * endValue)
      *
-     * @param scale
-     *            scale value to use. if 1, use endValue, if 0, use startValue.
-     * @param startValue
-     *            Begining value. 0% of f
-     * @param endValue
-     *            ending value. 100% of f
+     * @param scale      scale value to use. if 1, use endValue, if 0, use
+     *                   startValue.
+     * @param startValue Begining value. 0% of f
+     * @param endValue   ending value. 100% of f
      * @return The interpolated value between startValue and endValue.
      */
     public static Vector3f interpolateLinear(float scale, Vector3f startValue, Vector3f endValue) {
@@ -136,16 +142,15 @@ final public class FastMath {
         return res;
     }
 
-    /**Interpolate a spline between at least 4 control points following the Catmull-Rom equation.
-     * here is the interpolation matrix
-     * m = [ 0.0  1.0  0.0   0.0 ]
-     *     [-T    0.0  T     0.0 ]
-     *     [ 2T   T-3  3-2T  -T  ]
-     *     [-T    2-T  T-2   T   ]
-     * where T is the curve tension
-     * the result is a value between p1 and p2, t=0 for p1, t=1 for p2
-     * @param u value from 0 to 1
-     * @param T The tension of the curve
+    /**
+     * Interpolate a spline between at least 4 control points following the
+     * Catmull-Rom equation. here is the interpolation matrix m = [ 0.0 1.0 0.0
+     * 0.0 ] [-T 0.0 T 0.0 ] [ 2T T-3 3-2T -T ] [-T 2-T T-2 T ] where T is the
+     * curve tension the result is a value between p1 and p2, t=0 for p1, t=1
+     * for p2
+     *
+     * @param u  value from 0 to 1
+     * @param T  The tension of the curve
      * @param p0 control point 0
      * @param p1 control point 1
      * @param p2 control point 2
@@ -162,16 +167,15 @@ final public class FastMath {
         return (float) (((c4 * u + c3) * u + c2) * u + c1);
     }
 
-    /**Interpolate a spline between at least 4 control points following the Catmull-Rom equation.
-     * here is the interpolation matrix
-     * m = [ 0.0  1.0  0.0   0.0 ]
-     *     [-T    0.0  T     0.0 ]
-     *     [ 2T   T-3  3-2T  -T  ]
-     *     [-T    2-T  T-2   T   ]
-     * where T is the tension of the curve
-     * the result is a value between p1 and p2, t=0 for p1, t=1 for p2
-     * @param u value from 0 to 1
-     * @param T The tension of the curve
+    /**
+     * Interpolate a spline between at least 4 control points following the
+     * Catmull-Rom equation. here is the interpolation matrix m = [ 0.0 1.0 0.0
+     * 0.0 ] [-T 0.0 T 0.0 ] [ 2T T-3 3-2T -T ] [-T 2-T T-2 T ] where T is the
+     * tension of the curve the result is a value between p1 and p2, t=0 for p1,
+     * t=1 for p2
+     *
+     * @param u  value from 0 to 1
+     * @param T  The tension of the curve
      * @param p0 control point 0
      * @param p1 control point 1
      * @param p2 control point 2
@@ -191,6 +195,7 @@ final public class FastMath {
      * Special cases:
      * <ul><li>If fValue is smaller than -1, then the result is PI.
      * <li>If the argument is greater than 1, then the result is 0.</ul>
+     *
      * @param fValue The angle, in radians.
      * @return fValue's acos
      * @see java.lang.Math#acos(double)
@@ -212,6 +217,7 @@ final public class FastMath {
      * Special cases:
      * <ul><li>If fValue is smaller than -1, then the result is -HALF_PI.
      * <li>If the argument is greater than 1, then the result is HALF_PI.</ul>
+     *
      * @param fValue The angle, in radians.
      * @return fValue's asin
      * @see java.lang.Math#asin(double)
@@ -230,6 +236,7 @@ final public class FastMath {
 
     /**
      * Returns the arc tangent of an angle given in radians.<br>
+     *
      * @param fValue The angle, in radians.
      * @return fValue's asin
      * @see java.lang.Math#atan(double)
@@ -240,9 +247,10 @@ final public class FastMath {
 
     /**
      * A direct call to Math.atan2.
+     *
      * @param fY
      * @param fX
-     * @return Math.atan2(fY,fX)
+     * @return Math.atan2(fY, fX)
      * @see java.lang.Math#atan2(double, double)
      */
     public static float atan2(float fY, float fX) {
@@ -250,7 +258,8 @@ final public class FastMath {
     }
 
     /**
-     * Rounds a fValue up.  A call to Math.ceil
+     * Rounds a fValue up. A call to Math.ceil
+     *
      * @param fValue The value.
      * @return The fValue rounded up
      * @see java.lang.Math#ceil(double)
@@ -264,8 +273,8 @@ final public class FastMath {
      * within the safe area on the x86 processor (-45 degrees to +45 degrees)
      * The results may be very slightly off from what the Math and StrictMath
      * trig functions give due to rounding in the angle reduction but it will be
-     * very very close. 
-     * 
+     * very very close.
+     * <p/>
      * note: code from wiki posting on java.net by jeffpk
      */
     public static float reduceSinAngle(float radians) {
@@ -281,12 +290,11 @@ final public class FastMath {
     }
 
     /**
-     * Returns sine of a value. 
-     * 
+     * Returns sine of a value.
+     * <p/>
      * note: code from wiki posting on java.net by jeffpk
-     * 
-     * @param fValue
-     *            The value to sine, in radians.
+     *
+     * @param fValue The value to sine, in radians.
      * @return The sine of fValue.
      * @see java.lang.Math#sin(double)
      */
@@ -301,9 +309,8 @@ final public class FastMath {
 
     /**
      * Returns cos of a value.
-     * 
-     * @param fValue
-     *            The value to cosine, in radians.
+     *
+     * @param fValue The value to cosine, in radians.
      * @return The cosine of fValue.
      * @see java.lang.Math#cos(double)
      */
@@ -321,6 +328,7 @@ final public class FastMath {
 
     /**
      * Returns E^fValue
+     *
      * @param fValue Value to raise to a power.
      * @return The value E^fValue
      * @see java.lang.Math#exp(double)
@@ -331,6 +339,7 @@ final public class FastMath {
 
     /**
      * Returns Absolute value of a float.
+     *
      * @param fValue The value to abs.
      * @return The abs of the value.
      * @see java.lang.Math#abs(float)
@@ -344,6 +353,7 @@ final public class FastMath {
 
     /**
      * Returns a number rounded down.
+     *
      * @param fValue The value to round
      * @return The given number rounded down
      * @see java.lang.Math#floor(double)
@@ -354,6 +364,7 @@ final public class FastMath {
 
     /**
      * Returns 1/sqrt(fValue)
+     *
      * @param fValue The value to process.
      * @return 1/sqrt(fValue)
      * @see java.lang.Math#sqrt(double)
@@ -373,6 +384,7 @@ final public class FastMath {
 
     /**
      * Returns the log base E of a value.
+     *
      * @param fValue The value to log.
      * @return The log of fValue base E
      * @see java.lang.Math#log(double)
@@ -382,10 +394,12 @@ final public class FastMath {
     }
 
     /**
-     * Returns the logarithm of value with given base, calculated as log(value)/log(base), 
-     * so that pow(base, return)==value (contributed by vear)
+     * Returns the logarithm of value with given base, calculated as
+     * log(value)/log(base), so that pow(base, return)==value (contributed by
+     * vear)
+     *
      * @param value The value to log.
-     * @param base Base of logarithm.
+     * @param base  Base of logarithm.
      * @return The logarithm of value with given base
      */
     public static float log(float value, float base) {
@@ -393,8 +407,9 @@ final public class FastMath {
     }
 
     /**
-     * Returns a number raised to an exponent power.  fBase^fExponent
-     * @param fBase The base value (IE 2)
+     * Returns a number raised to an exponent power. fBase^fExponent
+     *
+     * @param fBase     The base value (IE 2)
      * @param fExponent The exponent value (IE 3)
      * @return base raised to exponent (IE 8)
      * @see java.lang.Math#pow(double, double)
@@ -404,7 +419,8 @@ final public class FastMath {
     }
 
     /**
-     * Returns the value squared.  fValue ^ 2
+     * Returns the value squared. fValue ^ 2
+     *
      * @param fValue The vaule to square.
      * @return The square of the given value.
      */
@@ -414,6 +430,7 @@ final public class FastMath {
 
     /**
      * Returns the square root of a given value.
+     *
      * @param fValue The value to sqrt.
      * @return The square root of the given value.
      * @see java.lang.Math#sqrt(double)
@@ -423,8 +440,9 @@ final public class FastMath {
     }
 
     /**
-     * Returns the tangent of a value.  If USE_FAST_TRIG is enabled, an approximate value
-     * is returned.  Otherwise, a direct value is used.
+     * Returns the tangent of a value. If USE_FAST_TRIG is enabled, an
+     * approximate value is returned. Otherwise, a direct value is used.
+     *
      * @param fValue The value to tangent, in radians.
      * @return The tangent of fValue.
      * @see java.lang.Math#tan(double)
@@ -434,7 +452,9 @@ final public class FastMath {
     }
 
     /**
-     * Returns 1 if the number is positive, -1 if the number is negative, and 0 otherwise
+     * Returns 1 if the number is positive, -1 if the number is negative, and 0
+     * otherwise
+     *
      * @param iValue The integer to examine.
      * @return The integer's sign.
      */
@@ -449,7 +469,9 @@ final public class FastMath {
     }
 
     /**
-     * Returns 1 if the number is positive, -1 if the number is negative, and 0 otherwise
+     * Returns 1 if the number is positive, -1 if the number is negative, and 0
+     * otherwise
+     *
      * @param fValue The float to examine.
      * @return The float's sign.
      */
@@ -458,12 +480,14 @@ final public class FastMath {
     }
 
     /**
-     * Given 3 points in a 2d plane, this function computes if the points going from A-B-C
-     * are moving counter clock wise.
+     * Given 3 points in a 2d plane, this function computes if the points going
+     * from A-B-C are moving counter clock wise.
+     *
      * @param p0 Point 0.
      * @param p1 Point 1.
      * @param p2 Point 2.
-     * @return 1 If they are CCW, -1 if they are not CCW, 0 if p2 is between p0 and p1.
+     * @return 1 If they are CCW, -1 if they are not CCW, 0 if p2 is between p0
+     * and p1.
      */
     public static int counterClockwise(Vector2f p0, Vector2f p1, Vector2f p2) {
         float dx1, dx2, dy1, dy2;
@@ -487,12 +511,13 @@ final public class FastMath {
     }
 
     /**
-     * Test if a point is inside a triangle.  1 if the point is on the ccw side,
+     * Test if a point is inside a triangle. 1 if the point is on the ccw side,
      * -1 if the point is on the cw side, and 0 if it is on neither.
+     *
      * @param t0 First point of the triangle.
      * @param t1 Second point of the triangle.
      * @param t2 Third point of the triangle.
-     * @param p The point to test.
+     * @param p  The point to test.
      * @return Value 1 or -1 if inside triangle, 0 otherwise.
      */
     public static int pointInsideTriangle(Vector2f t0, Vector2f t1, Vector2f t2, Vector2f p) {
@@ -521,9 +546,9 @@ final public class FastMath {
      * Returns the determinant of a 4x4 matrix.
      */
     public static float determinant(double m00, double m01, double m02,
-            double m03, double m10, double m11, double m12, double m13,
-            double m20, double m21, double m22, double m23, double m30,
-            double m31, double m32, double m33) {
+                                    double m03, double m10, double m11, double m12, double m13,
+                                    double m20, double m21, double m22, double m23, double m30,
+                                    double m31, double m32, double m33) {
 
         double det01 = m20 * m31 - m21 * m30;
         double det02 = m20 * m32 - m22 * m30;
@@ -539,9 +564,9 @@ final public class FastMath {
 
     /**
      * Returns a random float between 0 and 1.
-     * 
+     *
      * @return A random float between <tt>0.0f</tt> (inclusive) to
-     *         <tt>1.0f</tt> (exclusive).
+     * <tt>1.0f</tt> (exclusive).
      */
     public static float nextRandomFloat() {
         return rand.nextFloat();
@@ -549,9 +574,9 @@ final public class FastMath {
 
     /**
      * Returns a random float between min and max.
-     * 
+     *
      * @return A random int between <tt>min</tt> (inclusive) to
-     *         <tt>max</tt> (inclusive).
+     * <tt>max</tt> (inclusive).
      */
     public static int nextRandomInt(int min, int max) {
         return (int) (nextRandomFloat() * (max - min + 1)) + min;
@@ -566,7 +591,7 @@ final public class FastMath {
      * Y as up) and stores the results in the store var.
      */
     public static Vector3f sphericalToCartesian(Vector3f sphereCoords,
-            Vector3f store) {
+                                                Vector3f store) {
         store.y = sphereCoords.x * FastMath.sin(sphereCoords.z);
         float a = sphereCoords.x * FastMath.cos(sphereCoords.z);
         store.x = a * FastMath.cos(sphereCoords.y);
@@ -581,7 +606,7 @@ final public class FastMath {
      * Polar)
      */
     public static Vector3f cartesianToSpherical(Vector3f cartCoords,
-            Vector3f store) {
+                                                Vector3f store) {
         if (cartCoords.x == 0) {
             cartCoords.x = FastMath.FLT_EPSILON;
         }
@@ -601,7 +626,7 @@ final public class FastMath {
      * Z as up) and stores the results in the store var.
      */
     public static Vector3f sphericalToCartesianZ(Vector3f sphereCoords,
-            Vector3f store) {
+                                                 Vector3f store) {
         store.z = sphereCoords.x * FastMath.sin(sphereCoords.z);
         float a = sphereCoords.x * FastMath.cos(sphereCoords.z);
         store.x = a * FastMath.cos(sphereCoords.y);
@@ -616,7 +641,7 @@ final public class FastMath {
      * Polar)
      */
     public static Vector3f cartesianZToSpherical(Vector3f cartCoords,
-            Vector3f store) {
+                                                 Vector3f store) {
         if (cartCoords.x == 0) {
             cartCoords.x = FastMath.FLT_EPSILON;
         }
@@ -633,9 +658,8 @@ final public class FastMath {
 
     /**
      * Takes an value and expresses it in terms of min to max.
-     * 
-     * @param val -
-     *            the angle to normalize (in radians)
+     *
+     * @param val - the angle to normalize (in radians)
      * @return the normalized angle (also in radians)
      */
     public static float normalize(float val, float min, float max) {
@@ -653,10 +677,8 @@ final public class FastMath {
     }
 
     /**
-     * @param x
-     *            the value whose sign is to be adjusted.
-     * @param y
-     *            the value whose sign is to be used.
+     * @param x the value whose sign is to be adjusted.
+     * @param y the value whose sign is to be used.
      * @return x with its sign changed to match the sign of y.
      */
     public static float copysign(float x, float y) {
@@ -671,7 +693,7 @@ final public class FastMath {
 
     /**
      * Take a float input and clamp it between min and max.
-     * 
+     *
      * @param input
      * @param min
      * @param max
@@ -692,9 +714,9 @@ final public class FastMath {
     }
 
     /**
-     * Converts a single precision (32 bit) floating point value
-     * into half precision (16 bit).
-     *
+     * Converts a single precision (32 bit) floating point value into half
+     * precision (16 bit).
+     * <p/>
      * Source: http://www.fox-toolkit.org/ftp/fasthalffloatconversion.pdf
      *
      * @param half The half floating point value as a short.

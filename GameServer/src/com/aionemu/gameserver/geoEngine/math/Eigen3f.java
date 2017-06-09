@@ -1,60 +1,41 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.math;
 
 import java.util.logging.Logger;
 
 public class Eigen3f {
+
     private static final Logger logger = Logger.getLogger(Eigen3f.class
             .getName());
-
     float[] eigenValues = new float[3];
     Vector3f[] eigenVectors = new Vector3f[3];
-
     static final double ONE_THIRD_DOUBLE = 1.0 / 3.0;
     static final double ROOT_THREE_DOUBLE = Math.sqrt(3.0);
 
-    
     public Eigen3f() {
-    	
     }
-    
+
     public Eigen3f(Matrix3f data) {
         calculateEigen(data);
     }
 
-	public void calculateEigen(Matrix3f data) {
-		// prep work...
+    public void calculateEigen(Matrix3f data) {
+        // prep work...
         eigenVectors[0] = new Vector3f();
         eigenVectors[1] = new Vector3f();
         eigenVectors[2] = new Vector3f();
@@ -74,7 +55,7 @@ public class Eigen3f {
         maxRows[0] = new Vector3f();
         maxRows[1] = new Vector3f();
         maxRows[2] = new Vector3f();
-        
+
         for (int i = 0; i < 3; i++) {
             Matrix3f tempMatrix = new Matrix3f(scaledData);
             tempMatrix.m00 -= eigenValues[i];
@@ -131,12 +112,12 @@ public class Eigen3f {
                 eigenValues[i] *= maxMagnitude;
             }
         }
-	}
+    }
 
     /**
      * Scale the matrix so its entries are in [-1,1]. The scaling is applied
      * only when at least one matrix entry has magnitude larger than 1.
-     * 
+     *
      * @return the max magnitude in this matrix
      */
     private float scaleMatrix(Matrix3f mat) {
@@ -173,7 +154,8 @@ public class Eigen3f {
     }
 
     /**
-     * Compute the eigenvectors of the given Matrix, using the 
+     * Compute the eigenvectors of the given Matrix, using the
+     *
      * @param mat
      * @param vect
      * @param index1
@@ -181,7 +163,7 @@ public class Eigen3f {
      * @param index3
      */
     private void computeVectors(Matrix3f mat, Vector3f vect, int index1,
-            int index2, int index3) {
+                                int index2, int index3) {
         Vector3f vectorU = new Vector3f(), vectorV = new Vector3f();
         Vector3f.generateComplementBasis(vectorU, vectorV, vect);
 
@@ -261,22 +243,19 @@ public class Eigen3f {
             }
         }
 
-         eigenVectors[index3].cross(eigenVectors[index1], eigenVectors[index2]);
+        eigenVectors[index3].cross(eigenVectors[index1], eigenVectors[index2]);
     }
 
     /**
      * Check the rank of the given Matrix to determine if it is positive. While
      * doing so, store the max magnitude entry in the given float store and the
      * max row of the matrix in the Vector store.
-     * 
-     * @param matrix
-     *            the Matrix3f to analyze.
-     * @param maxMagnitudeStore
-     *            a float array in which to store (in the 0th position) the max
-     *            magnitude entry of the matrix.
-     * @param maxRowStore
-     *            a Vector3f to store the values of the row of the matrix
-     *            containing the max magnitude entry.
+     *
+     * @param matrix            the Matrix3f to analyze.
+     * @param maxMagnitudeStore a float array in which to store (in the 0th
+     *                          position) the max magnitude entry of the matrix.
+     * @param maxRowStore       a Vector3f to store the values of the row of the
+     *                          matrix containing the max magnitude entry.
      * @return true if the given matrix has a non 0 rank.
      */
     private boolean positiveRank(Matrix3f matrix, float[] maxMagnitudeStore, Vector3f maxRowStore) {
@@ -303,18 +282,16 @@ public class Eigen3f {
     /**
      * Generate the base eigen values of the given matrix using double precision
      * math.
-     * 
-     * @param mat
-     *            the Matrix3f to analyze.
-     * @param rootsStore
-     *            a double array to store the results in. Must be at least
-     *            length 3.
+     *
+     * @param mat        the Matrix3f to analyze.
+     * @param rootsStore a double array to store the results in. Must be at
+     *                   least length 3.
      */
     private void computeRoots(Matrix3f mat, double[] rootsStore) {
         // Convert the unique matrix entries to double precision.
         double a = mat.m00, b = mat.m01, c = mat.m02,
-                            d = mat.m11, e = mat.m12,
-                                         f = mat.m22;
+                d = mat.m11, e = mat.m12,
+                f = mat.m22;
 
         // The characteristic equation is x^3 - c2*x^2 + c1*x - c0 = 0. The
         // eigenvalues are the roots to this equation, all guaranteed to be
@@ -380,8 +357,9 @@ public class Eigen3f {
         Eigen3f eigenSystem = new Eigen3f(mat);
 
         logger.info("eigenvalues = ");
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 3; i++) {
             logger.info(eigenSystem.getEigenValue(i) + " ");
+        }
 
         logger.info("eigenvectors = ");
         for (int i = 0; i < 3; i++) {

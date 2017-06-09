@@ -1,35 +1,19 @@
-/*
- * Copyright (c) 2009-2010 jMonkeyEngine
- * All rights reserved.
+/**
+ * This file is part of Aion-Lightning <aion-lightning.org>.
  *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are
- * met:
+ *  Aion-Lightning is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- * * Redistributions of source code must retain the above copyright
- *   notice, this list of conditions and the following disclaimer.
- *
- * * Redistributions in binary form must reproduce the above copyright
- *   notice, this list of conditions and the following disclaimer in the
- *   documentation and/or other materials provided with the distribution.
- *
- * * Neither the name of 'jMonkeyEngine' nor the names of its contributors
- *   may be used to endorse or promote products derived from this software
- *   without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
- * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  Aion-Lightning is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details. *
+ *  You should have received a copy of the GNU General Public License
+ *  along with Aion-Lightning.
+ *  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.aionemu.gameserver.geoEngine.bounding;
 
 import com.aionemu.gameserver.geoEngine.collision.Collidable;
@@ -45,12 +29,17 @@ import java.nio.FloatBuffer;
 //import com.jme.scene.TriMesh;
 
 /**
- * <code>BoundingBox</code> defines an axis-aligned cube that defines a container for a group of vertices of a
- * particular piece of geometry. This box defines a center and extents from that center along the x, y and z axis. <br>
+ * <code>BoundingBox</code> defines an axis-aligned cube that defines a
+ * container for a group of vertices of a particular piece of geometry. This box
+ * defines a center and extents from that center along the x, y and z axis. <br>
  * <br>
- * A typical usage is to allow the class define the center and radius by calling either <code>containAABB</code> or
- * <code>averagePoints</code>. A call to <code>computeFramePoint</code> in turn calls <code>containAABB</code>.
- * 
+ * A typical usage is to allow the class define the center and radius by calling
+ * either
+ * <code>containAABB</code> or
+ * <code>averagePoints</code>. A call to
+ * <code>computeFramePoint</code> in turn calls
+ * <code>containAABB</code>.
+ *
  * @author Joshua Slack
  * @version $Id: BoundingBox.java,v 1.50 2007/09/22 16:46:35 irrisor Exp $
  */
@@ -59,13 +48,15 @@ public class BoundingBox extends BoundingVolume {
     float xExtent, yExtent, zExtent;
 
     /**
-     * Default constructor instantiates a new <code>BoundingBox</code> object.
+     * Default constructor instantiates a new
+     * <code>BoundingBox</code> object.
      */
     public BoundingBox() {
     }
 
     /**
-     * Contstructor instantiates a new <code>BoundingBox</code> object with given specs.
+     * Contstructor instantiates a new
+     * <code>BoundingBox</code> object with given specs.
      */
     public BoundingBox(Vector3f c, float x, float y, float z) {
         this.center.set(c);
@@ -90,7 +81,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>computeFromPoints</code> creates a new Bounding Box from a given set of points. It uses the
+     * <code>computeFromPoints</code> creates a new Bounding Box from a given
+     * set of points. It uses the
      * <code>containAABB</code> method as default.
      *
      * @param points the points to contain.
@@ -100,8 +92,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>computeFromTris</code> creates a new Bounding Box from a given set of triangles. It is used in OBBTree
-     * calculations.
+     * <code>computeFromTris</code> creates a new Bounding Box from a given set
+     * of triangles. It is used in OBBTree calculations.
      *
      * @param tris
      * @param start
@@ -170,33 +162,43 @@ public class BoundingBox extends BoundingVolume {
     }
 
     public static final void checkMinMax(Vector3f min, Vector3f max, Vector3f point) {
-        if (point.x < min.x)
+        if (point.x < min.x) {
             min.x = point.x;
-        if (point.x > max.x)
+        }
+        if (point.x > max.x) {
             max.x = point.x;
-        if (point.y < min.y)
+        }
+        if (point.y < min.y) {
             min.y = point.y;
-        if (point.y > max.y)
+        }
+        if (point.y > max.y) {
             max.y = point.y;
-        if (point.z < min.z)
+        }
+        if (point.z < min.z) {
             min.z = point.z;
-        if (point.z > max.z)
+        }
+        if (point.z > max.z) {
             max.z = point.z;
+        }
     }
 
     /**
-     * <code>containAABB</code> creates a minimum-volume axis-aligned bounding box of the points, then selects the
-     * smallest enclosing sphere of the box with the sphere centered at the boxes center.
+     * <code>containAABB</code> creates a minimum-volume axis-aligned bounding
+     * box of the points, then selects the smallest enclosing sphere of the box
+     * with the sphere centered at the boxes center.
      *
      * @param points the list of points.
      */
     public void containAABB(FloatBuffer points) {
-        if (points == null)
+        if (points == null) {
             return;
+        }
 
         points.rewind();
         if (points.remaining() <= 2) // we need at least a 3 float vector
+        {
             return;
+        }
 
         Vector3f vect1 = Vector3f.newInstance();
         BufferUtils.populateFromBuffer(vect1, points, 0);
@@ -205,20 +207,23 @@ public class BoundingBox extends BoundingVolume {
 
         for (int i = 1, len = points.remaining() / 3; i < len; i++) {
             BufferUtils.populateFromBuffer(vect1, points, i);
-            if (vect1.x < minX)
+            if (vect1.x < minX) {
                 minX = vect1.x;
-            else if (vect1.x > maxX)
+            } else if (vect1.x > maxX) {
                 maxX = vect1.x;
+            }
 
-            if (vect1.y < minY)
+            if (vect1.y < minY) {
                 minY = vect1.y;
-            else if (vect1.y > maxY)
+            } else if (vect1.y > maxY) {
                 maxY = vect1.y;
+            }
 
-            if (vect1.z < minZ)
+            if (vect1.z < minZ) {
                 minZ = vect1.z;
-            else if (vect1.z > maxZ)
+            } else if (vect1.z > maxZ) {
                 maxZ = vect1.z;
+            }
         }
         Vector3f.recycle(vect1);
 
@@ -261,8 +266,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>whichSide</code> takes a plane (typically provided by a view frustum) to determine which side this bound is
-     * on.
+     * <code>whichSide</code> takes a plane (typically provided by a view
+     * frustum) to determine which side this bound is on.
      *
      * @param plane the plane to check against.
      */
@@ -283,8 +288,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>merge</code> combines this sphere with a second bounding sphere. This new sphere contains both bounding
-     * spheres and is returned.
+     * <code>merge</code> combines this sphere with a second bounding sphere.
+     * This new sphere contains both bounding spheres and is returned.
      *
      * @param volume the sphere to combine with this sphere.
      * @return the new sphere
@@ -305,15 +310,15 @@ public class BoundingBox extends BoundingVolume {
             // BoundingBox rVal = (BoundingBox) this.clone(null);
             // return rVal.mergeOBB(box);
             // }
-
             default:
                 return null;
         }
     }
 
     /**
-     * <code>mergeLocal</code> combines this sphere with a second bounding sphere locally. Altering this sphere to contain
-     * both the original and the additional sphere volumes;
+     * <code>mergeLocal</code> combines this sphere with a second bounding
+     * sphere locally. Altering this sphere to contain both the original and the
+     * additional sphere volumes;
      *
      * @param volume the sphere to combine with this sphere.
      * @return this
@@ -332,7 +337,6 @@ public class BoundingBox extends BoundingVolume {
             // case OBB: {
             // return mergeOBB((OrientedBoundingBox) volume);
             // }
-
             default:
                 return null;
         }
@@ -341,8 +345,7 @@ public class BoundingBox extends BoundingVolume {
     /**
      * Merges this AABB with the given OBB.
      *
-     * @param volume
-     *          the OBB to merge this AABB with.
+     * @param volume the OBB to merge this AABB with.
      * @return This AABB extended to fit the given OBB.
      */
     // private BoundingBox mergeOBB(OrientedBoundingBox volume) {
@@ -383,7 +386,8 @@ public class BoundingBox extends BoundingVolume {
     // }
 
     /**
-     * <code>merge</code> combines this bounding box with another box which is defined by the center, x, y, z extents.
+     * <code>merge</code> combines this bounding box with another box which is
+     * defined by the center, x, y, z extents.
      *
      * @param boxCenter the center of the box to merge with
      * @param boxX      the x extent of the box to merge with.
@@ -397,24 +401,30 @@ public class BoundingBox extends BoundingVolume {
         Vector3f vect2 = Vector3f.newInstance();
 
         vect1.x = center.x - xExtent;
-        if (vect1.x > boxCenter.x - boxX)
+        if (vect1.x > boxCenter.x - boxX) {
             vect1.x = boxCenter.x - boxX;
+        }
         vect1.y = center.y - yExtent;
-        if (vect1.y > boxCenter.y - boxY)
+        if (vect1.y > boxCenter.y - boxY) {
             vect1.y = boxCenter.y - boxY;
+        }
         vect1.z = center.z - zExtent;
-        if (vect1.z > boxCenter.z - boxZ)
+        if (vect1.z > boxCenter.z - boxZ) {
             vect1.z = boxCenter.z - boxZ;
+        }
 
         vect2.x = center.x + xExtent;
-        if (vect2.x < boxCenter.x + boxX)
+        if (vect2.x < boxCenter.x + boxX) {
             vect2.x = boxCenter.x + boxX;
+        }
         vect2.y = center.y + yExtent;
-        if (vect2.y < boxCenter.y + boxY)
+        if (vect2.y < boxCenter.y + boxY) {
             vect2.y = boxCenter.y + boxY;
+        }
         vect2.z = center.z + zExtent;
-        if (vect2.z < boxCenter.z + boxZ)
+        if (vect2.z < boxCenter.z + boxZ) {
             vect2.z = boxCenter.z + boxZ;
+        }
 
         center.set(vect2).addLocal(vect1).multLocal(0.5f);
 
@@ -428,9 +438,11 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>clone</code> creates a new BoundingBox object containing the same data as this one.
+     * <code>clone</code> creates a new BoundingBox object containing the same
+     * data as this one.
      *
-     * @param store where to store the cloned information. if null or wrong class, a new store is created.
+     * @param store where to store the cloned information. if null or wrong
+     *              class, a new store is created.
      * @return the new BoundingBox
      */
     public BoundingBox clone(BoundingVolume store) {
@@ -449,8 +461,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>toString</code> returns the string representation of this object. The form is:
-     * "Radius: RRR.SSSS Center: <Vector>".
+     * <code>toString</code> returns the string representation of this object.
+     * The form is: "Radius: RRR.SSSS Center: <Vector>".
      *
      * @return the string representation of this.
      */
@@ -472,8 +484,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * intersects determines if this Bounding Box intersects with another given bounding volume. If so, true is returned,
-     * otherwise, false is returned.
+     * intersects determines if this Bounding Box intersects with another given
+     * bounding volume. If so, true is returned, otherwise, false is returned.
      *
      * @see com.aionemu.gameserver.geoEngine.bounding.jme.bounding.BoundingVolume#intersects(com.aionemu.gameserver.geoEngine.bounding.jme.bounding.BoundingVolume)
      */
@@ -482,36 +494,40 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * determines if this bounding box intersects a given bounding box. If the two boxes intersect in any way, true is
-     * returned. Otherwise, false is returned.
+     * determines if this bounding box intersects a given bounding box. If the
+     * two boxes intersect in any way, true is returned. Otherwise, false is
+     * returned.
      *
      * @see com.aionemu.gameserver.geoEngine.bounding.jme.bounding.BoundingVolume#intersectsBoundingBox(com.aionemu.gameserver.geoEngine.bounding.jme.bounding.BoundingBox)
      */
     public boolean intersectsBoundingBox(BoundingBox bb) {
         assert Vector3f.isValidVector(center) && Vector3f.isValidVector(bb.center);
 
-        if (center.x + xExtent < bb.center.x - bb.xExtent || center.x - xExtent > bb.center.x + bb.xExtent)
+        if (center.x + xExtent < bb.center.x - bb.xExtent || center.x - xExtent > bb.center.x + bb.xExtent) {
             return false;
-        else if (center.y + yExtent < bb.center.y - bb.yExtent || center.y - yExtent > bb.center.y + bb.yExtent)
+        } else if (center.y + yExtent < bb.center.y - bb.yExtent || center.y - yExtent > bb.center.y + bb.yExtent) {
             return false;
-        else if (center.z + zExtent < bb.center.z - bb.zExtent || center.z - zExtent > bb.center.z + bb.zExtent)
+        } else if (center.z + zExtent < bb.center.z - bb.zExtent || center.z - zExtent > bb.center.z + bb.zExtent) {
             return false;
-        else
+        } else {
             return true;
+        }
     }
 
     /**
-     * determines if this bounding box intersects with a given oriented bounding box.
+     * determines if this bounding box intersects with a given oriented bounding
+     * box.
      *
-     * @see com.jme.bounding.BoundingVolume#intersectsOrientedBoundingBox(com.jme.bounding.OrientedBoundingBox)
+     * @see
+     * com.jme.bounding.BoundingVolume#intersectsOrientedBoundingBox(com.jme.bounding.OrientedBoundingBox)
      */
     // public boolean intersectsOrientedBoundingBox(OrientedBoundingBox obb) {
     // return obb.intersectsBoundingBox(this);
     // }
 
     /**
-     * determines if this bounding box intersects with a given ray object. If an intersection has occurred, true is
-     * returned, otherwise false is returned.
+     * determines if this bounding box intersects with a given ray object. If an
+     * intersection has occurred, true is returned, otherwise false is returned.
      *
      * @see com.aionemu.gameserver.geoEngine.bounding.jme.bounding.BoundingVolume#intersects(com.jme.math.Ray)
      */
@@ -680,7 +696,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * C code ported from http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt
+     * C code ported from
+     * http://www.cs.lth.se/home/Tomas_Akenine_Moller/code/tribox3.txt
      *
      * @param v1
      * @param v2
@@ -745,7 +762,8 @@ public class BoundingBox extends BoundingVolume {
     }
 
     /**
-     * <code>clip</code> determines if a line segment intersects the current test plane.
+     * <code>clip</code> determines if a line segment intersects the current
+     * test plane.
      *
      * @param denom the denominator of the line segment.
      * @param numer the numerator of the line segment.
@@ -757,16 +775,20 @@ public class BoundingBox extends BoundingVolume {
         // plane. Otherwise 'false' is returned in which case the line segment
         // is entirely clipped.
         if (denom > 0.0f) {
-            if (numer > denom * t[1])
+            if (numer > denom * t[1]) {
                 return false;
-            if (numer > denom * t[0])
+            }
+            if (numer > denom * t[0]) {
                 t[0] = numer / denom;
+            }
             return true;
         } else if (denom < 0.0f) {
-            if (numer > denom * t[0])
+            if (numer > denom * t[0]) {
                 return false;
-            if (numer > denom * t[1])
+            }
+            if (numer > denom * t[1]) {
                 t[1] = numer / denom;
+            }
             return true;
         } else {
             return numer <= 0.0;
@@ -800,22 +822,25 @@ public class BoundingBox extends BoundingVolume {
     }
 
     public void setXExtent(float xExtent) {
-        if (xExtent < 0)
+        if (xExtent < 0) {
             throw new IllegalArgumentException();
+        }
 
         this.xExtent = xExtent;
     }
 
     public void setYExtent(float yExtent) {
-        if (yExtent < 0)
+        if (yExtent < 0) {
             throw new IllegalArgumentException();
+        }
 
         this.yExtent = yExtent;
     }
 
     public void setZExtent(float zExtent) {
-        if (zExtent < 0)
+        if (zExtent < 0) {
             throw new IllegalArgumentException();
+        }
 
         this.zExtent = zExtent;
     }
