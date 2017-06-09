@@ -8,8 +8,10 @@ import javolution.util.FastMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.loginserver.LoginServer;
 import com.aionemu.gameserver.network.loginserver.serverpackets.SM_MACBAN_CONTROL;
+import com.aionemu.gameserver.world.World;
 
 /**
  * 
@@ -26,6 +28,11 @@ public class BannedMacManager {
 	private Map<String, BannedMacEntry> bannedList = new FastMap<String, BannedMacEntry>();
 
 	public final void banAddress(String address, long newTime, String details) {
+		for (Player player : World.getInstance().getAllPlayers()) {
+            if (player.getClientConnection().getMacAddress().equals(address)) {
+                player.getClientConnection().closeNow();
+            }
+        }
 		BannedMacEntry entry;
 		if (bannedList.containsKey(address)) {
 			if (bannedList.get(address).isActiveTill(newTime)) {
@@ -68,6 +75,6 @@ public class BannedMacManager {
 	}
 
 	public void onEnd() {
-		log.info("Loaded "+this.bannedList.size()+" banned mac addesses");
+		log.info("[BannedMacManager] Loaded " + this.bannedList.size() + " banned mac addresses");
 	}
 }
