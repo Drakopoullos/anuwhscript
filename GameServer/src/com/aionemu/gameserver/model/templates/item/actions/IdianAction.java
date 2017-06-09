@@ -112,7 +112,6 @@ public class IdianAction extends AbstractItemAction
 				targetItem.setIdianStone(idianStone);
 				if (targetItem.isEquipped()) {
 					idianStone.onEquip(player);
-					player.getEquipment().setPersistentState(PersistentState.UPDATE_REQUIRED);
 				}
 				PacketSendUtility.sendPacket(player, new SM_INVENTORY_UPDATE_ITEM(player, targetItem));
 			}
