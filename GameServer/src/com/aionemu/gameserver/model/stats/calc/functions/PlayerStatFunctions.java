@@ -20,6 +20,7 @@ public class PlayerStatFunctions
 		FUNCTIONS.add(new PvPMagicalAttackRatioFunction());
 		FUNCTIONS.add(new PvPPhysicalDefendRatioFunction());
 		FUNCTIONS.add(new PvPMagicalDefendRatioFunction());
+		FUNCTIONS.add(new AttackSpeedFunction());
 		FUNCTIONS.add(new PDefFunction());
 		FUNCTIONS.add(new MaxHpFunction());
 		FUNCTIONS.add(new MaxMpFunction());
