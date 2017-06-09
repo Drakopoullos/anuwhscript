@@ -52,18 +52,42 @@ public class CreativitySkillService
     public void enchantDaevaSkill(Player player, int id, int point) {
         PanelCp pcp = DataManager.PANEL_CP_DATA.getPanelCpId(id);
         if (id >= 409 && id <= 456) {
-            if (point >= 1) {
+            if (point == 1) {
                 player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
                 player.getCP().addPoint(player, id, point);
-            } else if (point == 0) {
+            } else if (point == 2) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 3) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 4) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 5) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 0){
                 SkillLearnService.removeSkill(player, pcp.getSkillId());
                 player.getCP().removePoint(player, id);
             }
         } else if(id >= 373 && id <= 400) {
-            if (point >= 1) {
+            if (point == 1) {
                 player.getSkillList().addSkill(player, pcp.getSkillId(), 6);
                 player.getCP().addPoint(player, id, point);
-            } else if (point == 0) {
+            } else if (point == 2) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 6);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 3) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 6);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 4) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 6);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 5) {
+            	player.getSkillList().addSkill(player, pcp.getSkillId(), 6);
+                player.getCP().addPoint(player, id, point);
+            } else if (point == 0){
                 player.getSkillList().addSkill(player, pcp.getSkillId(),  1);
                 player.getCP().removePoint(player, id);
             }
@@ -71,12 +95,24 @@ public class CreativitySkillService
     }
 	
     public void loginDaevaSkill(Player player, int id, int point) {
-        PanelCp pcp = DataManager.PANEL_CP_DATA.getPanelCpId(id);
-        if (point >= 1) {
+    	PanelCp pcp = DataManager.PANEL_CP_DATA.getPanelCpId(id);
+        if (point == 1) {
             player.getSkillList().addSkill(player, pcp.getSkillId(), point + 1);
             player.getCP().addPoint(player, id, point);
-        } else if(point == 0) {
-            player.getSkillList().addSkill(player, pcp.getSkillId(),  1);
+        } else if (point == 2) {
+        	player.getSkillList().addSkill(player, pcp.getSkillId(), point + 1);
+            player.getCP().addPoint(player, id, point);
+        } else if (point == 3) {
+        	player.getSkillList().addSkill(player, pcp.getSkillId(), point + 1);
+            player.getCP().addPoint(player, id, point);
+        } else if (point == 4) {
+        	player.getSkillList().addSkill(player, pcp.getSkillId(), point + 1);
+            player.getCP().addPoint(player, id, point);
+        } else if (point == 5) {
+        	player.getSkillList().addSkill(player, pcp.getSkillId(), point + 1);
+            player.getCP().addPoint(player, id, point);
+        } else if (point == 0) {
+            player.getSkillList().addSkill(player, pcp.getSkillId(), 1);
             player.getCP().removePoint(player, id);
         }
     }
