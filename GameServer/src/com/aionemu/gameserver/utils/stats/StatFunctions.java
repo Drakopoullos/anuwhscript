@@ -636,15 +636,15 @@ public class StatFunctions
         	PlayerClass playerClass = ((Player) attacker).getPlayerClass();
         	if (playerClass != null ) {
         		switch (playerClass) {
-        		case ASSASSIN : damages *= 0.9f;
-        			break;
-        		case GUNSLINGER : damages *= 0.8f;
+        		case GUNSLINGER : damages *= 0.6f;
         			break;
         		case SORCERER : damages *= 0.8f;
         			break;
-        		case SPIRIT_MASTER : damages *= 0.9f;
+        		case SPIRIT_MASTER : damages *= 0.8f;
         			break;
-        		case CLERIC : damages *= 0.8f;
+        		case CLERIC : damages *= 0.7f;
+        			break;
+        		case SONGWEAVER : damages *= 0.5f;
         			break;
         		default: damages *= 1f;		
         		}
