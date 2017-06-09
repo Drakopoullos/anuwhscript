@@ -200,6 +200,8 @@ public class Player extends Creature
 	private int bonusId = 0;
 	private boolean hasAbyssBonus;
 	private int abyssId = 0;
+	//GM Mode
+	private boolean isGmMode = false;
 
 	/**
 	 * Static information for players
@@ -2428,6 +2430,9 @@ public class Player extends Creature
 		case 5:
 			accessTag = AdminConfig.ADMIN_TAG_5;
 			break;
+		case 6:
+			accessTag = AdminConfig.ADMIN_TAG_6;
+			break;
 		default:
 			accessTag = "%s";
 		}
@@ -2437,9 +2442,9 @@ public class Player extends Creature
 	private String getAcountTag() {
 		String accountName = getClientConnection().getAccount().getName();
 		String accountTag = "%s";
-		if (accountName.equalsIgnoreCase("rinzler")) {
+		if (accountName.equalsIgnoreCase("nonedisable")) {
 			accountTag = MembershipConfig.PLAYER_TAG_30;
-		} if (accountName.equalsIgnoreCase("suzu")) {
+		} if (accountName.equalsIgnoreCase("nonedisable1")) {
 			accountTag = MembershipConfig.PLAYER_TAG_34;
 		}
 		return accountTag;
@@ -2910,8 +2915,20 @@ public class Player extends Creature
 	public void setFFA(boolean isFFA) {
 		this.isFFA = isFFA;
 	}
+	
+	public boolean isGmMode() {
+		return isGmMode;
+	}
+
+	public void setGmMode(boolean isGmMode) {
+		this.isGmMode = isGmMode;
+	}
 
 	public void sendMessage(String string) {
 		PacketSendUtility.sendMessage(this, string);
+	}
+	
+	public int getPartnerId() { 
+		return this.partnerId;
 	}
 }

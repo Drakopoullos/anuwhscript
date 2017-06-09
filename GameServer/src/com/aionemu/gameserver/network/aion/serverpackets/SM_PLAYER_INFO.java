@@ -2,10 +2,12 @@ package com.aionemu.gameserver.network.aion.serverpackets;
 
 import javolution.util.FastList;
 
+import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.commons.utils.Rnd;
-
 import com.aionemu.gameserver.configs.administration.*;
 import com.aionemu.gameserver.configs.main.GSConfig;
+import com.aionemu.gameserver.configs.main.MembershipConfig;
+import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.model.gameobjects.*;
 import com.aionemu.gameserver.model.gameobjects.player.*;
 import com.aionemu.gameserver.model.*;
@@ -85,10 +87,52 @@ public class SM_PLAYER_INFO extends AionServerPacket
 		writeB(new byte[8]);
 		writeC(player.getHeading());
 		String nameFormat = "%s";
-		// orphaned players - later find/remove them
-		if ((player.getClientConnection() != null) && (AdminConfig.ADMIN_TAG_ENABLE)) {
-			nameFormat = player.getCustomTag(false);
+		StringBuilder sb = new StringBuilder(nameFormat);
+		
+		if (player.getClientConnection() != null) {
+			// * = Premium & VIP Membership
+			if (MembershipConfig.PREMIUM_TAG_DISPLAY) {
+                switch (player.getClientConnection().getAccount().getMembership()) {
+                    case 1:
+                    	nameFormat = sb.replace(0, sb.length(), MembershipConfig.TAG_PREMIUM).toString();
+                        break;
+                    case 2:
+                    	nameFormat = sb.replace(0, sb.length(), MembershipConfig.TAG_VIP).toString();
+                        break;
+                }
+            }
+			
+			// * = Wedding
+			if (player.isMarried()) {
+				String partnerName = DAOManager.getDAO(PlayerDAO.class).getPlayerNameByObjId(player.getPartnerId());
+				nameFormat += "\uE020"+ partnerName;
+			}
+			
+			// * = Server Staff Access Level
+			if (AdminConfig.ADMIN_TAG_ENABLE && player.isGmMode()) {
+                switch (player.getClientConnection().getAccount().getAccessLevel()) {
+                    case 1:
+                    	nameFormat = AdminConfig.ADMIN_TAG_1.replace("%s", sb.toString());
+                        break;
+                    case 2:
+                    	nameFormat = AdminConfig.ADMIN_TAG_2.replace("%s", sb.toString());
+                        break;
+                    case 3:
+                    	nameFormat = AdminConfig.ADMIN_TAG_3.replace("%s", sb.toString());
+                        break;
+                    case 4:
+                    	nameFormat = AdminConfig.ADMIN_TAG_4.replace("%s", sb.toString());
+                        break;
+                    case 5:
+                    	nameFormat = AdminConfig.ADMIN_TAG_5.replace("%s", sb.toString());
+                        break;
+                    case 6:
+                    	nameFormat = AdminConfig.ADMIN_TAG_6.replace("%s", sb.toString());
+                    	break;
+                }
+			}
 		}
+		
 		writeS(String.format(nameFormat, DisplayService.getDisplayName(player)));
 		writeH(pcd.getTitleId());
 		writeH(player.getCommonData().isHaveMentorFlag()? 1 : 0);
@@ -283,7 +327,7 @@ public class SM_PLAYER_INFO extends AionServerPacket
 		//Protector/Conqueror 4.8
 		writeC(player.getConquerorInfo().getRank());
 		writeC(player.getProtectorInfo().getRank());
-		writeC(player.getGoldenStarOfLodi()); //5.0 로다스의 황금 별 [Korean Buff] (Golden Star Of Lodi's)
+		writeC(player.getGoldenStarOfLodi()); //5.0
 		writeH(player.getUnkPoint1()); //5.0 [ArchDaeva]
 	}
 }

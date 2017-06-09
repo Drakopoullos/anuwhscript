@@ -1,13 +1,18 @@
 package com.aionemu.gameserver.utils.audit;
 
 import java.util.*;
+
 import javolution.util.FastMap;
 
+import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.configs.administration.AdminConfig;
+import com.aionemu.gameserver.configs.main.MembershipConfig;
+import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.model.ChatType;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+import com.aionemu.gameserver.world.World;
 
 public class GMService
 {
@@ -38,15 +43,119 @@ public class GMService
 	public void onPlayerLogin(Player player){
 		if (player.isGM()){
 			gms.put(player.getObjectId(), player);
-			if (announceAny) 
-			   PacketSendUtility.broadcastPacket(player, new SM_MESSAGE(player, "Announce: " + player.getCustomTag(true) + player.getName() + " appear !!", ChatType.BRIGHT_YELLOW_CENTER), true);
-            else if (announceList.contains(Byte.valueOf(player.getAccessLevel())))
-			   PacketSendUtility.broadcastPacket(player, new SM_MESSAGE(player, "Announce: " + player.getCustomTag(true) + player.getName() + " appear !!", ChatType.BRIGHT_YELLOW_CENTER), true);
 		}
 	}
 	
 	public void onPlayerLogedOut(Player player){
 		gms.remove(player.getObjectId());
+	}
+	
+	public void onPlayerAvailable(Player player) {
+        if (player.isGM()) {
+            gms.put(player.getObjectId(), player);
+            String adminTag = "%s";
+            StringBuilder sb = new StringBuilder(adminTag);
+            
+            // * = Premium & VIP Membership
+            if (MembershipConfig.PREMIUM_TAG_DISPLAY) {
+            	switch (player.getClientConnection().getAccount().getMembership()) {
+            		case 1:
+            			adminTag = sb.replace(0, sb.length(), MembershipConfig.TAG_PREMIUM).toString();
+            			break;
+            		case 2:
+            			adminTag = sb.replace(0, sb.length(), MembershipConfig.TAG_VIP).toString();
+            			break;
+            	}
+            }
+         			
+            // * = Wedding
+            if (player.isMarried()) {
+            	String partnerName = DAOManager.getDAO(PlayerDAO.class).getPlayerNameByObjId(player.getPartnerId());
+            	adminTag += "\uE020"+ partnerName;
+            }
+         			
+            // * = Server Staff Access Level
+            if (AdminConfig.ADMIN_TAG_ENABLE && player.isGmMode()) {
+            	switch (player.getClientConnection().getAccount().getAccessLevel()) {
+            		case 1:
+            			adminTag = AdminConfig.ADMIN_TAG_1.replace("%s", sb.toString());
+            			break;
+            		case 2:
+            			adminTag = AdminConfig.ADMIN_TAG_2.replace("%s", sb.toString());
+            			break;
+            		case 3:
+            			adminTag = AdminConfig.ADMIN_TAG_3.replace("%s", sb.toString());
+            			break;
+            		case 4:
+            			adminTag = AdminConfig.ADMIN_TAG_4.replace("%s", sb.toString());
+            			break;
+            		case 5:
+            			adminTag = AdminConfig.ADMIN_TAG_5.replace("%s", sb.toString());
+            			break;
+            		case 6:
+                    	adminTag = AdminConfig.ADMIN_TAG_6.replace("%s", sb.toString());
+                    	break;
+            	}
+            }
+            
+            Iterator<Player> iter = World.getInstance().getPlayersIterator();
+            while (iter.hasNext()) {
+                PacketSendUtility.sendBrightYellowMessageOnCenter(iter.next(), "Information : " + String.format(adminTag, player.getName()) + " is now available for support!");
+            }
+        }
+	}
+	
+	public void onPlayerUnavailable(Player player) {
+        gms.remove(player.getObjectId());
+        String adminTag = "%s";
+        StringBuilder sb = new StringBuilder(adminTag);
+        
+        // * = Premium & VIP Membership
+        if (MembershipConfig.PREMIUM_TAG_DISPLAY) {
+        	switch (player.getClientConnection().getAccount().getMembership()) {
+        		case 1:
+        			adminTag = sb.replace(0, sb.length(), MembershipConfig.TAG_PREMIUM).toString();
+        			break;
+        		case 2:
+        			adminTag = sb.replace(0, sb.length(), MembershipConfig.TAG_VIP).toString();
+        			break;
+        	}
+        }
+     			
+        // * = Wedding
+        if (player.isMarried()) {
+        	String partnerName = DAOManager.getDAO(PlayerDAO.class).getPlayerNameByObjId(player.getPartnerId());
+        	adminTag += "\uE020"+ partnerName;
+        }
+     			
+        // * = Server Staff Access Level
+        if (AdminConfig.ADMIN_TAG_ENABLE && player.isGmMode()) {
+        	switch (player.getClientConnection().getAccount().getAccessLevel()) {
+        		case 1:
+        			adminTag = AdminConfig.ADMIN_TAG_1.replace("%s", sb.toString());
+        			break;
+        		case 2:
+        			adminTag = AdminConfig.ADMIN_TAG_2.replace("%s", sb.toString());
+        			break;
+        		case 3:
+        			adminTag = AdminConfig.ADMIN_TAG_3.replace("%s", sb.toString());
+        			break;
+        		case 4:
+        			adminTag = AdminConfig.ADMIN_TAG_4.replace("%s", sb.toString());
+        			break;
+        		case 5:
+        			adminTag = AdminConfig.ADMIN_TAG_5.replace("%s", sb.toString());
+        			break;
+        		case 6:
+                	adminTag = AdminConfig.ADMIN_TAG_6.replace("%s", sb.toString());
+                	break;
+        	}
+        }
+        
+        Iterator<Player> iter = World.getInstance().getPlayersIterator();
+        while (iter.hasNext()) {
+            PacketSendUtility.sendBrightYellowMessageOnCenter(iter.next(), "Information : " + String.format(adminTag, player.getName()) + " is now unavailable for support!");
+        }
 	}
 	
 	public void broadcastMesage(String message){
