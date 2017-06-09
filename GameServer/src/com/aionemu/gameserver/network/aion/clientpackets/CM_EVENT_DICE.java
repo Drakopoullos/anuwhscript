@@ -27,6 +27,6 @@ public class CM_EVENT_DICE extends AionClientPacket {
 		if (player == null) {
 			return;
 		}
-		log.info("Send CM_EVENT_DICE action: "+action);
+		log.info("Send CM_EVENT_DICE action: "+ action);
 	}
 }

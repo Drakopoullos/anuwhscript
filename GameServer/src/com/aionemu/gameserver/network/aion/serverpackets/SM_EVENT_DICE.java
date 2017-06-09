@@ -1,8 +1,5 @@
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
@@ -15,8 +12,6 @@ public class SM_EVENT_DICE  extends AionServerPacket {
 	private int diceGolden;
 	private int unkButton;
 	private int moveStep;
-	
-	private static final Logger log = LoggerFactory.getLogger(SM_EVENT_DICE.class);
 	
 	public SM_EVENT_DICE(int tableId, int currentStep, int diceLeft, int diceGolden, int unkButton, int moveStep) {
 		this.tableId = tableId;
