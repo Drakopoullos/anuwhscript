@@ -51,6 +51,8 @@ import com.aionemu.gameserver.services.events.*;
 import com.aionemu.gameserver.services.instance.*;
 import com.aionemu.gameserver.services.player.LunaShopService;
 import com.aionemu.gameserver.services.player.PlayerEventService;
+import com.aionemu.gameserver.services.player.PlayerEventService2;
+import com.aionemu.gameserver.services.player.PlayerEventService3;
 import com.aionemu.gameserver.services.player.PlayerLimitService;
 import com.aionemu.gameserver.services.reward.RewardService;
 import com.aionemu.gameserver.services.abysslandingservice.LandingUpdateService;
@@ -333,6 +335,10 @@ public class GameServer
 			RewardService.getInstance();
 		} if (EventsConfig.EVENT_ENABLED) {
 			PlayerEventService.getInstance();
+		} if (EventsConfig.EVENT_ENABLED2) {
+			PlayerEventService2.getInstance();
+		} if (EventsConfig.EVENT_ENABLED3) {
+			PlayerEventService3.getInstance();
 		} if (EventsConfig.ENABLE_EVENT_SERVICE) {
 			EventService.getInstance().start();
 		} if (EventsConfig.ENABLE_ATREIAN_PASSPORT) {
