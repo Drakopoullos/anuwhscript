@@ -216,6 +216,7 @@ public class AionPacketHandlerFactory
 		addPacket(new CM_SELL_TERMINATED_ITEMS(0x01CD, State.IN_GAME)); //5.1
 		addPacket(new CM_AETHERFORGING(0x01C1, State.IN_GAME)); //5.1
 		addPacket(new CM_COALESCENCE(0x01C0, State.IN_GAME)); //5.1
+		addPacket(new CM_COALESCENCE_WINDOW(0x01E7, State.IN_GAME)); //5.1
 		
 		//addPacket(new CM_SUBZONE_CHANGE(0x0162, State.IN_GAME)); //To Do 5.1 maybe removed by ncsoft
 		//addPacket(new CM_A_STATION(0x1BB, State.IN_GAME)); //To Do 5.1 we do not implement fasttrack yet

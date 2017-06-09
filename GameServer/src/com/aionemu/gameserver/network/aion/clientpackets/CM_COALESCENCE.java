@@ -3,9 +3,6 @@ package com.aionemu.gameserver.network.aion.clientpackets;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
@@ -16,10 +13,10 @@ import com.aionemu.gameserver.services.item.CoalescenceService;
  */
 public class CM_COALESCENCE extends AionClientPacket
 {
-	private Logger log = LoggerFactory.getLogger(CM_COALESCENCE.class);
-	private int mainItemObjId;
-	private int materialCount;
-	private List<Integer> materialItemObjId;
+	private int ItemSize;
+	private int upgradedItemObjectId;
+	private int Items;
+	private List<Integer> ItemsList = new ArrayList<Integer>();
 	
 	public CM_COALESCENCE(int opcode, State state, State... restStates) {
 		super(opcode, state, restStates);
@@ -27,23 +24,20 @@ public class CM_COALESCENCE extends AionClientPacket
 	
 	@Override
 	protected void readImpl() {
-		materialItemObjId  = new ArrayList<Integer>();
-		mainItemObjId = readD();
-		materialCount = readH();
-		for (int i=0;i<materialCount;i++) {
-			materialItemObjId.add(readD());
+		ItemsList  = new ArrayList<Integer>();
+		upgradedItemObjectId = readD();
+		ItemSize = readH();
+		for (int i=0;i<ItemSize;i++) {
+			Items = readD();
+			ItemsList.add(Items);
 		}
 	}
 	
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-		if (player == null || !player.isSpawned()) {
-			return;
-		} 
-		if (player.getController().isInShutdownProgress()) {
-			return;
-		}
-		CoalescenceService.getInstance().letsCoalescence(player, mainItemObjId, materialCount, materialItemObjId);
+		if (player != null) {
+			CoalescenceService.startCoalescence(player, upgradedItemObjectId, ItemsList);
+		} else {}
 	}
 }

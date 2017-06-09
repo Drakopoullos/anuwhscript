@@ -256,6 +256,7 @@ public class ServerPacketsOpcodes
 		addPacketOpcode(SM_AETHERFORGING_ANIMATION.class, 0x14A, idSet); //5.1
 		addPacketOpcode(SM_AETHERFORGING_PLAYER.class, 0x14B, idSet); //5.1
 		addPacketOpcode(SM_COALESCENCE_RESULT.class, 0x14C, idSet); //5.1
+		addPacketOpcode(SM_COALESCENCE_WINDOW.class, 0x15B, idSet); //5.1
 		addPacketOpcode(SM_BOOST_EVENTS.class, 0x146, idSet); //5.1
 	}
 	

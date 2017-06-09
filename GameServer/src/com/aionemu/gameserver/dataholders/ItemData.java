@@ -149,4 +149,8 @@ public class ItemData extends ReloadableData {
         this.its = (List<ItemTemplate>) data;
         this.afterUnmarshal(null, null);
     }
+    
+    public TIntObjectHashMap<ItemTemplate> getItemData() {
+        return items;
+    }
 }

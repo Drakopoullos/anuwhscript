@@ -20,9 +20,8 @@ public class SM_COALESCENCE_RESULT extends AionServerPacket
 	protected void writeImpl(AionConnection client) {
 		writeD(itemTemplateId);
 		writeD(itemObjId);
-		writeD(0x00);//unk
-		writeD(0x00);//unk
-		writeD(0x00);//unk
-		writeD(0x00);//unk
+		writeQ(0x00);//unk
+		writeQ(0x00);//unk
+		writeD(0x01);//unk
 	}
 }
