@@ -48,7 +48,7 @@ public class SM_SKILL_REMOVE extends AionServerPacket {
 			writeC(0);
 		}
 		else if (isStigma) {
-			writeC(1);
+			writeC(skillLevel);
 			writeC(1);
 		}
 		else if (isLinked) {

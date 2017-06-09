@@ -29,12 +29,14 @@ import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Equipment;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.items.ItemSlot;
+import com.aionemu.gameserver.model.skill.PlayerSkillEntry;
 import com.aionemu.gameserver.model.templates.item.RequireSkill;
 import com.aionemu.gameserver.model.templates.item.Stigma;
 import com.aionemu.gameserver.model.templates.item.Stigma.StigmaSkill;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_CUBE_UPDATE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SKILL_LIST;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SKILL_REMOVE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.skillengine.model.SkillLearnTemplate;
@@ -131,18 +133,25 @@ public class StigmaService
 			PacketSendUtility.sendPacket(player, SM_CUBE_UPDATE.stigmaSlots(player.getCommonData().getAdvencedStigmaSlotSize()));
 			PacketSendUtility.sendPacket(player, new SM_INVENTORY_UPDATE_ITEM(player, resultItem));
 			for (StigmaSkill skill : stigmaInfo.getSkills()) {
-				for (int i = 1; i <= player.getLevel(); i++) {
-					SkillLearnTemplate[] skillTemplates = DataManager.SKILL_TREE_DATA.getTemplatesFor(player.getPlayerClass(), i, player.getRace());
-					for (SkillLearnTemplate skillTree : skillTemplates) {
-						if (resultItem.getSkillGroup().equalsIgnoreCase(skillTree.getSkillGroup()) && skillTree.getSkillId() != 0) {
-							//Remove "Basic Stigma" Skills.
-							SkillLearnService.removeSkill(player, skillTree.getSkillId());
-							//Remove "Enchanted Stigma" Skills.
-							SkillLearnService.removeSkill(player, skillTree.getSkillId() + resultItem.getEnchantLevel());
-							player.getEffectController().removeEffect(skillTree.getSkillId());
-						}
+				String skillStack = DataManager.SKILL_DATA.getSkillTemplate(skill.getSkillId()).getStack();
+					PlayerSkillEntry[] skillTemplates = player.getSkillList().getStigmaSkills();
+					for (PlayerSkillEntry skillTree : skillTemplates) {
+							if(skillTree.getSkillTemplate().getStack().equals(skillStack))
+							{
+								//Remove "Basic Stigma" Skills.
+								PacketSendUtility.sendPacket(player, new SM_SKILL_REMOVE(skillTree.getSkillId(), skillTree.getSkillLevel(), skillTree.isStigma(), false));
+
+								SkillLearnService.removeSkill(player, skillTree.getSkillId());
+								player.getSkillList().removeSkill(skillTree.getSkillId());
+								player.getEffectController().removeEffect(skillTree.getSkillId());
+
+								//Remove "Enchanted Stigma" Skills.
+								//SkillLearnService.removeSkill(player, skillTree.getSkillId() + resultItem.getEnchantLevel() + 1);
+
+							}
+
 					}
-				}
+
 				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300403, new DescriptionId(resultItem.getNameId())));
 				player.getEquipedStigmaList().remove(player, itemId);
 				StigmaLinkedService.DeleteLinkedSkills(player);
