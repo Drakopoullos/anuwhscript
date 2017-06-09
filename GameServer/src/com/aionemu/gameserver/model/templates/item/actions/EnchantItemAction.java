@@ -14,6 +14,7 @@ import com.aionemu.gameserver.model.*;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.stats.container.StatEnum;
+import com.aionemu.gameserver.model.templates.item.ArmorType;
 import com.aionemu.gameserver.model.templates.item.ItemCategory;
 import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_ITEM_USAGE_ANIMATION;
@@ -54,8 +55,11 @@ public class EnchantItemAction extends AbstractItemAction
 			return false;
 		} if (targetItem.isAmplified() && parentItem.getItemTemplate().isAmplificationStone() && player.getInventory().getKinah() < EnchantKinah) {
 			return false;
-		} if (targetItem.getEnchantLevel() == 25 && !parentItem.getItemTemplate().isManaStone()) {
+		} if (targetItem.getEnchantLevel() == 25 && !parentItem.getItemTemplate().isManaStone() && !(targetItem.getItemTemplate().getArmorType() == ArmorType.WING)) {
 			//You cannot enchant %0 any further.
+			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_ENCHANT_ITEM_IT_CAN_NOT_BE_ENCHANTED_MORE_TIME(targetItem.getNameId()));
+			return false;
+		} if (targetItem.getEnchantLevel() == 20 && targetItem.getItemTemplate().getArmorType() == ArmorType.WING) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_ENCHANT_ITEM_IT_CAN_NOT_BE_ENCHANTED_MORE_TIME(targetItem.getNameId()));
 			return false;
 		}

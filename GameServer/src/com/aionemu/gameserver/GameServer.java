@@ -346,6 +346,7 @@ public class GameServer
 		} if (WeddingsConfig.WEDDINGS_ENABLE) {
 			WeddingService.getInstance();
 		}
+		RollDiceEventService.getInstance();
 		AdminService.getInstance();
 		PlayerTransferService.getInstance();
 		MaintenanceTask.getInstance();

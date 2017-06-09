@@ -21,12 +21,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.commons.utils.Rnd;
+import com.aionemu.gameserver.configs.main.EnchantsConfig;
 import com.aionemu.gameserver.controllers.observer.ItemUseObserver;
 import com.aionemu.gameserver.model.*;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.model.templates.item.ArmorType;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_ITEM_USAGE_ANIMATION;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
@@ -77,7 +77,7 @@ public class TemperingAction extends AbstractItemAction
 			}
 		};
 		player.getObserveController().attach(observer);
-		final boolean isTemperingSuccess = isTemperingSuccess(player);
+		final boolean isTemperingSuccess = isSuccess(player);
 		player.getController().addTask(TaskId.ITEM_USE, ThreadPoolManager.getInstance().schedule(new Runnable() {
 			@Override
 			public void run() {
@@ -109,18 +109,20 @@ public class TemperingAction extends AbstractItemAction
 		}, 5000));
 	}
 	
-	public boolean isTemperingSuccess(Player player) {
-		int chance = Rnd.get(1, 1000);
-		if (chance < 800) {
-            if (player.getAccessLevel() > 0) {
-                PacketSendUtility.sendMessage(player, "Success! Tempering: " + chance + " Lucky: 800");
-			}
-            return true;
-        } else {
-            if (player.getAccessLevel() > 0) {
-                PacketSendUtility.sendMessage(player, "Fail! Tempering: " + chance + " Lucky: 800");
-			}
-            return false;
-        }
-	}
+	public boolean isSuccess(Player player) {
+    	return Rnd.get(0, 100) < calcTemperingRate();
+        
+    }
+    /*
+     * New Formula which makes accurate tolerance for FaileRate calculation.
+     */
+    private float calcTemperingRate() 
+    {
+    	float base = 5;
+    	float staticRate = 40;
+    	float failRate = Rnd.get(0, 2);
+    	float resultRate = EnchantsConfig.TEMPERING_RATE > 10 ? 10 : EnchantsConfig.TEMPERING_RATE;
+    	resultRate = (resultRate * base) - failRate;
+    	return (resultRate + staticRate);
+    }
 }

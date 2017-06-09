@@ -1,31 +1,31 @@
 package com.aionemu.gameserver.model.items;
 
-import com.aionemu.commons.utils.Rnd;
-import com.aionemu.commons.database.dao.DAOManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import com.aionemu.gameserver.services.item.ItemPacketService;
-import com.aionemu.gameserver.dao.InventoryDAO;
-import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.commons.database.dao.DAOManager;
+import com.aionemu.commons.utils.Rnd;
+import com.aionemu.gameserver.configs.main.AdvCustomConfig;
+import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.controllers.observer.ActionObserver;
 import com.aionemu.gameserver.controllers.observer.ObserverType;
+import com.aionemu.gameserver.dao.InventoryDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.DescriptionId;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.network.aion.serverpackets.*;
-import com.aionemu.gameserver.utils.*;
 import com.aionemu.gameserver.model.templates.item.GodstoneInfo;
 import com.aionemu.gameserver.model.templates.item.ItemTemplate;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
+import com.aionemu.gameserver.services.item.ItemPacketService;
 import com.aionemu.gameserver.skillengine.SkillEngine;
-import com.aionemu.gameserver.skillengine.model.*;
+import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.skillengine.model.Skill;
-import com.aionemu.gameserver.model.DescriptionId;
-import com.aionemu.gameserver.configs.main.CustomConfig;
-import com.aionemu.gameserver.utils.audit.AuditLogger;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.aionemu.gameserver.utils.PacketSendUtility;
+import com.aionemu.gameserver.utils.ThreadPoolManager;
 
 public class GodStone extends ItemStone
 {
@@ -65,7 +65,7 @@ public class GodStone extends ItemStone
             public void attack(Creature creature) {
                 int chance = 100;
                 float breakChance = godstoneInfo.getProbabilityleft() / CustomConfig.ILLUSION_GODSTONE_BREAK_RATE;
-                if (handProbability > Rnd.get(0, 1000)) {
+                if (handProbability > Rnd.get(0, AdvCustomConfig.BASE_GODSTONE)) {
                     Skill skill = SkillEngine.getInstance().getSkill(player, godstoneInfo.getSkillid(), godstoneInfo.getSkilllvl(), player.getTarget(), godItem);
                     //%effect godstone has been activated.
                     PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_SKILL_PROC_EFFECT_OCCURRED(skill.getSkillTemplate().getNameId()));
