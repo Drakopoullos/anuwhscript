@@ -20,8 +20,6 @@ public class CM_UPGRADE_ARCADE extends AionClientPacket
 	private int type;
 	private int wtfPoint;
 	
-	private static final Logger log = LoggerFactory.getLogger(CM_UPGRADE_ARCADE.class);
-	
 	public CM_UPGRADE_ARCADE(int opcode, State state, State... restStates) {
 		super(opcode, state, restStates);
 	}

@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 
+import javolution.util.FastList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +61,6 @@ import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerCommonData;
 import com.aionemu.gameserver.model.gameobjects.player.emotion.Emotion;
-import com.aionemu.gameserver.model.gameobjects.player.f2p.F2pAccount;
 import com.aionemu.gameserver.model.gameobjects.player.motion.Motion;
 import com.aionemu.gameserver.model.gameobjects.player.title.Title;
 import com.aionemu.gameserver.model.gameobjects.state.CreatureSeeState;
@@ -69,7 +70,6 @@ import com.aionemu.gameserver.model.items.storage.IStorage;
 import com.aionemu.gameserver.model.items.storage.Storage;
 import com.aionemu.gameserver.model.items.storage.StorageType;
 import com.aionemu.gameserver.model.skill.PlayerSkillEntry;
-import com.aionemu.gameserver.model.stats.container.StatEnum;
 import com.aionemu.gameserver.model.team2.alliance.PlayerAllianceService;
 import com.aionemu.gameserver.model.team2.group.PlayerGroupService;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -143,7 +143,6 @@ import com.aionemu.gameserver.skillengine.effect.AbnormalState;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
-import com.aionemu.gameserver.utils.TimeUtil;
 import com.aionemu.gameserver.utils.audit.AuditLogger;
 import com.aionemu.gameserver.utils.audit.GMService;
 import com.aionemu.gameserver.utils.collections.ListSplitter;
@@ -152,13 +151,10 @@ import com.aionemu.gameserver.utils.stats.AbyssRankEnum;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 
-import javolution.util.FastList;
-
 public final class PlayerEnterWorldService
 {
 	private static final Logger log = LoggerFactory.getLogger("GAMECONNECTION_LOG");
 	private static final String serverName = "Welcome to " + GSConfig.SERVER_NAME + "!";
-	////
 	private static final String serverIntro = "Please remember: Vote for US";
 	private static final String serverInfo;
 	private static final String alInfo;
@@ -173,8 +169,7 @@ public final class PlayerEnterWorldService
 		infoBuffer = infoBuffer + "Info: Type .faction to use the chat for your faction.";
 		infoBuffer = infoBuffer + "=============================\n";
 		String alBuffer = "=============================\n";
-		alBuffer = alBuffer + "This emu is developed by Encom.\n";
-		alBuffer = alBuffer + "Copyright 2009 - 2017 Encom\n";
+		alBuffer = alBuffer + "Copyright 2016 - 2017 AionEpic\n";
 		if (GSConfig.SERVER_MOTD_DISPLAYREV) {
 			alBuffer = alBuffer + "=============================\n";
 			alBuffer = alBuffer + "Server Revision: " + String.format("%-6s", new Object[] { new Version(GameServer.class).getRevision() }) + "\n";
@@ -411,8 +406,10 @@ public final class PlayerEnterWorldService
 			client.sendPacket(new SM_PRICES());
 			DisputeLandService.getInstance().onLogin(player);
 			client.sendPacket(new SM_ABYSS_RANK(player.getAbyssRank()));
+			//Color Chat.
+			PacketSendUtility.sendBrightYellowMessageOnCenter(player, ColorChat.colorChat("Welcome to AionEpic : " + player.getName() , "1 0 5 0"));
 			//Intro message
-			PacketSendUtility.sendWhiteMessage(player, serverName);
+			//PacketSendUtility.sendWhiteMessage(player, serverName);
 			PacketSendUtility.sendYellowMessage(player, serverIntro);
 			PacketSendUtility.sendBrightYellowMessage(player, serverInfo);
 			PacketSendUtility.sendWhiteMessage(player, alInfo);
@@ -490,9 +487,7 @@ public final class PlayerEnterWorldService
 				abyssDarkLogon(player);
 			}
 			client.sendPacket(new SM_BOOST_EVENTS());
-			//Color Chat.
-			PacketSendUtility.sendBrightYellowMessageOnCenter(player, ColorChat.colorChat("Welcome to Encom Emu", "1 0 5 0"));
-			LoginServerInfo(player);
+			//LoginServerInfo(player);
 			GloryPointLoseMsg(player);
 			F2pService.getInstance().onEnterWorld(player);
 			//Aura Of Growth.
@@ -718,32 +713,6 @@ public final class PlayerEnterWorldService
 			    break;
 			}
 			client.sendPacket(new SM_MESSAGE(0, null, "Your account is " + accountType, ChatType.GOLDEN_YELLOW));
-		}
-	}
-	
-	public static final void LoginServerInfo(Player player) {
-		float pvpAttackRatio = player.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO, 0).getCurrent();
-		float pvpDefenseRatio = player.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO, 0).getCurrent();
-		float pvpAttackPhyscRatio = player.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
-		float pvpAttackMagicRatio = player.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
-		float pvpDefensePhyscRatio = player.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
-		float pvpDefenseMagicRatio = player.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "============================"));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0] Welcome to Encom Emu 5.1 NA"));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0] (Bugs & Suggestions) go in Forum."));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "============================"));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0] Account Information"));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:Toll Points：;0 1 0] " + player.getClientConnection().getAccount().getToll()));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:Luna Points：;0 1 0] " + player.getLunaAccount()));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "============================"));
-		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:Player Name：;0 1 0] " + player.getName()));
-		if (player.getAccessLevel() > 0) {
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Attack Ratio：;0 1 0] " + pvpAttackRatio * 0.01f + "%"));
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Defense Ratio：;0 1 0] " + pvpDefenseRatio * 0.01f + "%"));
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Physc Attack Ratio：;0 1 0] " + pvpAttackPhyscRatio * 0.1f + "%"));
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Magic Attack Ratio：;0 1 0] " + pvpAttackMagicRatio * 0.1f + "%"));
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Physc Defend Ratio：;0 1 0] " + pvpDefensePhyscRatio * 0.1f + "%"));
-			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300564, "[color:Info：;0 1 0][color:PvP Magic Defend Ratio：;0 1 0] " + pvpDefenseMagicRatio * 0.1f + "%"));
 		}
 	}
 }
