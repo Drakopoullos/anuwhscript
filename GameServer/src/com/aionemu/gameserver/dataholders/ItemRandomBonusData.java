@@ -71,7 +71,7 @@ public class ItemRandomBonusData
 		if (bonus == null)
 			return null;
 		List<ModifiersTemplate> modifiersGroup = bonus.getModifiers();
-		int chance = Rnd.get(1, 100);
+		int chance = Rnd.get(10000);
 		int current = 0;
 		ModifiersTemplate template = null;
 		int number = 0;
