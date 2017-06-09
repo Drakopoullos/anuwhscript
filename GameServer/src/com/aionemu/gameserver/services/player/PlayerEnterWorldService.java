@@ -125,6 +125,7 @@ import com.aionemu.gameserver.services.ProtectorConquerorService;
 import com.aionemu.gameserver.services.PunishmentService;
 import com.aionemu.gameserver.services.PunishmentService.PunishmentType;
 import com.aionemu.gameserver.services.SiegeService;
+import com.aionemu.gameserver.services.SkillLearnService;
 import com.aionemu.gameserver.services.StigmaService;
 import com.aionemu.gameserver.services.SurveyService;
 import com.aionemu.gameserver.services.VortexService;
@@ -154,7 +155,7 @@ import com.aionemu.gameserver.world.knownlist.Visitor;
 public final class PlayerEnterWorldService
 {
 	private static final Logger log = LoggerFactory.getLogger("GAMECONNECTION_LOG");
-	private static final String serverName = "Welcome to " + GSConfig.SERVER_NAME + "!";
+	//private static final String serverName = "Welcome to " + GSConfig.SERVER_NAME + "!";
 	private static final String serverIntro = "Please remember: Vote for US";
 	private static final String serverInfo;
 	private static final String alInfo;
@@ -455,7 +456,7 @@ public final class PlayerEnterWorldService
 				serviceBuff.applyEffect(player, 2);
 			}
 			//PC Cafe Login Benefits.
-			if (player.getLevel() >= 66 && player.getLevel() <= 83) {
+			if (player.getMembership() == 2) {
 				serviceBuff = new ServiceBuff(4);
 				serviceBuff.applyEffect(player, 4);
 			}
@@ -579,6 +580,13 @@ public final class PlayerEnterWorldService
 			EnchantService.GloryShieldSkill(player);
 			RollDiceEventService.getInstance().onEnterWorld(player);
 			LunaShopService.getInstance().onLogin(player);
+			if (player.isGM() && player.getSkillList().size() <= 40) {
+				SkillLearnService.addMissingSkills(player);
+			} else if (player.getSkillList().size() <= 10) {
+				SkillLearnService.addMissingSkills(player);
+			} else {
+				return;
+			}
 		} else {
 			log.info("[DEBUG] enter world" + objectId + ", Player: " + player);
 		}

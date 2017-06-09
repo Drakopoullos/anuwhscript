@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.configs.main.MembershipConfig;
 import com.aionemu.gameserver.model.PlayerClass;
 import com.aionemu.gameserver.model.Race;
@@ -57,6 +58,8 @@ public class ClassChangeService
 						case MUSE:
 							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 4080, 1006));
 						break;
+					default:
+						break;
 					}
 				} else if (playerRace == Race.ASMODIANS) {
 					switch (playerClass) {
@@ -77,6 +80,8 @@ public class ClassChangeService
 						break;
 						case MUSE:
 							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3910, 2008));
+						break;
+					default:
 						break;
 					}
 				}
@@ -170,6 +175,7 @@ public class ClassChangeService
 					completeQuest(player, 2900);
 				}
 			}
+			SkillLearnService.addMissingSkills(player);
 		}
 	}
 	
@@ -197,9 +203,10 @@ public class ClassChangeService
 	
 	private static boolean validateSwitch(Player player, PlayerClass playerClass) {
 		int level = player.getLevel();
+		int levelToChange = GSConfig.STARTCLASS_MAXLEVEL - 1;
 		PlayerClass oldClass = player.getPlayerClass();
 		if (level < 9) {
-			PacketSendUtility.sendMessage(player, "You can only switch class at level 9");
+			PacketSendUtility.sendMessage(player, "You can only switch class at level " + levelToChange);
 			return false;
 		} if (!oldClass.isStartingClass()) {
 			PacketSendUtility.sendMessage(player, "You already switched class");

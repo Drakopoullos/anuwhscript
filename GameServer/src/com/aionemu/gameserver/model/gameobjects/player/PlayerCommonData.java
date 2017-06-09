@@ -306,6 +306,8 @@ public class PlayerCommonData extends VisibleObjectTemplate
 						PacketSendUtility.sendPacket(getPlayer(), SM_SYSTEM_MESSAGE.STR_GET_EXP(name, reward));
 					}
 				break;
+			default:
+				break;
 			} if (this.isArchDaeva()) {
 				CreativityEssenceService.getInstance().pointPerExp(this.getPlayer());
 			}
@@ -357,7 +359,7 @@ public class PlayerCommonData extends VisibleObjectTemplate
 		int maxLevel = DataManager.PLAYER_EXPERIENCE_TABLE.getMaxLevel();
 		long maxExp = DataManager.PLAYER_EXPERIENCE_TABLE.getStartExpForLevel(maxLevel);
 		if (getPlayerClass() != null && getPlayerClass().isStartingClass()) {
-            maxLevel = 10;
+            maxLevel = GSConfig.STARTING_LEVEL > GSConfig.STARTCLASS_MAXLEVEL ? GSConfig.STARTING_LEVEL : GSConfig.STARTCLASS_MAXLEVEL;
 			if (this.getLevel() == 9 && this.getExp() >= 74059) {
 			    //You can advance to level 10 only after you have completed the class change quest.
 				PacketSendUtility.sendPacket(this.getPlayer(), SM_SYSTEM_MESSAGE.STR_LEVEL_LIMIT_QUEST_NOT_FINISHED1);
