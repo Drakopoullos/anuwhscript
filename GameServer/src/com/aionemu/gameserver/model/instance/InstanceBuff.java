@@ -70,6 +70,7 @@ public class InstanceBuff implements StatOwner
 			task.cancel(true);
 		}
 		player.getGameStats().endEffect(this);
+		player.getGameStats().updateStatsVisually();
 	}
 	
 	/**
@@ -100,6 +101,7 @@ public class InstanceBuff implements StatOwner
 		functions.clear();
 		player.setBonusId(0);
 		player.getGameStats().endEffect(this);
+		player.getGameStats().updateStatsVisually();
 	}
 	
 	/**
@@ -137,6 +139,7 @@ public class InstanceBuff implements StatOwner
 			player.setBonusId(0);
 		}
 		player.getGameStats().endEffect(this);
+		player.getGameStats().updateStatsVisually();
 	}
 	
 	public int getRemaningTime() {

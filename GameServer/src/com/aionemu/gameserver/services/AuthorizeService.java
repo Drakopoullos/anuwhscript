@@ -65,6 +65,7 @@ public class AuthorizeService {
 		if (item.getItemTemplate().isArmor()) {
 			int pt = item.getItemTemplate().getItemSlot();
 			if (pt == 192 || /* Earring */
+				pt == 4 || /* Helm */
 				pt == 768 || /* Rings */
 				pt == 1024 || /* Necklace */
 				pt == 65536 || /* Belt */

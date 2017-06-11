@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.aionemu.gameserver.services.player.CreativityPanel.stats.*;
+
 import org.slf4j.*;
 
 import com.aionemu.commons.database.dao.DAOManager;
+import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.dao.*;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.Race;
@@ -68,7 +70,7 @@ public class CreativityEssenceService
 		float total = player.getCommonData().getExpNeed();
 		float percent = getPercentage(current, total);
 		int step = player.getCPStep();
-		if (player.isArchDaeva()) {
+		if (player.isArchDaeva() && player.getCreativityPoint() < CustomConfig.CP_LIMIT_MAX) {
 			if (percent >= 16.66f && percent < 33.33f) {
 				if (step == 1) {
 					player.setCPStep(step + 1);
@@ -120,7 +122,7 @@ public class CreativityEssenceService
 			} else if (percent >= 66.66f && percent < 83.33f) {
 				if (step == 4) {
 					player.setCPStep(step + 1);
-					point = player.getCreativityPoint() + 2;
+					point = player.getCreativityPoint() + 1;
 					player.setCreativityPoint(point);
 					int totalPoint = player.getCreativityPoint();
 					int size = DAOManager.getDAO(PlayerCPDAO.class).getSlotSize(player.getObjectId());
@@ -136,7 +138,7 @@ public class CreativityEssenceService
 			} else if (percent >= 83.33f && percent < 100.00f) {
 				if (step == 5) {
 					player.setCPStep(step + 1);
-					point = player.getCreativityPoint() + 2;
+					point = player.getCreativityPoint() + 1;
 					player.setCreativityPoint(point);
 					int totalPoint = player.getCreativityPoint();
 					int size = DAOManager.getDAO(PlayerCPDAO.class).getSlotSize(player.getObjectId());
@@ -162,44 +164,53 @@ public class CreativityEssenceService
 	 */
 	public void pointPerLevel(Player player) {
 		if (player.isArchDaeva()) {
-			player.setCPStep(1);
+			//player.setCPStep(1);
 			if (player.getLevel() == 66) {
-				point = player.getCreativityPoint() + 6;
+				point = player.getCreativityPoint() + 1;
 			} else if (player.getLevel() == 67) {
-				point = player.getCreativityPoint() + 14;
+				point = player.getCreativityPoint() + 9;
 			} else if (player.getLevel() == 68) {
-				point = player.getCreativityPoint() + 14;
+				point = player.getCreativityPoint() + 9;
 			} else if (player.getLevel() == 69) {
-				point = player.getCreativityPoint() + 16;
+				point = player.getCreativityPoint() + 11;
 			} else if (player.getLevel() == 70) {
-				point = player.getCreativityPoint() + 17;
+				point = player.getCreativityPoint() + 12;
 			} else if (player.getLevel() == 71) {
-				point = player.getCreativityPoint() + 18;
+				point = player.getCreativityPoint() + 13;
 			} else if (player.getLevel() == 72) {
-				point = player.getCreativityPoint() + 20;
+				point = player.getCreativityPoint() + 15;
 			} else if (player.getLevel() == 73) {
-				point = player.getCreativityPoint() + 22;
+				point = player.getCreativityPoint() + 17;
 			} else if (player.getLevel() == 74) {
-				point = player.getCreativityPoint() + 25;
+				point = player.getCreativityPoint() + 20;
 			} else if (player.getLevel() == 75) {
-				point = player.getCreativityPoint() + 28;
+				point = player.getCreativityPoint() + 23;
 			} else if (player.getLevel() == 76) {
-				point = player.getCreativityPoint() + 27;
+				point = player.getCreativityPoint() + 25;
 			} else if (player.getLevel() == 77) {
-				point = player.getCreativityPoint() + 40;
+				point = player.getCreativityPoint() + 35;
 			} else if (player.getLevel() == 78) {
-				point = player.getCreativityPoint() + 46;
+				point = player.getCreativityPoint() + 41;
 			} else if (player.getLevel() == 79) {
-				point = player.getCreativityPoint() + 52;
+				point = player.getCreativityPoint() + 48;
 			} else if (player.getLevel() == 80) {
-				point = player.getCreativityPoint() + 58;
+				point = player.getCreativityPoint() + 53;
 			} else if (player.getLevel() == 81) {
-				point = player.getCreativityPoint() + 64;
+				point = player.getCreativityPoint() + 49;
 			} else if (player.getLevel() == 82) {
-				point = player.getCreativityPoint() + 70;
+				point = player.getCreativityPoint() + 65;
 			} else if (player.getLevel() == 83) {
-				point = player.getCreativityPoint() + 76;
+				point = player.getCreativityPoint() + 71;
 			}
+			
+			if(player.getCPStep() < 6) //to make sure all steps are granted
+				point = point + 6 - player.getCPStep();
+			
+			player.setCPStep(1);
+			if(point > CustomConfig.CP_LIMIT_MAX) {
+				point = CustomConfig.CP_LIMIT_MAX;
+			}
+			
 			player.setCreativityPoint(point);
 			int size = DAOManager.getDAO(PlayerCPDAO.class).getSlotSize(player.getObjectId());
 			PacketSendUtility.sendPacket(player, new SM_PLAYER_ESSENCE(point, player.getCPStep()));
