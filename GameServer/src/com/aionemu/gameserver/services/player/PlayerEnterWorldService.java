@@ -108,6 +108,7 @@ import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.AStationService;
 import com.aionemu.gameserver.services.AtreianPassportService;
+import com.aionemu.gameserver.services.AuthorizeService;
 import com.aionemu.gameserver.services.AutoGroupService;
 import com.aionemu.gameserver.services.BrokerService;
 import com.aionemu.gameserver.services.ClassChangeService;
@@ -579,6 +580,8 @@ public final class PlayerEnterWorldService
 			player.setPartnerId(DAOManager.getDAO(WeddingDAO.class).loadPartnerId(player));
 			EnchantService.GloryShieldSkill(player);
 			RollDiceEventService.getInstance().onEnterWorld(player);
+			AuthorizeService.getInstance().onSetEquipAccessories(player, 8);
+			AuthorizeService.getInstance().onSetEquipPlume(player, 15);
 			LunaShopService.getInstance().onLogin(player);
 			if (player.isGM() && player.getSkillList().size() <= 40) {
 				SkillLearnService.addMissingSkills(player);

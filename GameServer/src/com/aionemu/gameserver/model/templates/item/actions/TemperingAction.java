@@ -46,11 +46,11 @@ public class TemperingAction extends AbstractItemAction
 	public boolean canAct(Player player, Item parentItem, Item targetItem) {
 		if (targetItem.getItemTemplate().getMaxAuthorize() == 0) {
 			return false;
-		} if (targetItem.getItemTemplate().isAccessory() && targetItem.getAuthorize() >= 200) {
+		} if (!targetItem.getItemTemplate().isPlume() && targetItem.getItemTemplate().isAccessory() && targetItem.getAuthorize() >= 8) {
 			//%0 cannot be tempered anymore.
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_ITEM_AUTHORIZE_CANT_MORE_AUTHORIZE(new DescriptionId(targetItem.getNameId())));
             return false;
-        } if (targetItem.getItemTemplate().isPlume() && targetItem.getAuthorize() >= 200) {
+        } if (targetItem.getItemTemplate().isPlume() && targetItem.getAuthorize() >= 15) {
 			//%0 cannot be tempered anymore.
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_ITEM_AUTHORIZE_CANT_MORE_AUTHORIZE(new DescriptionId(targetItem.getNameId())));
 		    return false;

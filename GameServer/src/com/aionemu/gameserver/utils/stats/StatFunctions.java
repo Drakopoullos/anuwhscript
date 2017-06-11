@@ -587,18 +587,18 @@ public class StatFunctions
             damages = Math.round(damages * 0.50f);
             float pvpAttackBonus = attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO, 0).getCurrent();
 			float pvpDefenceBonus = target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO, 0).getCurrent();
-			//float pvpAttackRatioPhyscBonus = attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
-			//float pvpAttackRatioMagicBonus = target.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
-			//float pvpDefenceRatioPhyscBonus = attacker.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
-			//float pvpDefenceRatioMagicBonus = target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
+			float pvpAttackRatioPhyscBonus = attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
+			float pvpAttackRatioMagicBonus = target.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
+			float pvpDefenceRatioPhyscBonus = attacker.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
+			float pvpDefenceRatioMagicBonus = target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
 			switch (elements) {
 				case NONE:
-					pvpAttackBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO, 0).getCurrent();
-					pvpDefenceBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO, 0).getCurrent();
-					//pvpAttackRatioPhyscBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
-					//pvpAttackRatioMagicBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
-					//pvpDefenceRatioPhyscBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
-					//pvpDefenceRatioMagicBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
+					pvpAttackBonus += attacker.getGameStats().getStat(StatEnum.PVP_PHYSICAL_ATTACK, 0).getCurrent();
+					pvpDefenceBonus += target.getGameStats().getStat(StatEnum.PVP_PHYSICAL_DEFEND, 0).getCurrent();
+					pvpAttackRatioPhyscBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
+					pvpAttackRatioMagicBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
+					pvpDefenceRatioPhyscBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
+					pvpDefenceRatioMagicBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
 				break;
 				case FIRE:
 				case WATER:
@@ -606,12 +606,12 @@ public class StatFunctions
 				case EARTH:
 				case LIGHT:
 				case DARK:
-					pvpAttackBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO, 0).getCurrent();
-					pvpDefenceBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO, 0).getCurrent();
-					//pvpAttackRatioPhyscBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
-					//pvpAttackRatioMagicBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
-					//pvpDefenceRatioPhyscBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
-					//pvpDefenceRatioMagicBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
+					pvpAttackBonus += attacker.getGameStats().getStat(StatEnum.PVP_MAGICAL_ATTACK, 0).getCurrent();
+					pvpDefenceBonus += target.getGameStats().getStat(StatEnum.PVP_MAGICAL_DEFEND, 0).getCurrent();
+					pvpAttackRatioPhyscBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_PHYSICAL, 0).getCurrent();
+					pvpAttackRatioMagicBonus += attacker.getGameStats().getStat(StatEnum.PVP_ATTACK_RATIO_MAGICAL, 0).getCurrent();
+					pvpDefenceRatioPhyscBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_PHYSICAL, 0).getCurrent();
+					pvpDefenceRatioMagicBonus += target.getGameStats().getStat(StatEnum.PVP_DEFEND_RATIO_MAGICAL, 0).getCurrent();
 				break;
 				default:
 				break;
@@ -619,12 +619,16 @@ public class StatFunctions
 			pvpAttackBonus = pvpAttackBonus * 0.001f;
 			pvpDefenceBonus = pvpDefenceBonus * 0.001f;
 			damages = Math.round(damages + (damages * pvpAttackBonus) - (damages * pvpDefenceBonus));
-			//pvpAttackRatioPhyscBonus = pvpAttackRatioPhyscBonus * 0.1f;
-			//pvpAttackRatioMagicBonus = pvpAttackRatioMagicBonus * 0.1f;
-			//pvpDefenceRatioPhyscBonus = pvpDefenceRatioPhyscBonus * 0.1f;
-			//pvpDefenceRatioMagicBonus = pvpDefenceRatioMagicBonus * 0.1f;
+			pvpAttackRatioPhyscBonus = pvpAttackRatioPhyscBonus * 0.001f;
+			pvpAttackRatioMagicBonus = pvpAttackRatioMagicBonus * 0.001f;
+			pvpDefenceRatioPhyscBonus = pvpDefenceRatioPhyscBonus * 0.001f;
+			pvpDefenceRatioMagicBonus = pvpDefenceRatioMagicBonus * 0.001f;
 			
-			if (attacker.getRace() != target.getRace() && !attacker.isInInstance()) {
+			if (attacker.isPhysClass(attacker) && (target.isPhysClass(target) || target.isMagicClass(target))) {
+				damages = Math.round(damages + (damages * pvpAttackRatioPhyscBonus) - (damages * pvpDefenceRatioPhyscBonus));
+			} else if (attacker.isMagicClass(attacker) && (target.isMagicClass(target) || target.isPhysClass(target))) {
+				damages = Math.round(damages + (damages * pvpAttackRatioMagicBonus) - (damages * pvpDefenceRatioMagicBonus));
+			} if (attacker.getRace() != target.getRace() && !attacker.isInInstance()) {
                 damages *= Influence.getInstance().getPvpRaceBonus(attacker.getRace());
             }
         } else if (target instanceof Npc) {
@@ -634,21 +638,21 @@ public class StatFunctions
             damages = movementDamageBonus(attacker, damages);
         } if (attacker instanceof Player) {
         	PlayerClass playerClass = ((Player) attacker).getPlayerClass();
-        	if (playerClass != null ) {
-        		switch (playerClass) {
-        		case GUNSLINGER : damages *= 0.4f;
-        			break;
-        		case SORCERER : damages *= 0.5f;
-        			break;
-        		case SPIRIT_MASTER : damages *= 0.6f;
-        			break;
-        		case CLERIC : damages *= 0.5f;
-        			break;
-        		case SONGWEAVER : damages *= 0.4f;
-        			break;
-        		default: damages *= 1f;		
-        		}
-        	}
+  			if (playerClass != null ) {
+  				switch (playerClass) {
+  				case GUNSLINGER : damages *= 0.4f;
+  					break;
+  				case SONGWEAVER : damages *= 0.4f;
+  					break;
+  				case CLERIC : damages *= 0.5f;
+  					break;
+  				case SPIRIT_MASTER : damages *= 0.6f;
+  					break;
+  				case SORCERER : damages *= 0.5f;
+  					break;
+  				default: damages *= 1f;		
+  				}
+  			}
         }
         return damages;
     }

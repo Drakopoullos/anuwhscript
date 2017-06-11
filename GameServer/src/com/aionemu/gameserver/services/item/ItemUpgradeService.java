@@ -68,6 +68,9 @@ public class ItemUpgradeService
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_REGISTER_ITEM_MSG_UPGRADE_CANNOT_NEED_AP);
 				return false;
 			}
+		} if (baseItem.getEnchantLevel() > 10) {
+			PacketSendUtility.sendMessage(player, "Can't Upgrade Item... Item Must be " + resultItem.getCheck_enchant_count());
+			return false;
 		} if (resultItem.getNeed_kinah() == null) {
 			for (SubMaterialItem sub : resultItem.getUpgrade_materials().getSubMaterialItem()) {
 				if (player.getInventory().getItemCountByItemId(sub.getId()) < sub.getCount()) {
