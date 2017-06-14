@@ -28,7 +28,6 @@ import com.aionemu.gameserver.utils.MathUtil;
 
 public class CM_CRAFT extends AionClientPacket
 {
-	private static final Logger log = LoggerFactory.getLogger(CM_CRAFT.class);
 	private int itemID;
 	private long itemCount;
 	private int unk;

@@ -63,7 +63,7 @@ public class CM_AETHERFORGING extends AionClientPacket
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-        if (player == null) {
+        if (player == null || player.isSpawned()) {
             return;
 		} if (actionId == 1 && craftType == 0) {
 			if (targetTemplateId != 150000039) {

@@ -22,12 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.aionemu.commons.utils.Rnd;
-
-import com.aionemu.gameserver.configs.main.EnchantsConfig;
 import com.aionemu.gameserver.controllers.observer.ItemUseObserver;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.DescriptionId;
@@ -43,27 +38,21 @@ import com.aionemu.gameserver.model.templates.recipe.Component;
 import com.aionemu.gameserver.model.templates.recipe.ComponentElement;
 import com.aionemu.gameserver.model.templates.recipe.RecipeTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_AETHERFORGING_ANIMATION;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_AETHERFORGING_PLAYER;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_CRAFT_ANIMATION;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_CRAFT_UPDATE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
-import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemAddType;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
+import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.item.ItemService.ItemUpdatePredicate;
 import com.aionemu.gameserver.skillengine.task.CraftingTask;
 import com.aionemu.gameserver.skillengine.task.MorphingTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
-import com.aionemu.gameserver.utils.audit.AuditLogger;
 
 public class CraftService
 {
-	private static final Logger log = LoggerFactory.getLogger("CRAFT_LOG");
-	
 	public static void finishCrafting(final Player player, RecipeTemplate recipetemplate, int critCount, int bonus) {
 		if (recipetemplate.getMaxProductionCount() != null) {
 			player.getRecipeList().deleteRecipe(player, recipetemplate.getId());
@@ -96,7 +85,6 @@ public class CraftService
 				return true;
 			}
 		});
-		ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(productItemId);
 		int gainedCraftExp = (int) RewardType.CRAFTING.calcReward(player, xpReward);
 		int skillId = recipetemplate.getSkillid();
 		if ((skillId == 40001) ||
@@ -126,7 +114,6 @@ public class CraftService
 		RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
 		int skillId = recipeTemplate.getSkillid();
 		VisibleObject target = player.getKnownList().getObject(targetObjId);
-		ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(recipeTemplate.getProductid());
 		if (recipeTemplate.getDp() != null) {
 			player.getCommonData().addDp(-recipeTemplate.getDp());
 		} if (skillId == 40009) {
@@ -139,7 +126,6 @@ public class CraftService
 	}
 	
 	public static void stopAetherforging(final Player player, int recipeId) {
-		final RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
 		final ItemUseObserver Aetherforging = new ItemUseObserver() {
 			@Override
 			public void abort() {
@@ -152,10 +138,12 @@ public class CraftService
 	
 	public static void startAetherforging(final Player player, int recipeId, int craftType) {
 		final RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
+		ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(recipeTemplate.getProductid());
 		int delayedTime = 4000;
-		int skillLvl = 0;
-		int skillId = recipeTemplate.getSkillid();
-		final ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(recipeTemplate.getProductid());
+		if (!checkAetherforging(player, recipeTemplate, itemTemplate)) {
+			stopAetherforging(player, recipeId);
+			return;
+		}
 		PacketSendUtility.broadcastPacket(player, new SM_AETHERFORGING_ANIMATION(player, recipeTemplate.getId(), delayedTime, 0), true);
 		final ItemUseObserver Aetherforging = new ItemUseObserver() {
 			@Override
@@ -169,8 +157,6 @@ public class CraftService
 		player.getController().addTask(TaskId.ITEM_USE, ThreadPoolManager.getInstance().schedule(new Runnable() {
 			@Override
 			public void run() {
-				int xpReward = (int) ((0.008 * (recipeTemplate.getSkillpoint() + 100) * (recipeTemplate.getSkillpoint() + 100) + 60));
-				int gainedCraftExp = (int) RewardType.CRAFTING.calcReward(player, xpReward);
 				player.getController().cancelTask(TaskId.ITEM_USE);
 				player.getObserveController().removeObserver(Aetherforging);
 				ItemService.addItem(player, recipeTemplate.getProductid(), recipeTemplate.getQuantity(), new ItemUpdatePredicate(ItemAddType.AETHERFORGING, ItemUpdateType.INC_ITEM_COLLECT));
@@ -181,6 +167,24 @@ public class CraftService
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CRAFT_SUCCESS_GETEXP);
 			}
 		}, delayedTime));
+	}
+	
+	private static boolean checkAetherforging(Player player, RecipeTemplate recipeTemplate, ItemTemplate itemTemplate) {
+		
+		int worldId = player.getWorldId();
+		
+		if (recipeTemplate == null) {
+			return false;
+		} if (itemTemplate == null) {
+			return false;
+	    } if (worldId != 110010000 && worldId != 120010000) {
+	    	PacketSendUtility.sendMessage(player, "Crafting Avaiable When in Sanctum or Pandaemonium.");
+	    	return false;
+		} if ((player.getCraftingTask() != null) && (player.getCraftingTask().isInProgress())) {
+	    	return false;
+	    }
+	    
+	    return true;
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -204,25 +208,5 @@ public class CraftService
 				}
 			}
 		}
-	}
-	
-	private static int getBonusReqItem(int skillId) {
-		switch (skillId) {
-			case 40001: //Cooking.
-			    return 169401081;
-		    case 40002: //Weaponsmithing.
-			    return 169401076;
-		    case 40003: //Armorsmithing.
-			    return 169401077;
-		    case 40004: //Tailoring.
-			    return 169401078;
-		    case 40007: //Alchemy.
-			    return 169401080;
-		    case 40008: //Handicrafting.
-			    return 169401079;
-		    case 40010: //Menuisier.
-			    return 169401082;
-		}
-		return 0;
 	}
 }
