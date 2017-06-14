@@ -26,8 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.utils.Rnd;
-
-import com.aionemu.gameserver.configs.main.EnchantsConfig;
 import com.aionemu.gameserver.controllers.observer.ItemUseObserver;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.DescriptionId;
@@ -43,22 +41,18 @@ import com.aionemu.gameserver.model.templates.recipe.Component;
 import com.aionemu.gameserver.model.templates.recipe.ComponentElement;
 import com.aionemu.gameserver.model.templates.recipe.RecipeTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_AETHERFORGING_ANIMATION;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_AETHERFORGING_PLAYER;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_CRAFT_ANIMATION;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_CRAFT_UPDATE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITEM;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
-import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemAddType;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
+import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.item.ItemService.ItemUpdatePredicate;
 import com.aionemu.gameserver.skillengine.task.CraftingTask;
 import com.aionemu.gameserver.skillengine.task.MorphingTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
-import com.aionemu.gameserver.utils.audit.AuditLogger;
 
 public class CraftService
 {
@@ -150,22 +144,14 @@ public class CraftService
 		PacketSendUtility.sendPacket(player, new SM_AETHERFORGING_ANIMATION(player, 0, 0, 1));
 	}
 	
-	public static void startAetherforging(final Player player, int recipeId, int craftType) {
+	public static void startAetherforging(final Player player, final int recipeId, int craftType, final int itemId) {
 		final RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
 		int delayedTime = 4000;
 		int skillLvl = 0;
 		int skillId = recipeTemplate.getSkillid();
 		final ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(recipeTemplate.getProductid());
-		if (player.getWorldId() == 600010000) {
+		if (!checkMapId(player)) {
 			stopAetherforging(player, recipeId);
-			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
-		} else if (player.getWorldId() == 600100000) {
-			stopAetherforging(player, recipeId);
-			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
-		} else if (player.getWorldId() == 210020000) {
-			stopAetherforging(player, recipeId);
-			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
-		} else {
 			return;
 		}
 		PacketSendUtility.broadcastPacket(player, new SM_AETHERFORGING_ANIMATION(player, recipeTemplate.getId(), delayedTime, 0), true);
@@ -183,6 +169,26 @@ public class CraftService
 			public void run() {
 				int xpReward = (int) ((0.008 * (recipeTemplate.getSkillpoint() + 100) * (recipeTemplate.getSkillpoint() + 100) + 80));
 				int gainedCraftExp = (int) RewardType.CRAFTING.calcReward(player, xpReward);
+				RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
+				if (recipeTemplate.getComponent() != null) {
+					HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
+					for (Component a : recipeTemplate.getComponent()) {
+						for (ComponentElement b : a.getComponents()) {
+							if (b.getItemid().equals(itemId)) {
+								hm.put(itemId, b.getQuantity());
+							}
+						}
+					}
+					Set<Entry<Integer, Integer>> set = hm.entrySet();
+					Iterator<Entry<Integer, Integer>> i = set.iterator();
+					while(i.hasNext()) {
+						@SuppressWarnings("rawtypes")
+						Map.Entry me = (Map.Entry)i.next();
+						if (!player.getInventory().decreaseByItemId((Integer)me.getKey(),(Integer)me.getValue())) {
+							return;
+						}
+					}
+				}
 				player.getController().cancelTask(TaskId.ITEM_USE);
 				player.getObserveController().removeObserver(Aetherforging);
 				ItemService.addItem(player, recipeTemplate.getProductid(), recipeTemplate.getQuantity(), new ItemUpdatePredicate(ItemAddType.AETHERFORGING, ItemUpdateType.INC_ITEM_COLLECT));
@@ -193,6 +199,21 @@ public class CraftService
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CRAFT_SUCCESS_GETEXP);
 			}
 		}, delayedTime));
+	}
+	
+	private static boolean checkMapId(Player player) {
+		if(player.getWorldId() == 600010000) {
+			PacketSendUtility.sendMessage(player, "You can't craft in this Map !");
+			return false;
+		} else if (player.getWorldId() == 600100000) {
+			PacketSendUtility.sendMessage(player, "You can't craft in this Map !");
+			return false;
+		} else if (player.getWorldId() == 210020000) {
+			PacketSendUtility.sendMessage(player, "You can't craft in this Map !");
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	@SuppressWarnings("rawtypes")

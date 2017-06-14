@@ -652,7 +652,9 @@ public class StatFunctions
   					break;
   				case ASSASSIN : damages *= 0.8f;
   					break;
-  				case RANGER : damages *= 0.7f;
+  				case RANGER : damages *= 0.8f;
+  					break;
+  				case AETHERTECH : damages *= 0.7f;
   					break;
   				default: damages *= 1f;		
   				}
