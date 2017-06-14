@@ -19,57 +19,66 @@ package com.aionemu.gameserver.network.aion.clientpackets;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
-import com.aionemu.gameserver.services.craft.CraftService;
+import com.aionemu.gameserver.services.craft.AetherforgingService;
 
 /**
- * @author Ranastic
+ * @author Idhacker542
  */
 
-public class CM_AETHERFORGING extends AionClientPacket
-{
-	private int itemID;
-	@SuppressWarnings("unused")
-	private long itemCount;
-	private int actionId;
+public class CM_AETHERFORGING extends AionClientPacket {
+	
+	private int action;
 	private int targetTemplateId;
 	private int recipeId;
+	private int targetObjId;
 	private int materialsCount;
 	private int craftType;
-	
+
 	public CM_AETHERFORGING(int opcode, State state, State... restStates) {
 		super(opcode, state, restStates);
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	protected void readImpl() {
-		Player player = getConnection().getActivePlayer();
-		actionId = readC();
-		targetTemplateId = readD();
-		recipeId = readD();
-		readD();
-		materialsCount = readH();
-		craftType = readC();
-		if (actionId == 1 && craftType == 0) {
-			for(int i = 0 ; i < materialsCount ; i++) {
-				itemID = readD();
-				itemCount = readQ();
-				CraftService.checkComponents(player, recipeId, itemID, materialsCount);
-			}
-		} else if (actionId == 0 && craftType == 0) {
-			CraftService.stopAetherforging(player, recipeId);
+		// TODO Auto-generated method stub
+		action = readC();
+		switch (action) {
+			case 0:
+				targetTemplateId = readD();
+				recipeId = readD();
+				targetObjId = readD();
+				materialsCount = readH();
+				craftType = readC();
+				break;
+			case 1:
+				targetTemplateId = readD();
+				recipeId = readD();
+				targetObjId = readD();
+				materialsCount = readH();
+				craftType = readC();
+				for (int i = 0; i < materialsCount; i++) {
+					readD();
+					readQ();
+				}
+		}
+	}
+
+	@Override
+	protected void runImpl() {
+		// TODO Auto-generated method stub
+		Player player = (getConnection().getActivePlayer());
+		if(player == null || !player.isSpawned()) {
+			return;
+		} if (player.getController().isInShutdownProgress()) {
+			return;
+		} switch (action) {
+			case 0:
+				AetherforgingService.sendCencelAetherforging(player);
+				break;
+			case 1:
+				AetherforgingService.startAetherforging(player, recipeId, craftType);
 		}
 	}
 	
-	@Override
-	protected void runImpl() {
-		Player player = getConnection().getActivePlayer();
-        if (player == null) {
-            return;
-		} if (actionId == 1 && craftType == 0) {
-			if (targetTemplateId != 150000039) {
-				return;
-			}
-			CraftService.startAetherforging(player, recipeId, craftType);
-		}
-	}
 }

@@ -644,11 +644,15 @@ public class StatFunctions
   					break;
   				case SONGWEAVER : damages *= 0.4f;
   					break;
-  				case CLERIC : damages *= 0.5f;
+  				case CLERIC : damages *= 0.4f;
   					break;
-  				case SPIRIT_MASTER : damages *= 0.6f;
+  				case SPIRIT_MASTER : damages *= 0.4f;
   					break;
-  				case SORCERER : damages *= 0.5f;
+  				case SORCERER : damages *= 0.4f;
+  					break;
+  				case ASSASSIN : damages *= 0.8f;
+  					break;
+  				case RANGER : damages *= 0.7f;
   					break;
   				default: damages *= 1f;		
   				}

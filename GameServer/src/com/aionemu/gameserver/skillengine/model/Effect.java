@@ -971,8 +971,6 @@ public class Effect implements StatOwner
 			case BUFF:
 				duration = effector.getGameStats().getStat(StatEnum.BOOST_DURATION_BUFF, duration).getCurrent();
 				break;
-		default:
-			break;
 		}
 		
 		// adjust with pvp duration

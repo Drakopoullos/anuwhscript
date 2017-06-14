@@ -36,10 +36,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_MOTION;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_INFO;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_TARGET_SELECTED;
-import com.aionemu.gameserver.skillengine.SkillEngine;
 import com.aionemu.gameserver.services.VortexService;
-import com.aionemu.gameserver.services.events.*;
-import com.aionemu.gameserver.services.events.bg.*;
 import com.aionemu.gameserver.services.teleport.TeleportService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.audit.AuditLogger;
@@ -53,11 +50,11 @@ public class PlayerReviveService
 	public static final void duelRevive(Player player) {
 		revive(player, 30, 30, false, 0);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(1);
 		PacketSendUtility.broadcastPacket(player, new SM_EMOTION(player, EmotionType.RESURRECT), true);
-		if (player.getIsFlyingBeforeDeath()) {
-			player.getFlyController().startFly();
-		}
+		//if (player.getIsFlyingBeforeDeath()) {
+		//	player.getFlyController().startFly();
+		//}
 		player.getGameStats().updateStatsAndSpeedVisually();
 		player.unsetResPosState();
 	}
@@ -65,7 +62,7 @@ public class PlayerReviveService
 	public static final void skillRevive(Player player) {
 		revive(player, 10, 10, true, player.getResurrectionSkill());
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}
@@ -97,7 +94,7 @@ public class PlayerReviveService
 			soulSickness = false;
 		}
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		revive(player, rebirthResurrectPercent, rebirthResurrectPercent, soulSickness, player.getRebirthSkill());
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
@@ -122,7 +119,7 @@ public class PlayerReviveService
 	public static final void bindRevive(Player player, int skillId) {
 		revive(player, 25, 25, true, skillId);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_REBIRTH_MASSAGE_ME);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.getFlyController().startFly();
@@ -163,7 +160,7 @@ public class PlayerReviveService
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_REBIRTH_MASSAGE_ME);
 			revive(player, 25, 25, false, skillId);
 			player.getController().startProtectionActiveTask();
-			player.setPortAnimation(4);
+			//player.setPortAnimation(4);
 			if (player.getIsFlyingBeforeDeath()) {
 				player.getFlyController().startFly();
 			}
@@ -188,7 +185,7 @@ public class PlayerReviveService
 		}
 		revive(player, 25, 25, true, skillId);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_REBIRTH_MASSAGE_ME);
 		player.getGameStats().updateStatsAndSpeedVisually();
 		PacketSendUtility.sendPacket(player, new SM_PLAYER_INFO(player, false));
@@ -227,7 +224,7 @@ public class PlayerReviveService
             player.setResurrectionSkill(0);
         }
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		player.getAggroList().clear();
 		player.getController().onBeforeSpawn(false);
 		if (player.isInGroup2()) {
@@ -254,7 +251,7 @@ public class PlayerReviveService
 		}
 		revive(player, 15, 15, true, player.getResurrectionSkill());
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}
@@ -274,7 +271,7 @@ public class PlayerReviveService
 	public static final void banditRevive(Player player) {
 		revive(player, 100, 1000, false, 0);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}
@@ -297,7 +294,7 @@ public class PlayerReviveService
 	public static final void ffaRevive(Player player) {
 		revive(player, 100, 1000, false, 0);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}
@@ -320,7 +317,7 @@ public class PlayerReviveService
 	public static final void bgRevive(Player player) {
 		revive(player, 100, 1000, false, player.getResurrectionSkill());
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}
@@ -345,7 +342,7 @@ public class PlayerReviveService
 	public static final void eventRevive(Player player) {
 		revive(player, 100, 100, false, 0);
 		player.getController().startProtectionActiveTask();
-		player.setPortAnimation(4);
+		//player.setPortAnimation(4);
 		if (player.getIsFlyingBeforeDeath()) {
 			player.setState(CreatureState.FLYING);
 		}

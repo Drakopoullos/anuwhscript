@@ -293,8 +293,9 @@ public class EffectController
 		Iterator<Effect> localIterator = this.abnormalEffectMap.values().iterator();
 		while (localIterator.hasNext()) {
 			Effect localEffect = localIterator.next();
-			if (localEffect.getSkillId() == skillId)
+			if (localEffect.getSkillId() == skillId) {
 				return true;
+			}
 		}
 		return false;
 	}

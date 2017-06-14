@@ -23,7 +23,7 @@ public class SM_EMOTION_LIST extends AionServerPacket
 		if (con.getActivePlayer().havePermission(MembershipConfig.EMOTIONS_ALL)) {
 			writeH(100); //Motions 5.1
 			for (int i = 0; i < 100; i++) {
-				writeH(64 + i);
+				writeH(72 + i);
 				writeD(0x00);
 			}
 		} else if (emotions == null || emotions.isEmpty()) {
