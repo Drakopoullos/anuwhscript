@@ -156,6 +156,18 @@ public class CraftService
 		int skillLvl = 0;
 		int skillId = recipeTemplate.getSkillid();
 		final ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(recipeTemplate.getProductid());
+		if (player.getWorldId() == 600010000) {
+			stopAetherforging(player, recipeId);
+			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
+		} else if (player.getWorldId() == 600100000) {
+			stopAetherforging(player, recipeId);
+			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
+		} else if (player.getWorldId() == 210020000) {
+			stopAetherforging(player, recipeId);
+			PacketSendUtility.sendMessage(player, "you cant craft in this Map... please move another map !");
+		} else {
+			return;
+		}
 		PacketSendUtility.broadcastPacket(player, new SM_AETHERFORGING_ANIMATION(player, recipeTemplate.getId(), delayedTime, 0), true);
 		final ItemUseObserver Aetherforging = new ItemUseObserver() {
 			@Override
@@ -169,7 +181,7 @@ public class CraftService
 		player.getController().addTask(TaskId.ITEM_USE, ThreadPoolManager.getInstance().schedule(new Runnable() {
 			@Override
 			public void run() {
-				int xpReward = (int) ((0.008 * (recipeTemplate.getSkillpoint() + 100) * (recipeTemplate.getSkillpoint() + 100) + 60));
+				int xpReward = (int) ((0.008 * (recipeTemplate.getSkillpoint() + 100) * (recipeTemplate.getSkillpoint() + 100) + 80));
 				int gainedCraftExp = (int) RewardType.CRAFTING.calcReward(player, xpReward);
 				player.getController().cancelTask(TaskId.ITEM_USE);
 				player.getObserveController().removeObserver(Aetherforging);

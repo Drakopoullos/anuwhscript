@@ -29,6 +29,7 @@ import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_EMOTION;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
+import com.aionemu.gameserver.services.teleport.TeleportService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 /**
@@ -203,8 +204,6 @@ public class CM_EMOTION extends AionClientPacket
 			    }
 			    player.setSprintMode(false);
 			    player.getLifeStats().triggerFpRestore();
-			break;
-		default:
 			break;
 		} if (player.getEmotions().canUse(emotion)) {
 			PacketSendUtility.broadcastPacket(player, new SM_EMOTION(player, emotionType, emotion, x, y, z, heading, getTargetObjectId(player)), true);
