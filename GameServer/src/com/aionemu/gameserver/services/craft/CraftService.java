@@ -144,7 +144,7 @@ public class CraftService
 		PacketSendUtility.sendPacket(player, new SM_AETHERFORGING_ANIMATION(player, 0, 0, 1));
 	}
 	
-	public static void startAetherforging(final Player player, final int recipeId, int craftType, final int itemId, final int materialsCount) {
+	public static void startAetherforging(final Player player, final int recipeId, int craftType) {
 		final RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
 		int delayedTime = 4000;
 		int skillLvl = 0;
@@ -169,25 +169,6 @@ public class CraftService
 			public void run() {
 				int xpReward = (int) ((0.008 * (recipeTemplate.getSkillpoint() + 100) * (recipeTemplate.getSkillpoint() + 100) + 80));
 				int gainedCraftExp = (int) RewardType.CRAFTING.calcReward(player, xpReward);
-				RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
-				if (recipeTemplate.getComponent() != null) {
-					HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
-					for (Component a : recipeTemplate.getComponent()) {
-						for (ComponentElement b : a.getComponents()) {
-							if (b.getItemid().equals(itemId)) {
-								hm.put(itemId, b.getQuantity());
-							}
-						}
-					}
-					Set<Entry<Integer, Integer>> set = hm.entrySet();
-					Iterator<Entry<Integer, Integer>> i = set.iterator();
-					while(i.hasNext()) {
-						Map.Entry me = (Map.Entry)i.next();
-						if (!player.getInventory().decreaseByItemId((Integer)me.getKey(),(Integer)me.getValue())) {
-							return;
-						}
-					}
-				}
 				player.getController().cancelTask(TaskId.ITEM_USE);
 				player.getObserveController().removeObserver(Aetherforging);
 				ItemService.addItem(player, recipeTemplate.getProductid(), recipeTemplate.getQuantity(), new ItemUpdatePredicate(ItemAddType.AETHERFORGING, ItemUpdateType.INC_ITEM_COLLECT));
