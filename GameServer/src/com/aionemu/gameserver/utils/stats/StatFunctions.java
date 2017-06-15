@@ -662,6 +662,8 @@ public class StatFunctions
   					break;
   				case AETHERTECH : damages *= 0.7f;
   					break;
+				case TEMPLAR : damages *= 0.8f;
+					break;
   				default: damages *= 1f;		
   				}
   			}
