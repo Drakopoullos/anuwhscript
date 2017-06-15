@@ -1,5 +1,6 @@
 package com.aionemu.gameserver.model.templates.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -50,6 +51,9 @@ public class RecipeTemplate
 	private List<Component> component_panel;
 	
 	public List<Component> getComponent() {
+		if(component_panel == null) {
+			component_panel = new ArrayList<Component>();
+		}
 		return component_panel;
 	}
 

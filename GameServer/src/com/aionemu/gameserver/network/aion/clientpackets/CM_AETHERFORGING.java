@@ -42,7 +42,7 @@ public class CM_AETHERFORGING extends AionClientPacket
 	
 	@Override
 	protected void readImpl() {
-		//Player player = getConnection().getActivePlayer();
+		Player player = getConnection().getActivePlayer();
 		actionId = readC();
 		targetTemplateId = readD();
 		recipeId = readD();
@@ -55,21 +55,21 @@ public class CM_AETHERFORGING extends AionClientPacket
 				itemCount = readQ();
 				//CraftService.checkComponents(player, recipeId, itemID, materialsCount);
 			}
-		} 
+		} else if (actionId == 0 && craftType == 0) {
+			CraftService.stopAetherforging(player, recipeId);
+		}
 	}
 	
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-        if (player == null || !player.isSpawned()) {
+        if (player == null) {
             return;
 		} if (actionId == 1 && craftType == 0) {
 			if (targetTemplateId != 150000039) {
 				return;
 			}
-			CraftService.startAetherforging(player, recipeId, craftType, itemID);
-		} else if (actionId == 0 && craftType == 0) {
-			CraftService.stopAetherforging(player, recipeId);
+			CraftService.startAetherforging(player, recipeId, craftType, itemID, materialsCount);
 		}
 	}
 }

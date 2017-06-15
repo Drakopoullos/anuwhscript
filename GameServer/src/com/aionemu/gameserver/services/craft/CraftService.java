@@ -144,7 +144,7 @@ public class CraftService
 		PacketSendUtility.sendPacket(player, new SM_AETHERFORGING_ANIMATION(player, 0, 0, 1));
 	}
 	
-	public static void startAetherforging(final Player player, final int recipeId, int craftType, final int itemId) {
+	public static void startAetherforging(final Player player, final int recipeId, int craftType, final int itemId, final int materialsCount) {
 		final RecipeTemplate recipeTemplate = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
 		int delayedTime = 4000;
 		int skillLvl = 0;
@@ -182,7 +182,6 @@ public class CraftService
 					Set<Entry<Integer, Integer>> set = hm.entrySet();
 					Iterator<Entry<Integer, Integer>> i = set.iterator();
 					while(i.hasNext()) {
-						@SuppressWarnings("rawtypes")
 						Map.Entry me = (Map.Entry)i.next();
 						if (!player.getInventory().decreaseByItemId((Integer)me.getKey(),(Integer)me.getValue())) {
 							return;

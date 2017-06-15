@@ -455,13 +455,19 @@ public class StatFunctions
         CreatureGameStats<?> sgs = speller.getGameStats();
         CreatureGameStats<?> tgs = target.getGameStats();
         int magicBoost = useMagicBoost ? sgs.getMBoost().getCurrent() : 0;
-        //int mBResist = tgs.getMBResist().getCurrent();
-        //int MDef = tgs.getMDef().getCurrent();
+        int mBResist = tgs.getMBResist().getCurrent();
+        int MDef = tgs.getMDef().getCurrent();
         int knowledge = useKnowledge ? sgs.getKnowledge().getCurrent() : 100;
         if (magicBoost < 0) {
             magicBoost = 0;
-        } else if (magicBoost > 3200) {
+        } else if ((magicBoost - mBResist) > 3200) {
             magicBoost = 3201;
+        } else {
+            magicBoost = magicBoost - mBResist;
+        } if ((magicBoost - MDef) < 1) {
+            magicBoost = 1;
+        } else {
+            magicBoost -= MDef;
         }
         float damages = baseDamages * (knowledge / 100f + magicBoost / 1000f);
         damages = sgs.getStat(StatEnum.BOOST_SPELL_ATTACK, (int) damages).getCurrent();
