@@ -52,14 +52,13 @@ public abstract class DamageEffect extends EffectTemplate
         ActionModifier modifier = getActionModifiers(effect);
         int accMod = this.accMod2 + this.accMod1 * skillLvl;
         int critAddDmg = this.critAddDmg2 + this.critAddDmg1 * skillLvl;
-        Object effector = effect.getEffector().getController().getOwner();
-		switch (damageType) {
+        switch (damageType) {
 			case PHYSICAL:
                 boolean cannotMiss = false;
                 if (this instanceof SkillAttackInstantEffect) {
                     cannotMiss = ((SkillAttackInstantEffect) this).isCannotmiss();
                 }
-                int rndDmg = (this instanceof SkillAttackInstantEffect ? ((SkillAttackInstantEffect) this).getRnddmg() : 0);
+                int rndDmg = (this instanceof SkillAttackInstantEffect) ? ((SkillAttackInstantEffect) this).getRnddmg() : 0;
                 AttackUtil.calculateSkillResult(effect, valueWithDelta, modifier, this.getMode(), rndDmg, accMod, this.critProbMod2, critAddDmg, cannotMiss, shared, false, false);
             break;
 			case MAGICAL:

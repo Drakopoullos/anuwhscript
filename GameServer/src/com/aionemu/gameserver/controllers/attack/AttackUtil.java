@@ -287,7 +287,11 @@ public class AttackUtil
 			baseAttack = effector.getGameStats().getMainHandPAttack().getBase();
 		    damage = StatFunctions.calculatePhysicalAttackDamage(effect.getEffector(), effect.getEffected(), true);
 		} else {
-			baseAttack = effector.getGameStats().getMAttack().getBase();
+			if(isMainHand) {
+				baseAttack = effector.getGameStats().getMainHandMAttack().getBase();
+			} else {
+				baseAttack = effector.getGameStats().getOffHandMAttack().getBase();
+			}
 			damage = StatFunctions.calculateMagicalAttackDamage(effector, effected, effector.getAttackType().getMagicalElement(), isMainHand);
 		} if (func != null) {
 			switch (func) {
@@ -314,6 +318,9 @@ public class AttackUtil
 		damage = Math.round(damage * damageMultiplier);
 		if (randomDamage > 0) {
             int randomChance = Rnd.get(100);
+            if (effect.getSkillId() == 20033) {
+            	damage *= 10;
+            }
 			switch (randomDamage) {
                 case 1:
                     if (randomChance <= 40) {
@@ -529,8 +536,6 @@ public class AttackUtil
 				else {
 					damage = (int) calculateWeaponCritical(effected, damage, null, critAddDmg, StatEnum.MAGICAL_CRITICAL_DAMAGE_REDUCE);
 				}
-				break;
-			default:
 				break;
 		}
 		if (shared && !effect.getSkill().getEffectedList().isEmpty())

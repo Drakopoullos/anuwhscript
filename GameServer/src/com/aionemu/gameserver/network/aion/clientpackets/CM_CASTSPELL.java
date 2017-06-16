@@ -1,5 +1,8 @@
 package com.aionemu.gameserver.network.aion.clientpackets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
@@ -10,6 +13,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 
 public class CM_CASTSPELL extends AionClientPacket
 {
+	private Logger log = LoggerFactory.getLogger(CM_CASTSPELL.class);
 	private int spellid;
 	private int targetType;
 	private float x, y, z;
@@ -58,6 +62,7 @@ public class CM_CASTSPELL extends AionClientPacket
 		}
 		hitTime = readH();
 		unk = readD();
+		log.debug("[CM_CASTSPELL] Unk value: " + unk);
 	}
 	
 	@Override

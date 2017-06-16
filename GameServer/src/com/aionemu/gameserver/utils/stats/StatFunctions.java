@@ -656,9 +656,9 @@ public class StatFunctions
   					break;
   				case SORCERER : damages *= 0.4f;
   					break;
-  				case ASSASSIN : damages *= 0.7f;
+  				case ASSASSIN : damages *= 0.9f;
   					break;
-  				case RANGER : damages *= 0.8f;
+  				case RANGER : damages *= 0.9f;
   					break;
   				case AETHERTECH : damages *= 0.7f;
   					break;
