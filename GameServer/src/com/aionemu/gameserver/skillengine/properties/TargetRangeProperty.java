@@ -50,7 +50,7 @@ public class TargetRangeProperty {
 		int distance = properties.getTargetDistance();
 		int maxcount = properties.getTargetMaxCount();
 		int effectiveRange = properties.getEffectiveRange();
-		int altitude = properties.getEffectiveAltitude() != 0 ? properties.getEffectiveAltitude() : 1;
+		int altitude = properties.getEffectiveAngle() != 0 ? properties.getEffectiveAngle() : 1;
 
 		final List<Creature> effectedList = skill.getEffectedList();
 		skill.setTargetRangeAttribute(value);

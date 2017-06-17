@@ -1,5 +1,8 @@
 package com.aionemu.gameserver.utils.stats;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.configs.main.FallDamageConfig;
 import com.aionemu.gameserver.controllers.attack.AttackStatus;
@@ -30,6 +33,7 @@ import com.google.common.base.Preconditions;
 
 public class StatFunctions
 {
+	private static final Logger log = LoggerFactory.getLogger(StatFunctions.class);
 	private static SkillElement elements = null;
 	private static PlayerClass playerClass;
 	public static PlayerClass getPlayerClass() {
@@ -358,6 +362,10 @@ public class StatFunctions
 				int totalMin = weaponStat.getMinDamage();
 				int totalMax = weaponStat.getMaxDamage();
 				if (totalMax - totalMin < 1) {
+					log.warn("Weapon stat MIN_MAX_DAMAGE resulted average zero in main-hand calculation");
+					log.warn("Weapon ID: " + String.valueOf(equipment.getMainHandWeapon().getItemTemplate().getTemplateId()));
+					log.warn("MIN_DAMAGE = " + String.valueOf(totalMin));
+					log.warn("MAX_DAMAGE = " + String.valueOf(totalMax));
 				}
 				float power = attacker.getGameStats().getPower().getCurrent() * 0.01f;
 				int diff = Math.round((totalMax - totalMin) * power / 2);
@@ -425,6 +433,10 @@ public class StatFunctions
                 int totalMin = weaponStat.getMinDamage();
                 int totalMax = weaponStat.getMaxDamage();
                 if (totalMax - totalMin < 1) {
+                	log.warn("Weapon stat MIN_MAX_DAMAGE resulted average zero in main-hand calculation");
+                	log.warn("Weapon ID: " + String.valueOf(equipment.getMainHandWeapon().getItemTemplate().getTemplateId()));
+                	log.warn("MIN_DAMAGE = " + String.valueOf(totalMin));
+                	log.warn("MAX_DAMAGE = " + String.valueOf(totalMax));
                 }
                 float knowledge = attacker.getGameStats().getKnowledge().getCurrent() * 0.01f;
                 int diff = Math.round((totalMax - totalMin) * knowledge / 2);
@@ -456,7 +468,6 @@ public class StatFunctions
         CreatureGameStats<?> tgs = target.getGameStats();
         int magicBoost = useMagicBoost ? sgs.getMBoost().getCurrent() : 0;
         int mBResist = tgs.getMBResist().getCurrent();
-        int MDef = tgs.getMDef().getCurrent();
         int knowledge = useKnowledge ? sgs.getKnowledge().getCurrent() : 100;
         if (magicBoost < 0) {
             magicBoost = 0;
@@ -464,17 +475,13 @@ public class StatFunctions
             magicBoost = 3201;
         } else {
             magicBoost = magicBoost - mBResist;
-        } if ((magicBoost - MDef) < 1) {
-            magicBoost = 1;
-        } else {
-            magicBoost -= MDef;
         }
         float damages = baseDamages * (knowledge / 100f + magicBoost / 1000f);
         damages = sgs.getStat(StatEnum.BOOST_SPELL_ATTACK, (int) damages).getCurrent();
         damages += bonus;
         if (!noReduce && element != SkillElement.NONE) {
             float elementalDef = getMovementModifier(target, SkillElement.getResistanceForElement(element), tgs.getMagicalDefenseFor(element));
-            damages = Math.round(damages * (1 - (elementalDef / 1300f)));
+            damages = Math.round(damages * (1 - (elementalDef / 1250f)));
         }
 		elements = element;
         damages = adjustDamages(speller, target, damages, pvpDamage, useKnowledge);
@@ -793,12 +800,12 @@ public class StatFunctions
         critical = attacked.getGameStats().getPositiveReverseStat(StatEnum.PHYSICAL_CRITICAL_RESIST, critical) - attacker.getGameStats().getStat(StatEnum.PVP_HIT_ACCURACY, 0).getCurrent();
         critical *= (float) criticalProb / 100f;
         double criticalRate;
-        if (critical <= 500) {
+        if (critical <= 440) {
             criticalRate = critical * 0.1f;
         } else if (critical <= 600) {
-            criticalRate = (500 * 0.1f) + ((critical - 500) * 0.05f);
+            criticalRate = (440 * 0.1f) + ((critical - 440) * 0.05f);
         } else {
-            criticalRate = (500 * 0.1f) + (160 * 0.05f) + ((critical - 600) * 0.02f);
+            criticalRate = (440 * 0.1f) + (160 * 0.05f) + ((critical - 600) * 0.02f);
         }
         return Rnd.nextInt(100) < criticalRate;
     }

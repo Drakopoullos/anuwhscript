@@ -143,7 +143,7 @@ public class AttackUtil
 	 */
 	private static final List<AttackResult> splitPhysicalDamage(final Creature attacker, final Creature attacked,
 		int hitCount, int damage, AttackStatus status, List<AttackResult> attackList) {
-		WeaponType weaponType;
+		//WeaponType weaponType;
 
 		switch (AttackStatus.getBaseStatus(status)) {
 			case BLOCK:
@@ -170,7 +170,7 @@ public class AttackUtil
 
 		if (status.isCritical()) {
 			if (attacker instanceof Player) {
-				weaponType = ((Player) attacker).getEquipment().getMainHandWeaponType();
+				WeaponType weaponType = ((Player) attacker).getEquipment().getMainHandWeaponType();
 				damage = (int) calculateWeaponCritical(attacked, damage, weaponType, StatEnum.PHYSICAL_CRITICAL_DAMAGE_REDUCE);
 				// Proc Stumble/Stagger on Crit calculation
 				applyEffectOnCritical((Player) attacker, attacked, 0);
@@ -216,9 +216,7 @@ public class AttackUtil
 					coeficient = 2f;
 				break;
 				case SWORD_2H:
-				case CANNON_2H:
 				case POLEARM_2H:
-				case KEYBLADE_2H:
 					coeficient =  1.8f;
 				break;
 				case STAFF_2H:
@@ -282,7 +280,7 @@ public class AttackUtil
 		    effector.getEffectController().hasAbnormalEffect(22988) &&
 			effector.getEffectController().hasAbnormalEffect(22989) &&
 			effector.getEffectController().hasAbnormalEffect(22990)) {
-			damage = StatFunctions.calculatePhysicalAttackDamage(effect.getEffector(), effect.getEffected(), true) * 2 / 100;
+			damage = StatFunctions.calculatePhysicalAttackDamage(effect.getEffector(), effect.getEffected(), true);
 		} if (effector.getAttackType() == ItemAttackType.PHYSICAL) {
 			baseAttack = effector.getGameStats().getMainHandPAttack().getBase();
 		    damage = StatFunctions.calculatePhysicalAttackDamage(effect.getEffector(), effect.getEffected(), true);
@@ -1003,7 +1001,7 @@ public class AttackUtil
 			return;
 		}
 		//On retail this effect apply on each crit with 10% of base chance + bonus effect penetration calculated above.
-		if (Rnd.get(100) > (10 * attacked.getPulledMulti())) {
+		if (Rnd.get(100) > (6 * attacked.getPulledMulti())) {
 			return;
 		} if (isSkillEffect(returnSkill)) {
 			return;

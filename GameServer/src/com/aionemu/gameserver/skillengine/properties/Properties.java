@@ -53,9 +53,6 @@ public class Properties {
 	
 	@XmlAttribute(name = "effective_range")
     private int effectiveRange;
-	
-	@XmlAttribute(name = "effective_altitude")
-    private int effectiveAltitude;
 
 	@XmlAttribute(name = "target_maxcount")
 	protected int targetMaxCount;
@@ -187,10 +184,6 @@ public class Properties {
 	
 	public int getEffectiveRange() {
         return effectiveRange;
-    }
-	
-	public int getEffectiveAltitude() {
-        return effectiveAltitude;
     }
 
 	public int getTargetMaxCount() {

@@ -31,6 +31,8 @@ public class TargetSpeciesProperty {
 						iter.remove();
 					}
 				}
+		default:
+			break;
 		}
 		return true;
 	}
