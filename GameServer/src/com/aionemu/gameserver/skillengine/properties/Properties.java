@@ -71,9 +71,6 @@ public class Properties {
 
 	@XmlAttribute(name = "effective_angle")
 	private int effectiveAngle;
-	
-	@XmlAttribute(name = "effective_dist")
-    private int effectiveDist;
 
 	@XmlAttribute(name = "direction")
 	protected AreaDirections direction = AreaDirections.NONE;
@@ -194,10 +191,6 @@ public class Properties {
 	
 	public int getEffectiveAltitude() {
         return effectiveAltitude;
-    }
-	
-	public int getEffectiveDist() {
-        return effectiveDist;
     }
 
 	public int getTargetMaxCount() {

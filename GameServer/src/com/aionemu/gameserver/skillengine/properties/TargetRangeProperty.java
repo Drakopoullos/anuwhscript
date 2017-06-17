@@ -104,9 +104,9 @@ public class TargetRangeProperty {
 							} if (!MathUtil.isIn3dRange(skill.getEffector(), nextCreature, effectiveRange)) {
 	                            continue;
 	                        }
-						} else if (properties.getEffectiveDist() > 0) {
+						} else if (properties.getEffectiveWidth() > 0) {
 	                        // Lightning bolt
-	                        if (MathUtil.isInsideAttackCylinder(skill.getEffector(), nextCreature, distance, properties.getEffectiveDist(),
+	                        if (MathUtil.isInsideAttackCylinder(skill.getEffector(), nextCreature, distance, properties.getEffectiveWidth(),
 	                                properties.getDirection()) || MathUtil.isIn3dRange(firstTarget, nextCreature, effectiveRange
 	                                + firstTarget.getObjectTemplate().getBoundRadius().getCollision())) {
 	                            if (!skill.shouldAffectTarget(nextCreature)) {
