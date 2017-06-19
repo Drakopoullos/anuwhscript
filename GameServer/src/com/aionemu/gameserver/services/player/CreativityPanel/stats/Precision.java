@@ -31,7 +31,7 @@ import com.aionemu.gameserver.model.stats.container.StatEnum;
 
 public class Precision implements StatOwner
 {
-	private List<IStatFunction> accuracy = new ArrayList<IStatFunction>();
+	private List<IStatFunction> accuracy = new ArrayList<>();
 	
 	public void onChange(Player player, int point) {
         if (point >= 1) {

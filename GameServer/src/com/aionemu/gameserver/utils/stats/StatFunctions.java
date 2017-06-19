@@ -468,6 +468,7 @@ public class StatFunctions
         CreatureGameStats<?> tgs = target.getGameStats();
         int magicBoost = useMagicBoost ? sgs.getMBoost().getCurrent() : 0;
         int mBResist = tgs.getMBResist().getCurrent();
+        int MDef = tgs.getMDef().getCurrent();
         int knowledge = useKnowledge ? sgs.getKnowledge().getCurrent() : 100;
         if (magicBoost < 0) {
             magicBoost = 0;
@@ -475,6 +476,10 @@ public class StatFunctions
             magicBoost = 3201;
         } else {
             magicBoost = magicBoost - mBResist;
+        }  if ((magicBoost - MDef) < 1) {
+            magicBoost = 1;
+        } else {
+            magicBoost -= MDef;
         }
         float damages = baseDamages * (knowledge / 100f + magicBoost / 1000f);
         damages = sgs.getStat(StatEnum.BOOST_SPELL_ATTACK, (int) damages).getCurrent();
@@ -637,11 +642,7 @@ public class StatFunctions
 			pvpDefenceRatioPhyscBonus = pvpDefenceRatioPhyscBonus * 0.001f;
 			pvpDefenceRatioMagicBonus = pvpDefenceRatioMagicBonus * 0.001f;
 			
-			if (attacker.isPhysClass(attacker) && (target.isPhysClass(target) || target.isMagicClass(target))) {
-				damages = Math.round(damages + (damages * pvpAttackRatioPhyscBonus) - (damages * pvpDefenceRatioPhyscBonus));
-			} else if (attacker.isMagicClass(attacker) && (target.isMagicClass(target) || target.isPhysClass(target))) {
-				damages = Math.round(damages + (damages * pvpAttackRatioMagicBonus) - (damages * pvpDefenceRatioMagicBonus));
-			} if (attacker.getRace() != target.getRace() && !attacker.isInInstance()) {
+			if (attacker.getRace() != target.getRace() && !attacker.isInInstance()) {
                 damages *= Influence.getInstance().getPvpRaceBonus(attacker.getRace());
             }
         } else if (target instanceof Npc) {
@@ -651,29 +652,15 @@ public class StatFunctions
             damages = movementDamageBonus(attacker, damages);
         } if (attacker instanceof Player) {
         	PlayerClass playerClass = ((Player) attacker).getPlayerClass();
-  			if (playerClass != null ) {
-  				switch (playerClass) {
-  				case GUNSLINGER : damages *= 0.4f;
-  					break;
-  				case SONGWEAVER : damages *= 0.4f;
-  					break;
-  				case CLERIC : damages *= 0.4f;
-  					break;
-  				case SPIRIT_MASTER : damages *= 0.4f;
-  					break;
-  				case SORCERER : damages *= 0.4f;
-  					break;
-  				case ASSASSIN : damages *= 0.8f;
-  					break;
-  				case RANGER : damages *= 0.9f;
-  					break;
-  				case AETHERTECH : damages *= 0.7f;
-  					break;
-				case TEMPLAR : damages *= 0.8f;
-					break;
-  				default: damages *= 1f;		
-  				}
-  			}
+        	if (playerClass != null ) {
+        		switch (playerClass) {
+        		case SONGWEAVER : damages *= 0.9f;
+        			break;
+        		case ASSASSIN : damages *= 0.8f;
+        			break;
+        		default: damages *= 1f;		
+        		}
+        	}
         }
         return damages;
     }

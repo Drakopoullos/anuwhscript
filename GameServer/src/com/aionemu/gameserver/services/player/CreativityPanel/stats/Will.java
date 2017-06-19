@@ -36,14 +36,14 @@ public class Will implements StatOwner
 	public void onChange(Player player, int point) {
         if (point >= 1) {
             will.clear();
-            player.getGameStats().endEffect(this);
+        	player.getGameStats().endEffect(this);
             will.add(new StatAddFunction(StatEnum.MAXMP, (int) (24.5f * point), true));
 			will.add(new StatAddFunction(StatEnum.MAGICAL_RESIST, (int) (3.35f * point), true));
 			will.add(new StatAddFunction(StatEnum.MAGICAL_CRITICAL_RESIST, (int) (2.25f * point), true));
 			will.add(new StatAddFunction(StatEnum.REGEN_MP, (int) (0.2f * point), true));
             player.getGameStats().addEffect(this, will);
         } else if (point == 0) {
-            will.clear();
+        	will.clear();
 			will.add(new StatAddFunction(StatEnum.MAXMP, (int) (24.5f * point), false));
 			will.add(new StatAddFunction(StatEnum.MAGICAL_RESIST, (int) (3.35f * point), false));
 			will.add(new StatAddFunction(StatEnum.MAGICAL_CRITICAL_RESIST, (int) (2.25f * point), false));

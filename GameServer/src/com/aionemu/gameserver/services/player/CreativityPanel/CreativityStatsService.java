@@ -18,8 +18,13 @@ package com.aionemu.gameserver.services.player.CreativityPanel;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_ESSENCE_CONTROL;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Agility;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Health;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Knowledge;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Power;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Precision;
+import com.aionemu.gameserver.services.player.CreativityPanel.stats.Will;
 import com.aionemu.gameserver.utils.PacketSendUtility;
-import com.aionemu.gameserver.services.player.CreativityPanel.stats.*;
 
 /**
  * @author Ranastic (Encom)
