@@ -87,6 +87,18 @@ public class WarSystemService {
 		wars.put(209355, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(120010000, 209355, 1272.5153F, 1338.2782F, 204.41998F, (byte)0), 1));
 		wars.put(209355, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(120010000, 209355, 1272.517F, 1335.2249F, 204.41998F, (byte)117), 1));
 		wars.put(209355, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(120010000, 209355, 1279.1007F, 1335.3522F, 204.42003F, (byte)59), 1));
+		// Spawn Kisk Elyos
+		wars.put(700018, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 700018, 636.97003F, 391.09747F, 197.9985F, (byte)29), 1));
+		wars.put(831025, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 831025, 634.3334F, 394.54318F, 197.9985F, (byte)1), 1));
+		// Spawn Kisk Asmos
+		wars.put(700068, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 700068, 412.21176F, 390.77625F, 197.9985F, (byte)30), 1));
+		wars.put(831026, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 831026, 408.8446F, 395.22598F, 197.9985F, (byte)0), 1));
+		// Spawn Guardians Kisk Elyos
+		wars.put(258280, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 258280, 628.61505F, 404.59045F, 196.79149F, (byte)30), 1));
+		wars.put(258280, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 258280, 645.54315F, 404.86942F, 196.79149F, (byte)33), 1));
+		// Spawn Guardians Kisk Asmos
+		wars.put(258281, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 258281, 404.66437F, 405.89426F, 196.79149F, (byte)31), 1));
+		wars.put(258281, SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(300140000, 258281, 419.8857F, 405.76068F, 196.79149F, (byte)28), 1));
 	}
 	
 	public void announceWar() {
