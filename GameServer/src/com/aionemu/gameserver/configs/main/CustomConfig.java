@@ -279,11 +279,47 @@ public class CustomConfig
 	@Property(key = "gameserver.max.cp.limit", defaultValue = "1000")
 	public static int CP_LIMIT_MAX;
 	
-	// World Channel Cost
+	//World Channel Cost
 	@Property(key = "gameserver.worldchannel.costs", defaultValue = "50000")
 	public static int WORLD_CHANNEL_AP_COSTS;
 	
-	// Auto Powershard
+	//Auto Powershard
 	@Property(key = "gameserver.enable.auto.powershard", defaultValue = "false")
 	public static boolean ENABLE_AUTO_POWERSHARD;
+	
+	//War System
+	@Property(key="gameserver.war.enable", defaultValue = "false")
+	public static boolean WAR_ENABLE;
+	
+	//War Schedule
+	@Property(key="gameserver.war.schedule.time", defaultValue = "0 0 1 ? * *")
+    public static String WAR_SYSTEM_SCHEDULE;
+	@Property(key="gameserver.war.announce", defaultValue = "50")
+    public static int WAR_ANNOUNCE;
+	@Property(key="gameserver.war.runtime", defaultValue = "1")
+    public static int WAR_RUNTIME;
+	
+	//War Reward Win
+	@Property(key="gameserver.war.gp.reward", defaultValue = "500")
+	public static int WAR_GP_REWARD;
+	@Property(key="gameserver.war.item.reward1", defaultValue = "100000000")
+	public static int WAR_ITEM_REWARD1;
+	@Property(key="gameserver.war.item.amount1", defaultValue = "2")
+	public static int WAR_ITEM_AMOUNT1;
+	@Property(key="gameserver.war.item.reward2", defaultValue = "100000000")
+	public static int WAR_ITEM_REWARD2;
+	@Property(key="gameserver.war.item.amount2", defaultValue = "2")
+	public static int WAR_ITEM_AMOUNT2;
+	
+	//War Reward Loss
+	@Property(key="gameserver.war.gp.reward.loss", defaultValue = "250")
+	public static int WAR_GP_REWARD_LOSS;
+	@Property(key="gameserver.war.item.reward.loss1", defaultValue = "100000000")
+	public static int WAR_ITEM_REWARD_LOSS1;
+	@Property(key="gameserver.war.item.amount.loss1", defaultValue = "1")
+	public static int WAR_ITEM_AMOUNT_LOSS1;
+	@Property(key="gameserver.war.item.reward.loss2", defaultValue = "100000000")
+	public static int WAR_ITEM_REWARD_LOSS2;
+	@Property(key="gameserver.war.item.amount.loss2", defaultValue = "1")
+	public static int WAR_ITEM_AMOUNT_LOSS2;
 }

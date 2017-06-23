@@ -350,13 +350,13 @@ public class StatEnchantFunction extends StatAddFunction
 				case BOOST_MAGICAL_SKILL:
 					return 4 * enchantLvl;
 				case PHYSICAL_DEFENSE:
-					return 4 * enchantLvl;
+					return 5 * enchantLvl;
 				case MAXHP:
 					return 14 * enchantLvl;
 				case PHYSICAL_CRITICAL_RESIST:
 					return 2 * enchantLvl;
 				case MAGICAL_DEFEND:
-					return 2 * enchantLvl;
+					return 4 * enchantLvl;
 				default:
 					break;
 				}
@@ -368,13 +368,13 @@ public class StatEnchantFunction extends StatAddFunction
 				case BOOST_MAGICAL_SKILL:
 					return 4 * enchantLvl;
 				case PHYSICAL_DEFENSE:
-					return 5 * enchantLvl;
+					return 6 * enchantLvl;
 				case MAXHP:
 					return 16 * enchantLvl;
 				case PHYSICAL_CRITICAL_RESIST:
 					return 3 * enchantLvl;
 				case MAGICAL_DEFEND:
-					return 2 * enchantLvl;
+					return 4 * enchantLvl;
 				default:
 					break;
 				}
@@ -386,13 +386,13 @@ public class StatEnchantFunction extends StatAddFunction
 				case BOOST_MAGICAL_SKILL:
 					return 4 * enchantLvl;
 				case PHYSICAL_DEFENSE:
-					return 6 * enchantLvl;
+					return 7 * enchantLvl;
 				case MAXHP:
 					return 18 * enchantLvl;
 				case PHYSICAL_CRITICAL_RESIST:
 					return 4 * enchantLvl;
 				case MAGICAL_DEFEND:
-					return 3 * enchantLvl;
+					return 5 * enchantLvl;
 				default:
 					break;
 				}

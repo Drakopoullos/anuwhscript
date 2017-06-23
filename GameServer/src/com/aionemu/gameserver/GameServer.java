@@ -250,6 +250,9 @@ public class GameServer
 		SpawnEngine.spawnAll();
 		RiftService.getInstance().initRifts();
 		TerritoryService.getInstance().initTerritory();
+		//War System 4.0
+		Util.printSection("War System Active/Deactive");
+		WarSystemService.getInstance().InitSystemWar();
 		//Event 4.3/4.7
 		if (EventsConfig.IMPERIAL_TOMB_ENABLE) { //Shugo Imperial Tomb 4.3
 		    ShugoImperialTombSpawnManager.getInstance().start();

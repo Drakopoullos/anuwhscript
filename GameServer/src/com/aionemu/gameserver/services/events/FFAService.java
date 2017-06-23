@@ -422,10 +422,10 @@ public class FFAService
         checkKillerLevel(killer);
 		//Reward AP.
 		AbyssPointsService.addAp(player, -1500);
-		AbyssPointsService.addAp(killer, 5000);
+		AbyssPointsService.addAp(killer, 2500);
 		//Reward GP.
-        AbyssPointsService.addGp(player, -60);
-        AbyssPointsService.addGp(killer, 300);
+        AbyssPointsService.addGp(player, -30);
+        AbyssPointsService.addGp(killer, 50);
         player.setKillStreak(0);
         killer.getLifeStats().increaseHp(SM_ATTACK_STATUS.TYPE.HP, 1500);
         killer.getLifeStats().increaseMp(SM_ATTACK_STATUS.TYPE.MP, 1500);

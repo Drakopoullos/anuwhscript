@@ -22,7 +22,6 @@ import org.apache.commons.lang.math.FloatRange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.aionemu.gameserver.model.actions.PlayerMode;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.model.gameobjects.Summon;
 import com.aionemu.gameserver.model.gameobjects.Trap;
@@ -49,8 +48,6 @@ public class TargetRangeProperty {
 		TargetRangeAttribute value = properties.getTargetType();
 		int distance = properties.getTargetDistance();
 		int maxcount = properties.getTargetMaxCount();
-		int effectiveRange = properties.getEffectiveRange();
-		int altitude = properties.getEffectiveAngle() != 0 ? properties.getEffectiveAngle() : 1;
 
 		final List<Creature> effectedList = skill.getEffectedList();
 		skill.setTargetRangeAttribute(value);
@@ -71,17 +68,13 @@ public class TargetRangeProperty {
 					if (((nextCreature instanceof Creature)) && (firstTarget != nextCreature) && (((Creature) nextCreature).getLifeStats() != null)
 						&& (!((Creature) nextCreature).getLifeStats().isAlreadyDead()) && ((!(skill.getEffector() instanceof Trap)) || (((Trap) skill.getEffector()).getCreator() != nextCreature))
 						&& ((!(nextCreature instanceof Player)) || (!((Player) nextCreature).isProtectionActive()))) {
-						if (Math.abs(firstTarget.getZ() - nextCreature.getZ()) > altitude
-	                            || ((nextCreature instanceof Player) && ((Player) nextCreature).isInPlayerMode(PlayerMode.WINDSTREAM))) {
-	                        continue;
-	                    }
 						if (skill.isPointSkill()) {
 							if (MathUtil.isIn3dRange(skill.getX(), skill.getY(), skill.getZ(), nextCreature.getX(), nextCreature.getY(), nextCreature.getZ(), distance + 1)) {
 								skill.getEffectedList().add((Creature) nextCreature);
 							}
 						}
 						else if (properties.getEffectiveWidth() > 0) {
-							if (MathUtil.isInsideAttackCylinder(firstTarget, nextCreature, distance, properties.getEffectiveWidth(), null)) {
+							if (MathUtil.isInsideAttackCylinder(firstTarget, nextCreature, distance, properties.getEffectiveWidth(), !properties.isBackDirection())) {
 								if (skill.shouldAffectTarget(nextCreature)) {
 									skill.getEffectedList().add((Creature) nextCreature);
 								}
@@ -89,7 +82,7 @@ public class TargetRangeProperty {
 						}
 						else if (properties.getEffectiveAngle() > 0) {
 							float angle = properties.getEffectiveAngle() / 2.0F;
-							if (properties.direction != null) {
+							if (properties.isBackDirection()) {
 								angle = 180.0F - angle;
 							}
 							FloatRange range = new FloatRange(angle, 360.0F - angle);
@@ -101,26 +94,13 @@ public class TargetRangeProperty {
 								}
 								else
 									;
-							} if (!MathUtil.isIn3dRange(skill.getEffector(), nextCreature, effectiveRange)) {
-	                            continue;
-	                        }
-						} else if (properties.getEffectiveWidth() > 0) {
-	                        // Lightning bolt
-	                        if (MathUtil.isInsideAttackCylinder(skill.getEffector(), nextCreature, distance, properties.getEffectiveWidth(),
-	                                properties.getDirection()) || MathUtil.isIn3dRange(firstTarget, nextCreature, effectiveRange
-	                                + firstTarget.getObjectTemplate().getBoundRadius().getCollision())) {
-	                            if (!skill.shouldAffectTarget(nextCreature)) {
-	                                continue;
-	                            }
-	                            skill.getEffectedList().add((Creature) nextCreature);
-	                        }
-	                    } else if (MathUtil.isIn3dRange(firstTarget, nextCreature, effectiveRange
-	                            + firstTarget.getObjectTemplate().getBoundRadius().getCollision())) {
-	                        if (!skill.shouldAffectTarget(nextCreature)) {
-	                            continue;
-	                        }
-	                        skill.getEffectedList().add((Creature) nextCreature);
-	                    }
+							}
+						}
+						else if (MathUtil.isIn3dRange(firstTarget, nextCreature, distance + firstTarget.getObjectTemplate().getBoundRadius().getCollision())) {
+							if (skill.shouldAffectTarget(nextCreature)) {
+								skill.getEffectedList().add((Creature) nextCreature);
+							}
+						}
 					}
 				break;
 			case PARTY:
@@ -138,7 +118,7 @@ public class TargetRangeProperty {
 								break;
 							if (!player.isOnline())
 								continue;
-							if (MathUtil.isIn3dRange(effector, player, effectiveRange + 1)) {
+							if (MathUtil.isIn3dRange(effector, player, distance + 1)) {
 								effectedList.add(player);
 								partyCount++;
 							}
@@ -150,7 +130,7 @@ public class TargetRangeProperty {
 							if (partyCount >= maxcount)
 								break;
 							// TODO: here value +4 till better move controller developed
-							if (member != null && MathUtil.isIn3dRange(effector, member, effectiveRange + 1)) {
+							if (member != null && MathUtil.isIn3dRange(effector, member, distance + 1)) {
 								effectedList.add(member);
 								partyCount++;
 							}

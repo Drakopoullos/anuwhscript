@@ -50,9 +50,6 @@ public class Properties {
 
 	@XmlAttribute(name = "target_distance")
 	protected int targetDistance;
-	
-	@XmlAttribute(name = "effective_range")
-    private int effectiveRange;
 
 	@XmlAttribute(name = "target_maxcount")
 	protected int targetMaxCount;
@@ -70,7 +67,7 @@ public class Properties {
 	private int effectiveAngle;
 
 	@XmlAttribute(name = "direction")
-	protected AreaDirections direction = AreaDirections.NONE;
+	protected int direction;
 
 	@XmlAttribute(name = "target_species")
 	protected TargetSpeciesAttribute targetSpecies;
@@ -181,10 +178,6 @@ public class Properties {
 	public int getTargetDistance() {
 		return targetDistance;
 	}
-	
-	public int getEffectiveRange() {
-        return effectiveRange;
-    }
 
 	public int getTargetMaxCount() {
 		return targetMaxCount;
@@ -205,10 +198,10 @@ public class Properties {
 	public int getEffectiveAngle() {
 		return effectiveAngle;
 	}
-	
-	public AreaDirections getDirection() {
-        return direction;
-    }
+
+	public boolean isBackDirection() {
+		return direction == 1;
+	}
 
 	public TargetSpeciesAttribute getTargetSpecies() {
 		return targetSpecies;
