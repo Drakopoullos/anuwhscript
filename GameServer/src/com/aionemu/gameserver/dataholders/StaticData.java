@@ -108,8 +108,8 @@ public class StaticData
 	public PetFeedData petFeedData;
 	@XmlElement(name = "dopings")
 	public PetDopingData petDopingData;
-	@XmlElement(name = "merchands")
-	public PetMerchandData petMerchandData;
+	@XmlElement(name = "merchants")
+	public PetMerchandData petMerchantData;
 	@XmlElement(name = "guides")
 	public GuideHtmlData guideData;
 	@XmlElement(name = "roads")
@@ -280,7 +280,7 @@ public class StaticData
 		DataManager.log.info("Loaded " + petData.size() + " PET TEMPLATE");
 		DataManager.log.info("Loaded " + petFeedData.size() + " FOOD FLAVOUR");
 		DataManager.log.info("Loaded " + petDopingData.size() + " PET DOPING TEMPLATE");
-		DataManager.log.info("Loaded " + petMerchandData.size() + " PET MERCHAND TEMPLATE");
+		DataManager.log.info("Loaded " + petMerchantData.size() + " PET MERCHAND TEMPLATE");
 		DataManager.log.info("Loaded " + playerInitialData.size() + " INITIAL PLAYER TEMPLATE");
 		DataManager.log.info("Loaded " + goodsListData.size() + " GOODLIST");
 		DataManager.log.info("Loaded " + tradeListData.size() + " NPC TRADE LIST");

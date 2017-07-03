@@ -1,42 +1,57 @@
 package com.aionemu.gameserver.network.aion.serverpackets;
 
+import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
 public class SM_EVENT_DICE  extends AionServerPacket {
 
-	private int tableId = 3;
-	private int currentStep;
-	private int diceLeft;
-	private int diceGolden;
-	private int unkButton;
-	private int moveStep;
+	private int login;
+	private int trys;
+	private int roll = Rnd.get(1, 6);
+	private int test;
+	private Player player;
 	
-	public SM_EVENT_DICE(int tableId, int currentStep, int diceLeft, int diceGolden, int unkButton, int moveStep) {
-		this.tableId = tableId;
-		this.currentStep = currentStep;
-		this.diceLeft = diceLeft;
-		this.diceGolden = diceGolden;
-		this.unkButton = unkButton;
-		this.moveStep = moveStep;
+	public SM_EVENT_DICE(int login) {
+		this.login = login;
+	}
+	
+	public SM_EVENT_DICE(int login, int trys) {
+		this.login = login;
+		this.trys = trys;
 	}
 	
 	@Override
     protected void writeImpl(AionConnection con) {
-		Player player = con.getActivePlayer();
-		writeD(tableId);//table id
-		writeD(currentStep);//current step
-		writeD(0);
-		writeD(0);
-		writeD(diceLeft);//dice left
-		writeD(diceGolden);//dice golden
-		writeD(unkButton);//button near dice left
-		writeD(379322);
-		writeD(0);
-		writeD(379322);
-		writeD(0);
-		writeD(moveStep);//move step
+		switch (login) {
+			case 0:
+				writeD(0x02);
+				writeD(0x00 + roll);
+				writeD(0x0F);
+				writeD(0x00);
+				writeD(0x03);
+				writeD(0x06);
+				writeD(0x01);
+				writeD(0x91075);
+				writeD(0x00);
+				writeD(0x91075);
+				writeD(0x00);
+				writeD(roll);
+			case 1:
+				writeD(0x02);
+				writeD(0x00);
+				writeD(0x00);
+				writeD(0x00);
+				writeD(0x03);
+				writeD(0x06);
+				writeD(0x01);
+				writeD(0x91075);
+				writeD(0x00);
+				writeD(0x91075);
+				writeD(0x00);
+				writeD(0x00);
+		}	
 	}
 
 }

@@ -167,11 +167,9 @@ public class CM_PET extends AionClientPacket
 					PetService.getInstance().activeAutoSell(player, false);
 				}
 			} else if (actionType == 5) {
-				if (activateCheering == 1) {
-					PetService.getInstance().activeCheering(player, true);
-				} else if (activateCheering == 0) {
-					PetService.getInstance().activeCheering(player, false);
-				}
+				activateCheering = readD();
+                unkCheer2 = readD();
+                unkCheer3 = readD();
 			} else if (pet != null && !pet.getCommonData().isFeedingTime()) {
 				PacketSendUtility.sendPacket(player, new SM_PET(8, actionId, objectId, count, player.getPet()));
 			} else if (pet != null && objectId == 0 && pet.getCommonData().isFeedingTime()) {

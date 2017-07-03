@@ -117,14 +117,14 @@ public class SM_PET extends AionServerPacket
 						writeH(PetFunctionType.LOOT.getId());
 						writeC(0);
 						specialtyCount++;
-					} if (petTemplate.ContainsFunction(PetFunctionType.CHEER)) {
-						writeH(PetFunctionType.CHEER.getId());
-						short cheer = (short) petTemplate.getPetFunction(PetFunctionType.CHEER).getId();
+					} if (petTemplate.ContainsFunction(PetFunctionType.BUFF)) {
+						writeH(PetFunctionType.BUFF.getId());
+						short cheer = (short) petTemplate.getPetFunction(PetFunctionType.BUFF).getId();
 						writeH(cheer);
 						specialtyCount++;
-					} if (petTemplate.ContainsFunction(PetFunctionType.MERCHAND)) {
-						writeH(PetFunctionType.MERCHAND.getId());
-                        short merchant = (short) petTemplate.getPetFunction(PetFunctionType.MERCHAND).getId();
+					} if (petTemplate.ContainsFunction(PetFunctionType.MERCHANT)) {
+						writeH(PetFunctionType.MERCHANT.getId());
+                        short merchant = (short) petTemplate.getPetFunction(PetFunctionType.MERCHANT).getId();
                         writeH(merchant);
                         writeC(0x00);
 						specialtyCount++;
@@ -151,7 +151,7 @@ public class SM_PET extends AionServerPacket
 					} if (petTemplate.ContainsFunction(PetFunctionType.FOOD)) {
 						writeH(PetFunctionType.FOOD.getId());
 						writeD(petCommonData.getFeedProgress().getDataForPacket());
-						writeD((int) petCommonData.getTime() / 1000);
+						writeD((int) petCommonData.getRefeedDelay() / 1000);
 						specialtyCount++;
 					} if (specialtyCount == 0) {
 						writeH(PetFunctionType.NONE.getId());
@@ -271,7 +271,7 @@ public class SM_PET extends AionServerPacket
 					case 4:
 					case 5:
 						writeD(commonData.getFeedProgress().getDataForPacket());
-						writeD((int) commonData.getTime() / 1000);
+						writeD((int) commonData.getRefeedDelay() / 1000);
 					break;
 					case 6:
 						writeD(commonData.getFeedProgress().getDataForPacket());
@@ -281,13 +281,13 @@ public class SM_PET extends AionServerPacket
 					break;
 					case 7:
 						writeD(commonData.getFeedProgress().getDataForPacket());
-						writeD((int) commonData.getTime() / 1000);
+						writeD((int) commonData.getRefeedDelay() / 1000);
 						writeD(itemObjectId);
 						writeD(0);
 					break;
 					case 8:
 						writeD(commonData.getFeedProgress().getDataForPacket());
-						writeD((int) commonData.getTime() / 1000);
+						writeD((int) commonData.getRefeedDelay() / 1000);
 						writeD(itemObjectId);
 						writeD(count);
 					break;

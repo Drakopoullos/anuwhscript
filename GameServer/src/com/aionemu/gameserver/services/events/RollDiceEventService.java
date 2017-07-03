@@ -35,7 +35,7 @@ public class RollDiceEventService
 	}
 	
 	public void onEnterWorld(Player player) {
-		PacketSendUtility.sendPacket(player, new SM_EVENT_DICE(1, 0, 1, 0, 0, 0));
+		PacketSendUtility.sendPacket(player, new SM_EVENT_DICE(1));
 	}
 	
 	public static final RollDiceEventService getInstance() {

@@ -68,7 +68,7 @@ public final class DataManager
 	public static PetData PET_DATA;
 	public static PetFeedData PET_FEED_DATA;
 	public static PetDopingData PET_DOPING_DATA;
-	public static PetMerchandData PET_MERCHAND_DATA;
+	public static PetMerchandData PET_MERCHANT_DATA;
 	public static RoadData ROAD_DATA;
 	public static InstanceCooltimeData INSTANCE_COOLTIME_DATA;
 	public static DecomposableItemsData DECOMPOSABLE_ITEMS_DATA;
@@ -197,7 +197,7 @@ public final class DataManager
 		PET_DATA = data.petData;
 		PET_FEED_DATA = data.petFeedData;
 		PET_DOPING_DATA = data.petDopingData;
-		PET_MERCHAND_DATA = data.petMerchandData;
+		PET_MERCHANT_DATA = data.petMerchantData;
 		GUIDE_HTML_DATA = data.guideData;
 		ROAD_DATA = data.roadData;
 		INSTANCE_COOLTIME_DATA = data.instanceCooltimeData;

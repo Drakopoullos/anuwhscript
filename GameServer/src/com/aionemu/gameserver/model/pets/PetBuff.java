@@ -84,7 +84,7 @@ public class PetBuff implements StatOwner
 		public void run() {
 			Pet pet = player.getPet();
 			PetTemplate petTemp = DataManager.PET_DATA.getPetTemplate(pet.getPetId());
-			PetBonusAttr petBuff = DataManager.PET_BUFF_DATA.getPetBonusattr(petTemp.getPetFunction(PetFunctionType.CHEER).getId());
+			PetBonusAttr petBuff = DataManager.PET_BUFF_DATA.getPetBonusattr(petTemp.getPetFunction(PetFunctionType.BUFF).getId());
 			
 			if (task != null && player.getInventory().getItemCountByItemId(182007162) >= petBuff.getFoodCount()) {
 				player.getInventory().decreaseByItemId(182007162, petBuff.getFoodCount());

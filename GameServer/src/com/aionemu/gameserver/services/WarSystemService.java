@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.configs.main.PvPModConfig;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
@@ -37,7 +38,7 @@ public class WarSystemService {
 	private Future<?> timeStop2;
 	
 	public void InitSystemWar() {
-		if (!CustomConfig.WAR_ENABLE) {
+		if (PvPModConfig.FFA_ENABLED) {
 			log.info("[WarService] War System are disabled...");
 		} else {
 			log.info("[WarService] War System Are Actived...");

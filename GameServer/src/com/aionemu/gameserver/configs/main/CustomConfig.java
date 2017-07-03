@@ -288,8 +288,8 @@ public class CustomConfig
 	public static boolean ENABLE_AUTO_POWERSHARD;
 	
 	//War System
-	@Property(key="gameserver.war.enable", defaultValue = "false")
-	public static boolean WAR_ENABLE;
+	//@Property(key="gameserver.war.enable", defaultValue = "false")
+	//public static boolean WAR_ENABLE;
 	
 	//War Schedule
 	@Property(key="gameserver.war.schedule.time", defaultValue = "0 0 1 ? * *")

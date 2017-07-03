@@ -330,6 +330,91 @@ public class Effect implements StatOwner
 	public boolean isBuff() {
         return skillTemplate.getTargetSlot() == SkillTargetSlot.BUFF;
     }
+	
+	public int checkForToggleBardEffect(int skillId){
+        // returns 0 if its Impassion
+        // returns 1 if its exultation
+        // returns 2 if its another skill
+        int Impassion = 4590;
+        int Exultation = 4589;
+
+        if (skillId == Impassion){
+            return 0;
+        }else{
+            if (skillId == Exultation){
+                return 1;
+            }
+            return 2;
+        }
+    }
+	
+	public boolean isRiderEffect(int skillId) {
+		switch (skillId) {
+			case 2767: // Embark
+			case 2768:
+			case 2769:
+			case 2770:
+			case 2771:
+            case 2772:
+            case 2773:
+            case 2774:
+            case 2775:
+            case 2776:
+            case 2777:
+            case 2778:
+			case 2440: // Kinetic Battery
+			case 2441:
+			case 2442:
+			case 2443:
+			case 2444:
+            case 2445:
+            case 2446:
+            case 2447:
+            case 2448:
+            case 2449:
+			case 2579: // Kinetic Bulwark
+			case 2580:
+			case 2581:
+			case 2421: // Mobility Thrusters
+			case 2422:
+			case 2736: // Stability Thrusters
+			case 2737:
+			case 2738:
+			case 2739:
+			case 2740:
+			case 2838: // Mounting Frustration
+			case 2839:
+			case 2840:
+			case 2841:
+			case 2842:
+			case 2843:
+			case 2844:
+			case 2845:
+			case 2846:
+			case 2847:
+			case 2848:
+				return true;
+		}
+
+		return false;
+	}
+	
+	public int checkForToggleRideEffect(int skillId){
+        int[] Battery = {2440, 2441, 2442, 2443, 2444, 2445, 2446, 2447, 2448, 2449};
+        int[] Bulwark = {2579, 2580, 2581};
+
+        for (int id : Battery){
+            if (id == skillId){
+                return 0;
+            }
+        }
+        for (int id : Bulwark){
+            if (id == skillId){
+                return 1;
+            }
+        }
+        return 2;
+    }
 
 	public boolean isRangerBuff() {
         int skillId = skillTemplate.getSkillId();
@@ -597,10 +682,6 @@ public class Effect implements StatOwner
                 isParalyzeEffect = true;
 			} if (template instanceof SanctuaryEffect) {
                 isSanctuaryEffect = true;
-			} if (template instanceof EnchantBoostEffect) {
-				isEnchantBoost = true;
-			} if (template instanceof AuthorizeBoostEffect) {
-				isAuthorizeBoost = true;
 			}
         } for (EffectTemplate template : getEffectTemplates()) {
             template.calculateHate(this);
@@ -721,16 +802,26 @@ public class Effect implements StatOwner
 			template.startEffect(this);
 			checkUseEquipmentConditions();
 			checkCancelOnDmg();
-		} if (isToggle() && effector instanceof Player) {
+		} if (isToggle() && effector instanceof Player || isRiderEffect(getSkillId())) {
 			activateToggleSkill();
 		} if (!restored && !forcedDuration) {
 			duration = getEffectsDuration();
-		} if (isToggle()) {
+		}  if (checkForToggleBardEffect(getSkillId()) == 0 || checkForToggleBardEffect(getSkillId()) == 1 && checkForToggleBardEffect(getSkillId()) != 2) {
+            if (checkForToggleBardEffect(getSkillId()) == 0){
+                checkBardEffects(0);
+            }else{
+                checkBardEffects(1);
+            }
+        } if (checkForToggleRideEffect(getSkillId()) == 0 || checkForToggleRideEffect(getSkillId()) == 1 && checkForToggleRideEffect(getSkillId()) != 2){
+            if (checkForToggleRideEffect(getSkillId()) == 0){
+                checkRideEffects(0);
+            }else{
+                checkRideEffects(1);
+            }
+        } if (isKineticSkill()){
             duration = skillTemplate.getToggleTimer();
-		} if (isEnchantBoost() && effector instanceof Player) {
-			((Player) effector).setEnchantBoost(true);
-		} if (isAuthorizeBoost() && effector instanceof Player) {
-			((Player) effector).setAuthorizeBoost(true);
+        } if (isToggle()) {
+            duration = skillTemplate.getToggleTimer();
 		} if (duration == 0) {
 			return;
 		} if (isOpenAerialSkill()) {
@@ -776,13 +867,9 @@ public class Effect implements StatOwner
 				PacketSendUtility.sendPacket(player, new SM_PLAYER_STANCE(player, 0));
 				player.getController().startStance(0);
 			}
-		} if (isToggle() && effector instanceof Player) {
+		} if (isToggle() && effector instanceof Player || isRiderEffect(getSkillId())) {
 			deactivateToggleSkill();
-		} if (isEnchantBoost() && effector instanceof Player) {
-			((Player) effector).setEnchantBoost(false);
-		} if (isAuthorizeBoost() && effector instanceof Player) {
-			((Player) effector).setAuthorizeBoost(false);
-		}
+		} 
 		stopTasks();
 		effected.getEffectController().clearEffect(this);
 		this.isStopped = true;
@@ -933,8 +1020,9 @@ public class Effect implements StatOwner
 	
 	private void shedulePeriodicActions() {
 		if (periodicActions == null || periodicActions.getPeriodicActions() == null
-			|| periodicActions.getPeriodicActions().isEmpty())
+			|| periodicActions.getPeriodicActions().isEmpty()) {
 			return;
+		}
 		int checktime = periodicActions.getChecktime();
 		periodicActionsTask = ThreadPoolManager.getInstance().scheduleAtFixedRate(new Runnable() {
 
@@ -952,6 +1040,79 @@ public class Effect implements StatOwner
 			periodicActionsTask = null;
 		}
 	}
+	
+	/**
+     * Check if bard has Impassion and Exultation activated at same time.
+     */
+    private void checkBardEffects(int code){
+        // 0 = Impassion == 4590
+        // 1 = Excultation == 4589
+        if (effector instanceof Player){
+            Player player = (Player) effector;
+
+            if (code == 0){
+                if (player.getEffectController().isNoshowPresentBySkillId(4589)){ // if Impassion is on check for Excultation
+                    player.getEffectController().removeNoshowEffect(4589);
+                }
+            }else{
+                if (player.getEffectController().isNoshowPresentBySkillId(4590)){ // if Excultation is on Check for Impassion
+                    player.getEffectController().removeNoshowEffect(4590);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Just for Rider class skills
+     */
+    private boolean isKineticSkill(){
+        switch (getSkillId()){
+            case 2440://Kinetic BAttery Start
+            case 2441:
+            case 2442:
+            case 2443:
+            case 2444:
+            case 2445:
+            case 2446:
+            case 2447:
+            case 2448:
+            case 2449:
+            case 2579://Kinetic Bulwark Start
+            case 2580:
+            case 2581:
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check if ride has Kinetic Bulwark and Kinetic BAttery turned on same time
+     * Updated 4.8
+     */
+    private void checkRideEffects(int code){
+        int[] Battery = {2440, 2441, 2442, 2443, 2444, 2445, 2446, 2447, 2448, 2449};
+        int[] Bulwark = {2579, 2580, 2581};
+        // 0 = Kinetic Battery
+        // 1 = Kinetic Bulwark
+        // 2 = NULL
+        if (effector instanceof Player){
+            Player player = (Player) effector;
+
+            if (code == 0){
+                for (int skillId : Bulwark){
+                    if (player.getEffectController().isNoshowPresentBySkillId(skillId)){
+                        player.getEffectController().removeNoshowEffect(skillId);
+                    }
+                }
+            }else{
+                for (int skillId : Battery){
+                    if (player.getEffectController().isNoshowPresentBySkillId(skillId)){
+                        player.getEffectController().removeNoshowEffect(skillId);
+                    }
+                }
+            }
+        }
+    }
 
 	public int getEffectsDuration() {
 		int duration = 0;
@@ -979,8 +1140,9 @@ public class Effect implements StatOwner
 		if (effected instanceof Player && skillTemplate.getPvpDuration() != 0)
 			duration = duration * skillTemplate.getPvpDuration() / 100;
 		
-		if (duration > 86400000)
+		if (duration > 86400000) {
 			duration = 86400000;
+		}
 		
 		return duration;
 	}

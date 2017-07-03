@@ -676,7 +676,7 @@ public final class PlayerEnterWorldService
 	private static void sendItemInfos(AionConnection client, Player player) {
 		int questExpands = player.getQuestExpands();
 		int npcExpands = player.getNpcExpands();
-		player.getInventory().setLimit(StorageType.CUBE.getLimit() + (questExpands + npcExpands) * 9);
+		player.getInventory().setLimit(StorageType.CUBE.getLimit() + (questExpands + npcExpands) * 12);
 		player.getWarehouse().setLimit(StorageType.REGULAR_WAREHOUSE.getLimit() + player.getWarehouseSize() * 8);
 		Storage inventory = player.getInventory();
 		List<Item> allItems = new ArrayList<Item>();

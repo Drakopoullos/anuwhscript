@@ -54,7 +54,7 @@ public class DelayedSpellAttackInstantEffect extends DamageEffect {
 		int valueWithDelta = value + delta * skillLvl;
 		ActionModifier modifier = getActionModifiers(effect);
 		int critAddDmg = this.critAddDmg2 + this.critAddDmg1 * effect.getSkillLevel();
-		AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, modifier, getElement(), true, true, false, getMode(), this.critProbMod2, critAddDmg, shared, false);
+		AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, modifier, getElement(), true, true, false, getMode(), this.critProbMod2, critAddDmg, shared, true);
 		effect.getEffected().getController().onAttack(effect.getEffector(), effect.getSkillId(), TYPE.DELAYDAMAGE, effect.getReserved1(), true, LOG.PROCATKINSTANT);
 		effect.getEffector().getObserveController().notifyAttackObservers(effect.getEffected());
 	}
