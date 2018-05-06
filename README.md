@@ -1,2 +1,4 @@
 # anuwhscript
-anuwhscript is real
+# TODO
+- Cooldown Delayed
+- Some Instance
